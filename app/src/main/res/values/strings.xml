@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Bildirim Bütçe</string>
+    <string name="service_label">Harcama bildirimlerini oku</string>
+    <string name="widget_description">Bu ayki toplam harcamanız</string>
+</resources>

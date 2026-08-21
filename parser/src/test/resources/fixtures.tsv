@@ -1,0 +1,171 @@
+# OTOMATIK URETILDI - scripts/generate_corpus.py
+# Bu metinler gercege benzetilmis SABLONLARDIR, gercek bildirim degildir.
+# Gercek ornekleri ./scripts/add-fixture.sh ile ekleyin.
+# kolonlar: metin <TAB> kind <TAB> amountMinor <TAB> merchant
+Garanti BBVA: 1234 kartiniz ile MIGROS isyerinde 8,99 TL tutarinda harcama yapilmistir.	EXPENSE	899	Migros
+Garanti BBVA: 4455 kartiniz ile MIGROS TICARET A.S. isyerinde 12,50 TL tutarinda harcama yapilmistir.	EXPENSE	1250	Migros Ticaret A.S
+Garanti BBVA: 9012 kartiniz ile A101 YENI MAGAZACILIK isyerinde 45,00 TL tutarinda harcama yapilmistir.	EXPENSE	4500	A101 Yeni Magazacilik
+Garanti BBVA: 9012 kartiniz ile BIM isyerinde 89,90 TL tutarinda harcama yapilmistir.	EXPENSE	8990	BIM
+Garanti BBVA: 9012 kartiniz ile CARREFOURSA isyerinde 129,45 TL tutarinda harcama yapilmistir.	EXPENSE	12945	Carrefoursa
+İş Bankası: Kartınızla 03.07.2026 tarihinde SOK MARKETLER'ta 89,90 TL harcama yapıldı.	EXPENSE	8990	Sok Marketler
+İş Bankası: Kartınızla 03.07.2026 tarihinde GETIR PERAKENDE'ta 129,45 TL harcama yapıldı.	EXPENSE	12945	Getir Perakende
+İş Bankası: Kartınızla 21.08.2026 tarihinde STARBUCKS'ta 175,00 TL harcama yapıldı.	EXPENSE	17500	Starbucks
+İş Bankası: Kartınızla 21.08.2026 tarihinde DOMINOS PIZZA'ta 245,90 TL harcama yapıldı.	EXPENSE	24590	Dominos Pizza
+İş Bankası: Kartınızla 03.07.2026 tarihinde BURGER KING'ta 349,99 TL harcama yapıldı.	EXPENSE	34999	Burger King
+Sayın müşterimiz, 1234 nolu kartınızla YEMEKSEPETI'da 245,90 TL tutarında işlem gerçekleşti.	EXPENSE	24590	Yemeksepeti
+Sayın müşterimiz, 9012 nolu kartınızla SHELL PETROL'da 349,99 TL tutarında işlem gerçekleşti.	EXPENSE	34999	Shell Petrol
+Sayın müşterimiz, 1234 nolu kartınızla OPET AKARYAKIT'da 450,00 TL tutarında işlem gerçekleşti.	EXPENSE	45000	Opet Akaryakit
+Sayın müşterimiz, 5678 nolu kartınızla BITAKSI'da 675,50 TL tutarında işlem gerçekleşti.	EXPENSE	67550	Bitaksi
+Sayın müşterimiz, 1234 nolu kartınızla TRENDYOL'da 999,00 TL tutarında işlem gerçekleşti.	EXPENSE	99900	Trendyol
+Akbank: Kredi kartınızdan HEPSIBURADA'de 675,50 TL harcama yapılmıştır.	EXPENSE	67550	Hepsiburada
+Akbank: Kredi kartınızdan LC WAIKIKI'de 999,00 TL harcama yapılmıştır.	EXPENSE	99900	LC Waikiki
+Akbank: Kredi kartınızdan MEDIAMARKT'de 1.249,00 TL harcama yapılmıştır.	EXPENSE	124900	Mediamarkt
+Akbank: Kredi kartınızdan TEKNOSA'de 1.899,50 TL harcama yapılmıştır.	EXPENSE	189950	Teknosa
+Akbank: Kredi kartınızdan IKEA'de 2.500 TL harcama yapılmıştır.	EXPENSE	250000	IKEA
+Yapı Kredi: World kartınız ile BOYNER 1.899,50 TL	EXPENSE	189950	Boyner
+Yapı Kredi: World kartınız ile TURKCELL 2.500,00 TL	EXPENSE	250000	Turkcell
+Yapı Kredi: World kartınız ile NETFLIX 3.499,00 TL	EXPENSE	349900	Netflix
+Yapı Kredi: World kartınız ile SPOTIFY AB 12.500 TL	EXPENSE	1250000	Spotify AB
+Yapı Kredi: World kartınız ile ENERJISA 0,75 TL	EXPENSE	75	Enerjisa
+Enpara: 12.500,00 TL tutarında harcamanız SIFA ECZANESI bünyesinde gerçekleşti.	EXPENSE	1250000	Sifa Eczanesi
+Enpara: 0,75 TL tutarında harcamanız ACIBADEM HASTANESI bünyesinde gerçekleşti.	EXPENSE	75	Acibadem Hastanesi
+Enpara: 1 TL tutarında harcamanız CINEMAXIMUM bünyesinde gerçekleşti.	EXPENSE	100	Cinemaximum
+Enpara: 9.999,99 TL tutarında harcamanız MACFIT bünyesinde gerçekleşti.	EXPENSE	999999	Macfit
+Enpara: 8,99 TL tutarında harcamanız STEAM GAMES bünyesinde gerçekleşti.	EXPENSE	899	Steam Games
+DenizBank: Kartınızla APPLE SERVICES mağazasında 9.999,99 TL tutarında ödeme yapılmıştır.	EXPENSE	999999	Apple Services
+DenizBank: Kartınızla N11 COM mağazasında 8,99 TL tutarında ödeme yapılmıştır.	EXPENSE	899	N11 COM
+DenizBank: Kartınızla MIGROS mağazasında 12,50 TL tutarında ödeme yapılmıştır.	EXPENSE	1250	Migros
+DenizBank: Kartınızla MIGROS TICARET A.S. mağazasında 45,00 TL tutarında ödeme yapılmıştır.	EXPENSE	4500	Migros Ticaret A.S
+DenizBank: Kartınızla A101 YENI MAGAZACILIK mağazasında 89,90 TL tutarında ödeme yapılmıştır.	EXPENSE	8990	A101 Yeni Magazacilik
+QNB: Kartınızla BIM'da 45 TL tutarında işlem gerçekleşti.	EXPENSE	4500	BIM
+QNB: Kartınızla CARREFOURSA'da 89,90 TL tutarında işlem gerçekleşti.	EXPENSE	8990	Carrefoursa
+QNB: Kartınızla SOK MARKETLER'da 129,45 TL tutarında işlem gerçekleşti.	EXPENSE	12945	Sok Marketler
+QNB: Kartınızla GETIR PERAKENDE'da 175,00 TL tutarında işlem gerçekleşti.	EXPENSE	17500	Getir Perakende
+QNB: Kartınızla STARBUCKS'da 245,90 TL tutarında işlem gerçekleşti.	EXPENSE	24590	Starbucks
+Ziraat Bankası: 9012 nolu kartınız ile DOMINOS PIZZA adlı üye işyerinde 175,00 TL tutarında harcama.	EXPENSE	17500	Dominos Pizza
+Ziraat Bankası: 4455 nolu kartınız ile BURGER KING adlı üye işyerinde 245,90 TL tutarında harcama.	EXPENSE	24590	Burger King
+Ziraat Bankası: 5678 nolu kartınız ile YEMEKSEPETI adlı üye işyerinde 349,99 TL tutarında harcama.	EXPENSE	34999	Yemeksepeti
+Ziraat Bankası: 4455 nolu kartınız ile SHELL PETROL adlı üye işyerinde 450,00 TL tutarında harcama.	EXPENSE	45000	Shell Petrol
+Ziraat Bankası: 4455 nolu kartınız ile OPET AKARYAKIT adlı üye işyerinde 675,50 TL tutarında harcama.	EXPENSE	67550	Opet Akaryakit
+Halkbank: BITAKSI firmasında 450,00 TL tutarlı harcama işlemi gerçekleşmiştir.	EXPENSE	45000	Bitaksi
+Halkbank: TRENDYOL firmasında 675,50 TL tutarlı harcama işlemi gerçekleşmiştir.	EXPENSE	67550	Trendyol
+Halkbank: HEPSIBURADA firmasında 999,00 TL tutarlı harcama işlemi gerçekleşmiştir.	EXPENSE	99900	Hepsiburada
+Halkbank: LC WAIKIKI firmasında 1.249,00 TL tutarlı harcama işlemi gerçekleşmiştir.	EXPENSE	124900	LC Waikiki
+Halkbank: MEDIAMARKT firmasında 1.899,50 TL tutarlı harcama işlemi gerçekleşmiştir.	EXPENSE	189950	Mediamarkt
+VakıfBank: Kartınızla TEKNOSA işyerinde 1.249,00 TL alışveriş yapılmıştır.	EXPENSE	124900	Teknosa
+VakıfBank: Kartınızla IKEA işyerinde 1.899,50 TL alışveriş yapılmıştır.	EXPENSE	189950	IKEA
+VakıfBank: Kartınızla BOYNER işyerinde 2.500,00 TL alışveriş yapılmıştır.	EXPENSE	250000	Boyner
+VakıfBank: Kartınızla TURKCELL işyerinde 3.499,00 TL alışveriş yapılmıştır.	EXPENSE	349900	Turkcell
+VakıfBank: Kartınızla NETFLIX işyerinde 12.500 TL alışveriş yapılmıştır.	EXPENSE	1250000	Netflix
+TEB: 15.08.2026 tarihinde SPOTIFY AB'de 3.499,00 TL tutarında kartlı işlem yapıldı.	EXPENSE	349900	Spotify AB
+TEB: 15.08.2026 tarihinde ENERJISA'de 12.500,00 TL tutarında kartlı işlem yapıldı.	EXPENSE	1250000	Enerjisa
+TEB: 15.08.2026 tarihinde SIFA ECZANESI'de 0,75 TL tutarında kartlı işlem yapıldı.	EXPENSE	75	Sifa Eczanesi
+TEB: 21.08.2026 tarihinde ACIBADEM HASTANESI'de 1 TL tutarında kartlı işlem yapıldı.	EXPENSE	100	Acibadem Hastanesi
+TEB: 21.08.2026 tarihinde CINEMAXIMUM'de 9.999,99 TL tutarında kartlı işlem yapıldı.	EXPENSE	999999	Cinemaximum
+Kartınızla MACFIT isyerinde 1,00 TL harcama yapılmıştır. Bilgilerinize.	EXPENSE	100	Macfit
+Kartınızla STEAM GAMES isyerinde 9.999,99 TL harcama yapılmıştır. Bilgilerinize.	EXPENSE	999999	Steam Games
+Kartınızla APPLE SERVICES isyerinde 8,99 TL harcama yapılmıştır. Bilgilerinize.	EXPENSE	899	Apple Services
+Kartınızla N11 COM isyerinde 12,50 TL harcama yapılmıştır. Bilgilerinize.	EXPENSE	1250	N11 COM
+Kartınızla MIGROS isyerinde 45,00 TL harcama yapılmıştır. Bilgilerinize.	EXPENSE	4500	Migros
+9012 kartınızla MIGROS TICARET A.S. mağazasında 12,50 TL tutarında harcama gerçekleşti.	EXPENSE	1250	Migros Ticaret A.S
+1234 kartınızla A101 YENI MAGAZACILIK mağazasında 45 TL tutarında harcama gerçekleşti.	EXPENSE	4500	A101 Yeni Magazacilik
+4455 kartınızla BIM mağazasında 89,90 TL tutarında harcama gerçekleşti.	EXPENSE	8990	BIM
+5678 kartınızla CARREFOURSA mağazasında 129,45 TL tutarında harcama gerçekleşti.	EXPENSE	12945	Carrefoursa
+5678 kartınızla SOK MARKETLER mağazasında 175,00 TL tutarında harcama gerçekleşti.	EXPENSE	17500	Sok Marketler
+Papara: GETIR PERAKENDE'den 129,45 TL tutarında ödeme yapıldı.	EXPENSE	12945	Getir Perakende
+Papara: STARBUCKS'den 175,00 TL tutarında ödeme yapıldı.	EXPENSE	17500	Starbucks
+Papara: DOMINOS PIZZA'den 245,90 TL tutarında ödeme yapıldı.	EXPENSE	24590	Dominos Pizza
+Papara: BURGER KING'den 349,99 TL tutarında ödeme yapıldı.	EXPENSE	34999	Burger King
+Papara: YEMEKSEPETI'den 450,00 TL tutarında ödeme yapıldı.	EXPENSE	45000	Yemeksepeti
+Fibabanka: Kartınız ile SHELL PETROL üye işyerinde 349,99 TL tutarında harcama işlemi.	EXPENSE	34999	Shell Petrol
+Fibabanka: Kartınız ile OPET AKARYAKIT üye işyerinde 450,00 TL tutarında harcama işlemi.	EXPENSE	45000	Opet Akaryakit
+Fibabanka: Kartınız ile BITAKSI üye işyerinde 675,50 TL tutarında harcama işlemi.	EXPENSE	67550	Bitaksi
+Fibabanka: Kartınız ile TRENDYOL üye işyerinde 999,00 TL tutarında harcama işlemi.	EXPENSE	99900	Trendyol
+Fibabanka: Kartınız ile HEPSIBURADA üye işyerinde 1.249,00 TL tutarında harcama işlemi.	EXPENSE	124900	Hepsiburada
+İNG: LC WAIKIKI adlı işyerinde 999,00 TL tutarında harcamanız onaylandı.	EXPENSE	99900	LC Waikiki
+İNG: MEDIAMARKT adlı işyerinde 1.249,00 TL tutarında harcamanız onaylandı.	EXPENSE	124900	Mediamarkt
+İNG: TEKNOSA adlı işyerinde 1.899,50 TL tutarında harcamanız onaylandı.	EXPENSE	189950	Teknosa
+İNG: IKEA adlı işyerinde 2.500,00 TL tutarında harcamanız onaylandı.	EXPENSE	250000	IKEA
+İNG: BOYNER adlı işyerinde 3.499,00 TL tutarında harcamanız onaylandı.	EXPENSE	349900	Boyner
+Şekerbank: 2.500,00 TL tutarında harcama TURKCELL firmasında gerçekleşti.	EXPENSE	250000	Turkcell
+Şekerbank: 3.499,00 TL tutarında harcama NETFLIX firmasında gerçekleşti.	EXPENSE	349900	Netflix
+Şekerbank: 12.500,00 TL tutarında harcama SPOTIFY AB firmasında gerçekleşti.	EXPENSE	1250000	Spotify AB
+Şekerbank: 0,75 TL tutarında harcama ENERJISA firmasında gerçekleşti.	EXPENSE	75	Enerjisa
+Şekerbank: 1 TL tutarında harcama SIFA ECZANESI firmasında gerçekleşti.	EXPENSE	100	Sifa Eczanesi
+Odeabank: Kartınızla ACIBADEM HASTANESI'ta 0,75 TL ödeme yapılmıştır.	EXPENSE	75	Acibadem Hastanesi
+Odeabank: Kartınızla CINEMAXIMUM'ta 1,00 TL ödeme yapılmıştır.	EXPENSE	100	Cinemaximum
+Odeabank: Kartınızla MACFIT'ta 9.999,99 TL ödeme yapılmıştır.	EXPENSE	999999	Macfit
+Odeabank: Kartınızla STEAM GAMES'ta 8,99 TL ödeme yapılmıştır.	EXPENSE	899	Steam Games
+Odeabank: Kartınızla APPLE SERVICES'ta 12,50 TL ödeme yapılmıştır.	EXPENSE	1250	Apple Services
+Anadolubank: N11 COM işyerinde 8,99 TL tutarında işlem gerçekleşmiştir.	EXPENSE	899	N11 COM
+Anadolubank: MIGROS işyerinde 12,50 TL tutarında işlem gerçekleşmiştir.	EXPENSE	1250	Migros
+Anadolubank: MIGROS TICARET A.S. işyerinde 45 TL tutarında işlem gerçekleşmiştir.	EXPENSE	4500	Migros Ticaret A.S
+Anadolubank: A101 YENI MAGAZACILIK işyerinde 89,90 TL tutarında işlem gerçekleşmiştir.	EXPENSE	8990	A101 Yeni Magazacilik
+Anadolubank: BIM işyerinde 129,45 TL tutarında işlem gerçekleşmiştir.	EXPENSE	12945	BIM
+Sayın müşterimiz, 4455 nolu kartınızla MIGROS'da 8,99 USD tutarında işlem gerçekleşti.	EXPENSE	899	Migros
+Sayın müşterimiz, 4455 nolu kartınızla STARBUCKS'da 12,50 USD tutarında işlem gerçekleşti.	EXPENSE	1250	Starbucks
+Sayın müşterimiz, 1234 nolu kartınızla TRENDYOL'da 45,00 USD tutarında işlem gerçekleşti.	EXPENSE	4500	Trendyol
+Sayın müşterimiz, 4455 nolu kartınızla MIGROS'da 8,99 EUR tutarında işlem gerçekleşti.	EXPENSE	899	Migros
+Sayın müşterimiz, 9012 nolu kartınızla STARBUCKS'da 12,50 EUR tutarında işlem gerçekleşti.	EXPENSE	1250	Starbucks
+Sayın müşterimiz, 4455 nolu kartınızla TRENDYOL'da 45,00 EUR tutarında işlem gerçekleşti.	EXPENSE	4500	Trendyol
+Ziraat: Kartınızla 8,99 TL tutarında harcama yapılmıştır.	EXPENSE	899	-
+Ziraat: Kartınızla 12,50 TL tutarında harcama yapılmıştır.	EXPENSE	1250	-
+Ziraat: Kartınızla 45,00 TL tutarında harcama yapılmıştır.	EXPENSE	4500	-
+Kartınızdan 129,45 TL tutarında ödeme yapılmıştır.	EXPENSE	12945	-
+Kartınızdan 175,00 TL tutarında ödeme yapılmıştır.	EXPENSE	17500	-
+Kartınızdan 245,90 TL tutarında ödeme yapılmıştır.	EXPENSE	24590	-
+5678 nolu kartınızla 450,00 TL tutarında işlem gerçekleşti.	EXPENSE	45000	-
+4455 nolu kartınızla 675,50 TL tutarında işlem gerçekleşti.	EXPENSE	67550	-
+5678 nolu kartınızla 999,00 TL tutarında işlem gerçekleşti.	EXPENSE	99900	-
+MIGROS isyerinden 8,99 TL iade yapılmıştır.	REFUND	899	Migros
+MIGROS TICARET A.S. isyerinden 12,50 TL iade yapılmıştır.	REFUND	1250	Migros Ticaret A.S
+A101 YENI MAGAZACILIK isyerinden 45,00 TL iade yapılmıştır.	REFUND	4500	A101 Yeni Magazacilik
+Garanti BBVA: GETIR PERAKENDE'den 175,00 TL tutarında iade hesabınıza geçmiştir.	REFUND	17500	Getir Perakende
+Garanti BBVA: STARBUCKS'den 245,90 TL tutarında iade hesabınıza geçmiştir.	REFUND	24590	Starbucks
+Garanti BBVA: DOMINOS PIZZA'den 349,99 TL tutarında iade hesabınıza geçmiştir.	REFUND	34999	Dominos Pizza
+OPET AKARYAKIT mağazasından 999,00 TL tutarında iade işlemi gerçekleşti.	REFUND	99900	Opet Akaryakit
+BITAKSI mağazasından 1.249,00 TL tutarında iade işlemi gerçekleşti.	REFUND	124900	Bitaksi
+TRENDYOL mağazasından 1.899,50 TL tutarında iade işlemi gerçekleşti.	REFUND	189950	Trendyol
+İş Bankası: TEKNOSA firmasından 12.500,00 TL iade alındı.	REFUND	1250000	Teknosa
+İş Bankası: IKEA firmasından 0,75 TL iade alındı.	REFUND	75	IKEA
+İş Bankası: BOYNER firmasından 1,00 TL iade alındı.	REFUND	100	Boyner
+Tek kullanımlık şifreniz: 270439. Kimseyle paylaşmayın.	IGNORE	-	-
+Tek kullanımlık şifreniz: 861839. Kimseyle paylaşmayın.	IGNORE	-	-
+Doğrulama kodunuz 211589. 3 dakika geçerlidir.	IGNORE	-	-
+Doğrulama kodunuz 235403. 3 dakika geçerlidir.	IGNORE	-	-
+Onay kodu: 722270 - 129,45 TL tutarındaki işleminiz için	IGNORE	-	-
+Onay kodu: 598194 - 175,00 TL tutarındaki işleminiz için	IGNORE	-	-
+İnternetten alışveriş onay kodunuz 578765, tutar 245,90 TL.	IGNORE	-	-
+İnternetten alışveriş onay kodunuz 850280, tutar 349,99 TL.	IGNORE	-	-
+Hesabınızın kullanılabilir bakiyesi 450,00 TL'dir.	IGNORE	-	-
+Hesabınızın kullanılabilir bakiyesi 675,50 TL'dir.	IGNORE	-	-
+Vadesiz hesabınızın bakiyesi 999,00 TL olarak güncellenmiştir.	IGNORE	-	-
+Vadesiz hesabınızın bakiyesi 1.249,00 TL olarak güncellenmiştir.	IGNORE	-	-
+Kartınızla yapılan 1.899,50 TL tutarındaki işlem iptal edilmiştir.	IGNORE	-	-
+Kartınızla yapılan 2.500,00 TL tutarındaki işlem iptal edilmiştir.	IGNORE	-	-
+TURKCELL işyerinde 3.499,00 TL tutarındaki provizyon iptal edilmiştir.	IGNORE	-	-
+NETFLIX işyerinde 12.500,00 TL tutarındaki provizyon iptal edilmiştir.	IGNORE	-	-
+0,75 TL tutarındaki işleminiz başarısız oldu, lütfen tekrar deneyin.	IGNORE	-	-
+1,00 TL tutarındaki işleminiz başarısız oldu, lütfen tekrar deneyin.	IGNORE	-	-
+Kampanya! Bu ay 9.999,99 TL harcamaya 50,00 TL hediye çeki kazanın.	IGNORE	-	-
+Kampanya! Bu ay 8,99 TL harcamaya 50,00 TL hediye çeki kazanın.	IGNORE	-	-
+Fırsat: APPLE SERVICES alışverişlerinde 12,50 TL indirim sizi bekliyor.	IGNORE	-	-
+Fırsat: N11 COM alışverişlerinde 45,00 TL indirim sizi bekliyor.	IGNORE	-	-
+Kredi kartı ekstreniz hazır. Son ödeme tarihi 15.08.2026, borcunuz 89,90 TL.	IGNORE	-	-
+Kredi kartı ekstreniz hazır. Son ödeme tarihi 15.08.2026, borcunuz 129,45 TL.	IGNORE	-	-
+Asgari ödeme tutarınız 175,00 TL. Son ödeme tarihi 21.08.2026.	IGNORE	-	-
+Asgari ödeme tutarınız 245,90 TL. Son ödeme tarihi 03.07.2026.	IGNORE	-	-
+Kredi kartınıza tanımlı 349,99 TL tutarındaki otomatik ödeme talimatı işlenmiştir.	IGNORE	-	-
+Kredi kartınıza tanımlı 450,00 TL tutarındaki otomatik ödeme talimatı işlenmiştir.	IGNORE	-	-
+Kart limitiniz 675,50 TL olarak güncellenmiştir.	IGNORE	-	-
+Kart limitiniz 999,00 TL olarak güncellenmiştir.	IGNORE	-	-
+BITAKSI için 1.249,00 TL tutarında puan kazandınız.	IGNORE	-	-
+TRENDYOL için 1.899,50 TL tutarında puan kazandınız.	IGNORE	-	-
+Kargonuz yola çıktı, takip numarası 1234567890.	NONE	-	-
+Siparişiniz hazırlanıyor. Tahmini teslim 03.07.2026.	NONE	-	-
+Randevunuz 15.08.2026 tarihinde saat 14:30'da onaylanmıştır.	NONE	-	-
+Yarın hava sıcaklığı 28 derece, güneşli.	NONE	-	-
+Toplantı hatırlatması: 15.08.2026 saat 10:00.	NONE	-	-
+SOK MARKETLER mağazamız yeni adresinde hizmetinizde.	NONE	-	-
+Parolanız başarıyla güncellendi.	NONE	-	-
+Yeni bir cihazdan giriş yapıldı. Siz değilseniz bizi arayın.	NONE	-	-
