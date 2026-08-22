@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/nocturne-c396629d-c55e-430c-bb1f-d7bf0190fa36/styles.css">
+<script src="_ds/nocturne-c396629d-c55e-430c-bb1f-d7bf0190fa36/_ds_bundle.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#0b0d16;font-family:'Schibsted Grotesk','Instrument Sans',system-ui,sans-serif}
+a{color:#9184d9;text-decoration:none}a:hover{color:#a79ce2}
+@keyframes bbRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes bbFade{from{opacity:0}to{opacity:1}}
+@keyframes bbRibbon{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes bbBar{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes bbDrop{0%{opacity:0;transform:translateY(-26px) scale(.95)}100%{opacity:1;transform:none}}
+@keyframes bbSheet{from{transform:translateY(101%)}to{transform:none}}
+@keyframes bbGlow{0%,100%{opacity:.5}50%{opacity:.85}}
+@keyframes bbDraw{from{stroke-dashoffset:900}to{stroke-dashoffset:0}}
+@keyframes bbRing{0%{opacity:.6;transform:scale(.8)}100%{opacity:0;transform:scale(1.75)}}
+@keyframes bbBlink{0%,45%{opacity:1}50%,95%{opacity:0}}
+@keyframes bbShine{0%{transform:translateX(-130%) skewX(-18deg)}55%,100%{transform:translateX(240%) skewX(-18deg)}}
+@keyframes bbSkel{0%{opacity:.35}50%{opacity:.7}100%{opacity:.35}}
+</style>
+</helmet>
+
+<div style="padding:56px 56px 100px;color:#e9e9ed;display:flex;flex-direction:column;gap:56px">
+
+<div style="display:flex;flex-direction:column;gap:16px;max-width:840px">
+<div style="font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.16em;text-transform:uppercase;color:#9184d9">v2 · tam ekran seti</div>
+<div style="font:500 40px/1.08 'Schibsted Grotesk',sans-serif;letter-spacing:-.03em">Sakin bir banka defteri gibi</div>
+<div style="font:400 14px/1.7 'Schibsted Grotesk',sans-serif;color:#9a9aa8;max-width:720px;text-wrap:pretty">Tipografide üç aileden ikiye indim: <span style="color:#c9c9d4">Schibsted Grotesk</span> hem başlıkları hem rakamları taşıyor (tabular figürleri var, sıkı tracking'te bankacılık tonu veriyor), <span style="color:#c9c9d4">JetBrains Mono</span> yalnızca teknik satırlarda — kaynak, desen, manifest. Bricolage'ın oynak karakteri gitti; “şov” artık hareketten ve ölçekten geliyor, yazı tipinden değil. Kategori renkleri bir tık kısıldı, Pro için ayrı bir sıcak altın eklendi.</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px;padding-top:4px">
+  <sc-for list="{{ chapters }}" as="ch" hint-placeholder-count="7">
+    <span style="font:500 11px/1 'JetBrains Mono',monospace;letter-spacing:.1em;padding:7px 10px;border-radius:7px;background:rgba(145,132,217,.12);color:#b5abe8">{{ ch }}</span>
+  </sc-for>
+</div>
+</div>
+
+<!-- ══ A · ONBOARDING ══ -->
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:14px"><span style="font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:#9184d9">A · ONBOARDING</span><span style="flex:1;height:1px;background:linear-gradient(to right,rgba(145,132,217,.4),rgba(145,132,217,0))"></span></div>
+<div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+<!-- A1 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">A1</span>Ne işe yarar</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);font-family:'Schibsted Grotesk',sans-serif;color:#F6F4EF">
+  <div style="position:absolute;left:58%;top:12%;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,rgba(20,199,154,.34),rgba(20,199,154,0) 66%);filter:blur(30px);animation:bbGlow 8s ease-in-out infinite"></div>
+  <div style="position:relative;height:100%;display:flex;flex-direction:column;padding:0 26px">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;height:40px"></div>
+    <div style="flex:none;font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.22em;color:#14C79A;animation:bbRise .6s ease-out both">BILDIRIM BÜTÇE</div>
+    <div style="flex:none;height:16px"></div>
+    <div style="flex:none;font:600 40px/1.04 'Schibsted Grotesk',sans-serif;letter-spacing:-.035em;text-wrap:balance;animation:bbRise .7s .07s ease-out both">Harcamaların kendiliğinden listelensin.</div>
+    <div style="flex:none;height:14px"></div>
+    <div style="flex:none;font:400 15px/1.6 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.58);max-width:302px;animation:bbRise .7s .15s ease-out both">Banka bildirimi geldiği anda tutarı ve işyerini okur, deftere yazar. Fiş biriktirmen, hiçbir şey girmen gerekmez.</div>
+
+    <div style="flex:none;height:36px"></div>
+    <div style="flex:none;background:rgba(246,244,239,.06);border:1px solid rgba(246,244,239,.11);border-radius:16px;padding:13px 15px;display:flex;gap:11px;align-items:flex-start;animation:bbDrop .8s .5s cubic-bezier(.2,.9,.25,1) both">
+      <div style="width:26px;height:26px;border-radius:8px;background:#0E7C66;flex:none;display:flex;align-items:center;justify-content:center;font:700 11px/1 'JetBrains Mono',monospace">G</div>
+      <div style="flex:1;min-width:0">
+        <div style="font:500 11.5px/1.2 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.55);display:flex;justify-content:space-between"><span>Garanti BBVA</span><span style="font-family:'JetBrains Mono',monospace">şimdi</span></div>
+        <div style="height:4px"></div>
+        <div style="font:400 12.5px/1.45 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.88)">MIGROS TICARET AS işyerinde 245,90 TL harcama yapılmıştır.</div>
+      </div>
+    </div>
+    <div style="flex:none;height:16px;display:flex;justify-content:center"><div style="width:1px;height:16px;background:linear-gradient(to bottom,rgba(20,199,154,0),#14C79A)"></div></div>
+    <div style="flex:none;display:flex;align-items:center;gap:12px;padding:14px 16px;background:rgba(20,199,154,.09);border:1px solid rgba(20,199,154,.24);border-radius:16px;animation:bbDrop .8s 1.1s cubic-bezier(.2,.9,.25,1) both">
+      <div style="width:34px;height:34px;border-radius:11px;background:rgba(16,185,129,.18);display:flex;align-items:center;justify-content:center;font-size:16px">🛒</div>
+      <div style="flex:1">
+        <div style="font:600 15px/1.25 'Schibsted Grotesk',sans-serif">Migros</div>
+        <div style="font:400 10.5px/1.3 'JetBrains Mono',monospace;color:rgba(246,244,239,.45);letter-spacing:.06em">MARKET · 21 AĞU 18:42</div>
+      </div>
+      <div style="font:600 16px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums">−245,90</div>
+    </div>
+
+    <div style="flex:1;min-height:20px"></div>
+    <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding-bottom:34px">
+      <div style="display:flex;gap:6px;align-items:center">
+        <div style="width:22px;height:5px;border-radius:3px;background:#14C79A"></div>
+        <div style="width:5px;height:5px;border-radius:3px;background:rgba(246,244,239,.22)"></div>
+        <div style="width:5px;height:5px;border-radius:3px;background:rgba(246,244,239,.22)"></div>
+      </div>
+      <div style="height:52px;padding:0 28px;border-radius:14px;background:#F6F4EF;color:#080A0F;display:flex;align-items:center;gap:10px;font:600 15.5px/1 'Schibsted Grotesk',sans-serif">Devam <span style="font-family:'JetBrains Mono',monospace">→</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- A2 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">A2</span>İzin öncesi hazırlık</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);font-family:'Schibsted Grotesk',sans-serif;color:#F6F4EF">
+  <div style="position:absolute;left:50%;top:-8%;width:460px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(245,158,11,.22),rgba(245,158,11,0) 70%);filter:blur(30px);animation:bbGlow 9s ease-in-out infinite"></div>
+  <div style="position:relative;height:100%;display:flex;flex-direction:column;padding:0 26px">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;height:30px"></div>
+    <div style="flex:none;font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.22em;color:#F59E0B;animation:bbRise .6s ease-out both">SIRADAKI EKRAN</div>
+    <div style="flex:none;height:14px"></div>
+    <div style="flex:none;font:600 31px/1.08 'Schibsted Grotesk',sans-serif;letter-spacing:-.03em;text-wrap:balance;animation:bbRise .7s .07s ease-out both">Android şimdi sana ürkütücü bir şey soracak.</div>
+    <div style="flex:none;height:12px"></div>
+    <div style="flex:none;font:400 14px/1.55 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.58);animation:bbRise .7s .14s ease-out both">“Bildirimlere tam erişim” yazacak. Ne olduğunu önceden bilmen için gösteriyorum.</div>
+
+    <div style="flex:none;height:16px"></div>
+    <div style="flex:none;animation:bbRise .7s .22s ease-out both">
+      <div style="background:#1B1F26;border-radius:14px;padding:15px;font-family:Roboto,sans-serif;border:1px solid rgba(246,244,239,.08)">
+        <div style="font:500 16px/22px Roboto,sans-serif;color:#E3E3E0">Bildirim Bütçe için bildirimlere tam erişim verilsin mi?</div>
+        <div style="height:8px"></div>
+        <div style="font:400 12.5px/18px Roboto,sans-serif;color:#B6B3BA">Bildirim Bütçe tüm bildirimleri okuyabilecek. Kişiler ve mesajların içeriği gibi kişisel bilgileri içerebilir.</div>
+        <div style="height:14px"></div>
+        <div style="display:flex;justify-content:flex-end;gap:8px"><span style="font:500 13px/1 Roboto,sans-serif;color:#5FD3B4;padding:8px 10px">İzin verme</span><span style="font:500 13px/1 Roboto,sans-serif;color:#5FD3B4;padding:8px 10px">İzin ver</span></div>
+      </div>
+    </div>
+
+    <div style="flex:none;height:18px"></div>
+    <div style="flex:none;display:flex;flex-direction:column;gap:1px;background:rgba(246,244,239,.07);border-radius:16px;overflow:hidden;animation:bbRise .7s .3s ease-out both">
+      <sc-for list="{{ promises }}" as="p" hint-placeholder-count="3">
+        <div style="display:flex;gap:12px;align-items:flex-start;padding:11px 16px;background:#080A0F">
+          <div style="width:20px;height:20px;border-radius:6px;background:rgba(20,199,154,.15);color:#14C79A;flex:none;display:flex;align-items:center;justify-content:center;font:700 11px/1 'JetBrains Mono',monospace">✓</div>
+          <div style="flex:1">
+            <div style="font:600 13.5px/1.35 'Schibsted Grotesk',sans-serif">{{ p.title }}</div>
+            <div style="font:400 12px/1.5 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.5)">{{ p.body }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="flex:1;min-height:16px"></div>
+    <div style="flex:none;display:flex;flex-direction:column;gap:11px;padding-bottom:34px">
+      <div style="height:54px;border-radius:14px;background:#14C79A;color:#04231B;display:flex;align-items:center;justify-content:center;font:600 16px/1 'Schibsted Grotesk',sans-serif;position:relative">
+        <span style="position:absolute;inset:0;border-radius:14px;border:1px solid #14C79A;animation:bbRing 2.6s ease-out infinite"></span>
+        Anladım, izin ekranına git
+      </div>
+      <div style="height:42px;display:flex;align-items:center;justify-content:center;font:500 14.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.5)">Şimdilik elle girerim</div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- A3 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">A3</span>Kurulum tamam · ilk bildirim yakalandı</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);font-family:'Schibsted Grotesk',sans-serif;color:#F6F4EF">
+  <div style="position:absolute;left:50%;top:22%;width:460px;height:460px;margin-left:-230px;border-radius:50%;background:radial-gradient(circle,rgba(20,199,154,.3),rgba(20,199,154,0) 64%);filter:blur(34px);animation:bbGlow 7s ease-in-out infinite"></div>
+  <div style="position:relative;height:100%;display:flex;flex-direction:column;padding:0 26px">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+      <div style="position:relative;width:96px;height:96px;display:flex;align-items:center;justify-content:center;animation:bbRise .7s ease-out both">
+        <span style="position:absolute;inset:0;border-radius:50%;border:1px solid #14C79A;animation:bbRing 2.8s ease-out infinite"></span>
+        <span style="position:absolute;inset:0;border-radius:50%;border:1px solid #14C79A;animation:bbRing 2.8s .9s ease-out infinite"></span>
+        <span style="width:96px;height:96px;border-radius:50%;background:rgba(20,199,154,.12);border:1px solid rgba(20,199,154,.35);display:flex;align-items:center;justify-content:center;font:400 34px/1 'Schibsted Grotesk',sans-serif;color:#14C79A">✓</span>
+      </div>
+      <div style="height:28px"></div>
+      <div style="font:600 30px/1.12 'Schibsted Grotesk',sans-serif;letter-spacing:-.03em;animation:bbRise .7s .1s ease-out both">Dinlemeye başladım</div>
+      <div style="height:12px"></div>
+      <div style="font:400 14.5px/1.6 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.55);max-width:280px;animation:bbRise .7s .18s ease-out both">Bundan sonra hiçbir şey yapmana gerek yok. Kartını kullandığında harcama saniyeler içinde defterde olacak.</div>
+      <div style="height:30px"></div>
+      <div style="display:flex;gap:10px;animation:bbRise .7s .26s ease-out both">
+        <sc-for list="{{ readyStats }}" as="s" hint-placeholder-count="3">
+          <div style="padding:13px 15px;border-radius:13px;background:rgba(246,244,239,.05);border:1px solid rgba(246,244,239,.09);text-align:left">
+            <div style="font:600 20px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums">{{ s.n }}</div>
+            <div style="height:5px"></div>
+            <div style="font:400 9.5px/1.2 'JetBrains Mono',monospace;letter-spacing:.1em;color:rgba(246,244,239,.45)">{{ s.k }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="flex:none;display:flex;align-items:center;justify-content:space-between;padding-bottom:34px">
+      <div style="display:flex;gap:6px;align-items:center">
+        <div style="width:5px;height:5px;border-radius:3px;background:rgba(246,244,239,.22)"></div>
+        <div style="width:5px;height:5px;border-radius:3px;background:rgba(246,244,239,.22)"></div>
+        <div style="width:22px;height:5px;border-radius:3px;background:#14C79A"></div>
+      </div>
+      <div style="height:52px;padding:0 28px;border-radius:14px;background:#F6F4EF;color:#080A0F;display:flex;align-items:center;gap:10px;font:600 15.5px/1 'Schibsted Grotesk',sans-serif">Deftere git <span style="font-family:'JetBrains Mono',monospace">→</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ══ B · ANA EKRAN ══ -->
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:14px"><span style="font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:#9184d9">B · ANA EKRAN</span><span style="flex:1;height:1px;background:linear-gradient(to right,rgba(145,132,217,.4),rgba(145,132,217,0))"></span></div>
+<div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+<!-- B1 dark -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">B1</span>Koyu tema · dolu</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);font-family:'Schibsted Grotesk',sans-serif;color:#F6F4EF">
+  <div style="position:absolute;left:76%;top:6%;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(20,199,154,.3),rgba(20,199,154,0) 66%);filter:blur(32px);animation:bbGlow 8s ease-in-out infinite"></div>
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between;animation:bbRise .6s ease-out both">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(246,244,239,.14);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.66)">‹</div>
+        <div style="font:500 11.5px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:rgba(246,244,239,.78)">AĞUSTOS 2026</div>
+        <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(246,244,239,.14);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.3)">›</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="height:30px;padding:0 10px;border-radius:9px;background:rgba(217,168,78,.14);border:1px solid rgba(217,168,78,.3);display:flex;align-items:center;gap:5px;font:600 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:#D9A84E">PRO</div>
+        <div style="width:30px;height:30px;border-radius:9px;background:rgba(246,244,239,.06);display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(246,244,239,.66)">⚙</div>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:24px 24px 0;animation:bbRise .7s .06s ease-out both">
+      <div style="display:flex;align-items:flex-start;gap:6px">
+        <div ref="{{ totalRef }}" style="font:700 66px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;font-variant-numeric:tabular-nums">1.821,80</div>
+        <div style="font:500 21px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.4);padding-top:9px">₺</div>
+      </div>
+      <div style="height:11px"></div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <div style="font:400 13.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.52)">bu ay harcadın</div>
+        <div style="height:23px;padding:0 9px;border-radius:7px;background:rgba(16,185,129,.13);color:#10B981;display:flex;align-items:center;gap:5px;font:500 11px/1 'JetBrains Mono',monospace">↓ %12 <span style="opacity:.55">TEMMUZ</span></div>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:22px 24px 0;animation:bbRise .7s .13s ease-out both">
+      <div style="display:flex;height:9px;gap:2px;transform-origin:left;animation:bbRibbon .9s .28s cubic-bezier(.2,.9,.25,1) both">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+          <div style="width:{{ c.pct }};background:{{ c.color }};border-radius:5px"></div>
+        </sc-for>
+      </div>
+      <div style="height:14px"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;gap:7px;padding:7px 10px 7px 8px;border-radius:9px;background:rgba(246,244,239,.05)">
+            <span style="width:6px;height:6px;border-radius:2px;background:{{ c.color }}"></span>
+            <span style="font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.8)">{{ c.label }}</span>
+            <span style="font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.45);font-variant-numeric:tabular-nums">{{ c.amount }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:26px 24px 6px;display:flex;align-items:baseline;justify-content:space-between;animation:bbRise .7s .19s ease-out both">
+      <div style="font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(246,244,239,.4)">İŞLEMLER · 6</div>
+      <div style="font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#14C79A">RAPOR →</div>
+    </div>
+
+    <div style="flex:1;overflow:hidden;padding:0 24px">
+      <sc-for list="{{ txs }}" as="t" hint-placeholder-count="5">
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(246,244,239,.06);animation:bbRise .5s ease-out both;animation-delay:{{ t.delay }}">
+          <div style="width:37px;height:37px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;background:{{ t.tint }};border:1px solid {{ t.tintBorder }}">{{ t.emoji }}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font:600 15px/1.25 'Schibsted Grotesk',sans-serif;color:{{ t.nameColor }}">{{ t.merchant }}</div>
+            <div style="height:3px"></div>
+            <div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;color:rgba(246,244,239,.4)">{{ t.meta }}</div>
+          </div>
+          <div style="font:600 15.5px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums;color:{{ t.amountColor }}">{{ t.amount }}</div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div style="position:absolute;left:0;right:0;bottom:0;height:104px;background:linear-gradient(to top,#080A0F 44%,rgba(8,10,15,0));pointer-events:none"></div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:34px;height:48px;padding:0 20px;border-radius:13px;background:#F6F4EF;color:#080A0F;display:flex;align-items:center;gap:9px;font:600 14px/1 'Schibsted Grotesk',sans-serif;box-shadow:0 14px 32px -10px rgba(0,0,0,.8)"><span style="font:400 17px/1 'JetBrains Mono',monospace">+</span> Elle ekle</div>
+  </div>
+</div>
+</div>
+
+<!-- B2 light -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">B2</span>Açık tema · dolu</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#F6F4EF;box-shadow:0 24px 60px -18px rgba(0,0,0,.55);font-family:'Schibsted Grotesk',sans-serif;color:#11151C">
+  <div style="position:absolute;left:72%;top:2%;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,rgba(14,124,102,.14),rgba(14,124,102,0) 70%);filter:blur(26px)"></div>
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(17,21,28,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(17,21,28,.13);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(17,21,28,.6)">‹</div>
+        <div style="font:500 11.5px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:rgba(17,21,28,.75)">AĞUSTOS 2026</div>
+        <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(17,21,28,.13);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(17,21,28,.26)">›</div>
+      </div>
+      <div style="display:flex;gap:8px">
+        <div style="height:30px;padding:0 10px;border-radius:9px;background:rgba(217,168,78,.16);border:1px solid rgba(217,168,78,.4);display:flex;align-items:center;font:600 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:#8A6420">PRO</div>
+        <div style="width:30px;height:30px;border-radius:9px;background:rgba(17,21,28,.05);display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(17,21,28,.6)">⚙</div>
+      </div>
+    </div>
+    <div style="flex:none;padding:24px 24px 0">
+      <div style="display:flex;align-items:flex-start;gap:6px">
+        <div style="font:700 66px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;font-variant-numeric:tabular-nums">1.821,80</div>
+        <div style="font:500 21px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.35);padding-top:9px">₺</div>
+      </div>
+      <div style="height:11px"></div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <div style="font:400 13.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.52)">bu ay harcadın</div>
+        <div style="height:23px;padding:0 9px;border-radius:7px;background:rgba(14,124,102,.11);color:#0E7C66;display:flex;align-items:center;gap:5px;font:500 11px/1 'JetBrains Mono',monospace">↓ %12 <span style="opacity:.6">TEMMUZ</span></div>
+      </div>
+    </div>
+    <div style="flex:none;padding:22px 24px 0">
+      <div style="display:flex;height:9px;gap:2px">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+          <div style="width:{{ c.pct }};background:{{ c.colorLight }};border-radius:5px"></div>
+        </sc-for>
+      </div>
+      <div style="height:14px"></div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+          <div style="display:flex;align-items:center;gap:7px;padding:7px 10px 7px 8px;border-radius:9px;background:#FFFFFF;border:1px solid rgba(17,21,28,.06)">
+            <span style="width:6px;height:6px;border-radius:2px;background:{{ c.colorLight }}"></span>
+            <span style="font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.8)">{{ c.label }}</span>
+            <span style="font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.45);font-variant-numeric:tabular-nums">{{ c.amount }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="flex:none;padding:26px 24px 6px;display:flex;align-items:baseline;justify-content:space-between">
+      <div style="font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(17,21,28,.4)">İŞLEMLER · 6</div>
+      <div style="font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#0E7C66">RAPOR →</div>
+    </div>
+    <div style="flex:1;overflow:hidden;padding:0 24px">
+      <sc-for list="{{ txs }}" as="t" hint-placeholder-count="5">
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(17,21,28,.07)">
+          <div style="width:37px;height:37px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;background:{{ t.tintLight }};border:1px solid {{ t.tintBorderLight }}">{{ t.emoji }}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font:600 15px/1.25 'Schibsted Grotesk',sans-serif;color:{{ t.nameColorLight }}">{{ t.merchant }}</div>
+            <div style="height:3px"></div>
+            <div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;color:rgba(17,21,28,.42)">{{ t.meta }}</div>
+          </div>
+          <div style="font:600 15.5px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums;color:{{ t.amountColorLight }}">{{ t.amount }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:0;right:0;bottom:0;height:104px;background:linear-gradient(to top,#F6F4EF 44%,rgba(246,244,239,0));pointer-events:none"></div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:34px;height:48px;padding:0 20px;border-radius:13px;background:#11151C;color:#F6F4EF;display:flex;align-items:center;gap:9px;font:600 14px/1 'Schibsted Grotesk',sans-serif;box-shadow:0 14px 30px -12px rgba(17,21,28,.5)"><span style="font:400 17px/1 'JetBrains Mono',monospace">+</span> Elle ekle</div>
+  </div>
+</div>
+</div>
+
+<!-- B3 izin kapalı -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">B3</span>İzin kapalı uyarısı</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);font-family:'Schibsted Grotesk',sans-serif;color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between">
+      <div style="font:500 11.5px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:rgba(246,244,239,.78)">AĞUSTOS 2026</div>
+      <div style="width:30px;height:30px;border-radius:9px;background:rgba(246,244,239,.06);display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(246,244,239,.66)">⚙</div>
+    </div>
+
+    <div style="flex:none;padding:18px 24px 0;animation:bbRise .7s .05s ease-out both">
+      <div style="border-radius:18px;padding:18px;position:relative;overflow:hidden;background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.26)">
+        <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:#F59E0B">İZİN GEREKLİ</div>
+        <div style="height:10px"></div>
+        <div style="font:600 20px/1.2 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Bildirim erişimi kapalı</div>
+        <div style="height:7px"></div>
+        <div style="font:400 13px/1.55 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.6)">Harcamalar otomatik yakalanamıyor. İnternet iznimiz yok — okunan metinler telefondan çıkmaz.</div>
+        <div style="height:16px"></div>
+        <div style="display:flex;gap:9px;align-items:center">
+          <div style="height:42px;padding:0 18px;border-radius:12px;background:#F59E0B;color:#2B1A00;display:flex;align-items:center;font:600 13.5px/1 'Schibsted Grotesk',sans-serif">Ayarları aç</div>
+          <div style="height:42px;padding:0 15px;border-radius:12px;border:1px solid rgba(246,244,239,.2);display:flex;align-items:center;font:500 13.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.78)">İzni verdim</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:22px 24px 0">
+      <div style="display:flex;align-items:flex-start;gap:6px">
+        <div style="font:700 66px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:rgba(246,244,239,.28)">248,50</div>
+        <div style="font:500 21px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.2);padding-top:9px">₺</div>
+      </div>
+      <div style="height:10px"></div>
+      <div style="font:400 13px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.45)">yalnızca elle girdiklerin · 2 kayıt</div>
+    </div>
+
+    <div style="flex:none;padding:26px 24px 6px;font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(246,244,239,.4)">ELLE GİRİLENLER</div>
+    <div style="flex:1;padding:0 24px">
+      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(246,244,239,.06)">
+        <div style="width:37px;height:37px;border-radius:11px;background:rgba(132,204,22,.13);border:1px solid rgba(132,204,22,.28);display:flex;align-items:center;justify-content:center;font-size:16px">🚗</div>
+        <div style="flex:1"><div style="font:600 15px/1.25 'Schibsted Grotesk',sans-serif">Otopark</div><div style="height:3px"></div><div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;color:rgba(246,244,239,.4)">ULAŞIM · ELLE · 21 AĞU</div></div>
+        <div style="font:600 15.5px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums">−48,50</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(246,244,239,.06)">
+        <div style="width:37px;height:37px;border-radius:11px;background:rgba(16,185,129,.13);border:1px solid rgba(16,185,129,.28);display:flex;align-items:center;justify-content:center;font-size:16px">🛒</div>
+        <div style="flex:1"><div style="font:600 15px/1.25 'Schibsted Grotesk',sans-serif">BİM</div><div style="height:3px"></div><div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;color:rgba(246,244,239,.4)">MARKET · ELLE · 19 AĞU</div></div>
+        <div style="font:600 15.5px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums">−200,00</div>
+      </div>
+      <div style="height:20px"></div>
+      <div style="display:flex;flex-direction:column;gap:9px;opacity:.5">
+        <sc-for list="{{ skeletons }}" as="s" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 0">
+            <div style="width:37px;height:37px;border-radius:11px;background:rgba(246,244,239,.07);animation:bbSkel 1.8s ease-in-out infinite;animation-delay:{{ s.d }}"></div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:6px">
+              <div style="height:11px;width:{{ s.w }};border-radius:4px;background:rgba(246,244,239,.07);animation:bbSkel 1.8s ease-in-out infinite;animation-delay:{{ s.d }}"></div>
+              <div style="height:8px;width:38%;border-radius:4px;background:rgba(246,244,239,.05);animation:bbSkel 1.8s ease-in-out infinite;animation-delay:{{ s.d }}"></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="height:6px"></div>
+      <div style="text-align:center;font:400 11.5px/1.5 'JetBrains Mono',monospace;color:rgba(246,244,239,.34)">izin verilince buraya otomatik dolacak</div>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(246,244,239,.35)"></div>
+  </div>
+</div>
+</div>
+
+<!-- B4 boş -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">B4</span>Boş durum · izin var, harcama yok</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#F6F4EF;box-shadow:0 24px 60px -18px rgba(0,0,0,.55);font-family:'Schibsted Grotesk',sans-serif;color:#11151C">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(17,21,28,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between">
+      <div style="font:500 11.5px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:rgba(17,21,28,.75)">AĞUSTOS 2026</div>
+      <div style="width:30px;height:30px;border-radius:9px;background:rgba(17,21,28,.05);display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(17,21,28,.6)">⚙</div>
+    </div>
+    <div style="flex:none;padding:24px 24px 0">
+      <div style="display:flex;align-items:flex-start;gap:6px">
+        <div style="font:700 66px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;font-variant-numeric:tabular-nums;color:rgba(17,21,28,.2)">0,00</div>
+        <div style="font:500 21px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.16);padding-top:9px">₺</div>
+      </div>
+      <div style="height:10px"></div>
+      <div style="font:400 13.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.5)">bu ay henüz harcama yok</div>
+    </div>
+    <div style="flex:1;padding:34px 24px 0">
+      <div style="border:1px dashed rgba(17,21,28,.16);border-radius:20px;padding:28px 22px;display:flex;flex-direction:column;align-items:center;text-align:center;background:rgba(255,255,255,.5)">
+        <div style="position:relative;width:52px;height:52px;display:flex;align-items:center;justify-content:center">
+          <span style="position:absolute;inset:0;border-radius:16px;border:1px solid #0E7C66;animation:bbRing 3s ease-out infinite"></span>
+          <span style="width:52px;height:52px;border-radius:16px;background:rgba(14,124,102,.1);display:flex;align-items:center;justify-content:center;font-size:21px">📥</span>
+        </div>
+        <div style="height:16px"></div>
+        <div style="font:600 18px/1.25 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">İlk bildirim bekleniyor</div>
+        <div style="height:7px"></div>
+        <div style="font:400 13px/1.55 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.55);max-width:252px">Kartını bir yerde kullandığında harcama saniyeler içinde burada olacak. Beklemek istemezsen elle de ekleyebilirsin.</div>
+        <div style="height:18px"></div>
+        <div style="height:42px;padding:0 18px;border-radius:12px;background:#11151C;color:#F6F4EF;display:flex;align-items:center;gap:8px;font:600 13.5px/1 'Schibsted Grotesk',sans-serif"><span style="font-family:'JetBrains Mono',monospace">+</span> Elle harcama ekle</div>
+      </div>
+      <div style="height:20px"></div>
+      <div style="background:#FFFFFF;border:1px solid rgba(17,21,28,.06);border-radius:16px;padding:16px 18px">
+        <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(17,21,28,.4)">HAZIRLIK DURUMU</div>
+        <div style="height:14px"></div>
+        <sc-for list="{{ readiness }}" as="r" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:10px;padding:7px 0">
+            <span style="width:18px;height:18px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font:700 10px/1 'JetBrains Mono',monospace;background:{{ r.bg }};color:{{ r.fg }}">{{ r.mark }}</span>
+            <span style="flex:1;font:500 13px/1.3 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.8)">{{ r.label }}</span>
+            <span style="font:400 11px/1 'JetBrains Mono',monospace;color:rgba(17,21,28,.42)">{{ r.value }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(17,21,28,.28)"></div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+
+<div style="padding:0 56px 100px;color:#e9e9ed;display:flex;flex-direction:column;gap:56px;font-family:'Schibsted Grotesk',sans-serif">
+
+<!-- ══ C · RAPOR ══ -->
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:14px"><span style="font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:#9184d9">C · RAPOR VE DERİNLİK</span><span style="flex:1;height:1px;background:linear-gradient(to right,rgba(145,132,217,.4),rgba(145,132,217,0))"></span></div>
+<div style="font:400 13px/1.65 'Schibsted Grotesk',sans-serif;color:#9a9aa8;max-width:660px">Kullanıcının uygulamada vakit geçirmesi için eklenen katman. Oyunlaştırma yok — merak var: “geçen aya göre ne oldu”, “en çok nereye gitti”, “hangi gün zayıfım”. Ay kapanınca tek bir özet kartı üretiliyor, paylaşılabilir ama paylaşım da cihazda görsel üretiyor, sunucuya gitmiyor.</div>
+<div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+<!-- C1 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">C1</span>Aylık rapor</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(246,244,239,.14);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.66)">‹</div>
+      <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Rapor</div>
+    </div>
+
+    <div style="flex:none;padding:24px 24px 0">
+      <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:rgba(246,244,239,.4)">SON 6 AY</div>
+      <div style="height:16px"></div>
+      <div style="display:flex;align-items:flex-end;gap:9px;height:132px">
+        <sc-for list="{{ months }}" as="m" hint-placeholder-count="6">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;height:100%;justify-content:flex-end">
+            <div style="font:500 9.5px/1 'JetBrains Mono',monospace;color:{{ m.labelColor }}">{{ m.short }}</div>
+            <div style="width:100%;height:{{ m.h }};border-radius:6px;background:{{ m.fill }};transform-origin:bottom;animation:bbBar .7s cubic-bezier(.2,.9,.25,1) both;animation-delay:{{ m.delay }}"></div>
+            <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:{{ m.nameColor }}">{{ m.name }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:26px 24px 0">
+      <div style="display:flex;gap:10px">
+        <sc-for list="{{ reportStats }}" as="s" hint-placeholder-count="3">
+          <div style="flex:1;padding:14px;border-radius:14px;background:rgba(246,244,239,.045);border:1px solid rgba(246,244,239,.08)">
+            <div style="font:400 9.5px/1.2 'JetBrains Mono',monospace;letter-spacing:.1em;color:rgba(246,244,239,.42)">{{ s.k }}</div>
+            <div style="height:9px"></div>
+            <div style="font:600 19px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums;color:{{ s.color }}">{{ s.v }}</div>
+            <div style="height:4px"></div>
+            <div style="font:400 10.5px/1.2 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.4)">{{ s.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:26px 24px 0">
+      <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:rgba(246,244,239,.4)">HAFTANIN RİTMİ</div>
+      <div style="height:14px"></div>
+      <div style="display:flex;align-items:flex-end;gap:7px;height:62px">
+        <sc-for list="{{ weekdays }}" as="d" hint-placeholder-count="7">
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px;height:100%;justify-content:flex-end">
+            <div style="width:100%;height:{{ d.h }};border-radius:5px;background:{{ d.fill }};transform-origin:bottom;animation:bbBar .6s cubic-bezier(.2,.9,.25,1) both;animation-delay:{{ d.delay }}"></div>
+            <div style="font:500 9.5px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.45)">{{ d.label }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="height:10px"></div>
+      <div style="font:400 11.5px/1.5 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.5)">Cuma günleri ortalamanın <span style="color:#F59E0B">%64 üstünde</span> harcıyorsun.</div>
+    </div>
+
+    <div style="flex:1;padding:24px 24px 0;overflow:hidden">
+      <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:rgba(246,244,239,.4)">EN ÇOK GİDEN YERLER</div>
+      <div style="height:12px"></div>
+      <sc-for list="{{ topMerchants }}" as="t" hint-placeholder-count="3">
+        <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid rgba(246,244,239,.06)">
+          <div style="width:20px;font:600 12px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.34)">{{ t.rank }}</div>
+          <div style="flex:1"><div style="font:600 14px/1.2 'Schibsted Grotesk',sans-serif">{{ t.name }}</div><div style="height:3px"></div><div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;color:rgba(246,244,239,.4)">{{ t.meta }}</div></div>
+          <div style="font:600 14.5px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums">{{ t.amount }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(246,244,239,.32)"></div>
+  </div>
+</div>
+</div>
+
+<!-- C2 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">C2</span>Kategori detayı</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:absolute;left:-10%;top:-6%;width:400px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(132,204,22,.2),rgba(132,204,22,0) 70%);filter:blur(30px)"></div>
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(246,244,239,.14);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.66)">‹</div>
+      <div style="width:32px;height:32px;border-radius:10px;background:rgba(132,204,22,.15);border:1px solid rgba(132,204,22,.32);display:flex;align-items:center;justify-content:center;font-size:15px">🚗</div>
+      <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Ulaşım</div>
+    </div>
+
+    <div style="flex:none;padding:26px 24px 0">
+      <div style="display:flex;align-items:flex-start;gap:6px">
+        <div style="font:700 54px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.048em;font-variant-numeric:tabular-nums">780,00</div>
+        <div style="font:500 18px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.4);padding-top:7px">₺</div>
+      </div>
+      <div style="height:10px"></div>
+      <div style="display:flex;align-items:center;gap:9px">
+        <div style="font:400 13px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.5)">ayın %43'ü</div>
+        <div style="height:22px;padding:0 9px;border-radius:7px;background:rgba(248,113,113,.13);color:#F87171;display:flex;align-items:center;font:500 11px/1 'JetBrains Mono',monospace">↑ %31 TEMMUZ</div>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:26px 24px 0">
+      <svg viewBox="0 0 342 88" width="342" height="88" style="display:block;overflow:visible">
+        <polyline points="0,66 57,54 114,70 171,40 228,58 285,24 342,34" fill="none" stroke="#84CC16" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="900" style="animation:bbDraw 1.4s .3s ease-out both"></polyline>
+        <polyline points="0,66 57,54 114,70 171,40 228,58 285,24 342,34 342,88 0,88" fill="rgba(132,204,22,.1)" stroke="none" style="animation:bbFade 1s 1.1s ease-out both"></polyline>
+        <circle cx="285" cy="24" r="4" fill="#84CC16" style="animation:bbFade .4s 1.5s ease-out both"></circle>
+      </svg>
+      <div style="height:8px"></div>
+      <div style="display:flex;justify-content:space-between;font:400 9.5px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.36)"><span>MAR</span><span>NİS</span><span>MAY</span><span>HAZ</span><span>TEM</span><span>AĞU</span></div>
+    </div>
+
+    <div style="flex:1;padding:26px 24px 0;overflow:hidden">
+      <div style="display:flex;align-items:baseline;justify-content:space-between">
+        <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:rgba(246,244,239,.4)">BU AYIN İŞLEMLERİ · 3</div>
+        <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#84CC16">KURAL EKLE</div>
+      </div>
+      <div style="height:10px"></div>
+      <sc-for list="{{ ulasimTxs }}" as="t" hint-placeholder-count="3">
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(246,244,239,.06)">
+          <div style="width:37px;height:37px;border-radius:11px;flex:none;background:rgba(132,204,22,.13);border:1px solid rgba(132,204,22,.28);display:flex;align-items:center;justify-content:center;font-size:16px">🚗</div>
+          <div style="flex:1"><div style="font:600 15px/1.25 'Schibsted Grotesk',sans-serif">{{ t.name }}</div><div style="height:3px"></div><div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;color:rgba(246,244,239,.4)">{{ t.meta }}</div></div>
+          <div style="font:600 15.5px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums">{{ t.amount }}</div>
+        </div>
+      </sc-for>
+      <div style="height:18px"></div>
+      <div style="padding:14px 16px;border-radius:14px;background:rgba(246,244,239,.045);border:1px solid rgba(246,244,239,.08);display:flex;gap:11px;align-items:flex-start">
+        <span style="font:700 11px/1.4 'JetBrains Mono',monospace;color:#84CC16">↺</span>
+        <span style="font:400 12px/1.55 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.6)">Shell harcamalarının tamamı bu kategoriye düşüyor. Kural öğrenildi, bir daha sormayacağım.</span>
+      </div>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(246,244,239,.32)"></div>
+  </div>
+</div>
+</div>
+
+<!-- C3 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">C3</span>Ay kapanış özeti · paylaşılabilir</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between">
+      <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Ağustos kapandı</div>
+      <div style="width:30px;height:30px;border-radius:9px;background:rgba(246,244,239,.06);display:flex;align-items:center;justify-content:center;font:400 13px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.6)">✕</div>
+    </div>
+
+    <div style="flex:1;padding:22px 24px 0;display:flex;flex-direction:column">
+      <div style="border-radius:22px;padding:26px 24px;background:linear-gradient(160deg,#11362C,#0A1A18 62%,#080A0F);border:1px solid rgba(20,199,154,.22);position:relative;overflow:hidden;animation:bbRise .8s ease-out both">
+        <div style="position:absolute;inset:0;background:linear-gradient(105deg,rgba(255,255,255,0),rgba(255,255,255,.09),rgba(255,255,255,0));width:55%;animation:bbShine 3.4s 1s ease-in-out infinite"></div>
+        <div style="position:relative">
+          <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.22em;color:#14C79A">AĞUSTOS 2026</div>
+          <div style="height:18px"></div>
+          <div style="display:flex;align-items:flex-start;gap:6px">
+            <div style="font:700 50px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;font-variant-numeric:tabular-nums">1.821,80</div>
+            <div style="font:500 17px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.42);padding-top:6px">₺</div>
+          </div>
+          <div style="height:8px"></div>
+          <div style="font:400 13px/1.5 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.62)">Temmuz'a göre <span style="color:#14C79A">248,20 ₺ daha az</span>. Son altı ayın en düşüğü.</div>
+          <div style="height:22px"></div>
+          <div style="display:flex;height:8px;gap:2px;transform-origin:left;animation:bbRibbon 1s .4s cubic-bezier(.2,.9,.25,1) both">
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+              <div style="width:{{ c.pct }};background:{{ c.color }};border-radius:4px"></div>
+            </sc-for>
+          </div>
+          <div style="height:20px"></div>
+          <div style="display:flex;gap:20px">
+            <sc-for list="{{ closeStats }}" as="s" hint-placeholder-count="3">
+              <div>
+                <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums">{{ s.v }}</div>
+                <div style="height:5px"></div>
+                <div style="font:400 9.5px/1.2 'JetBrains Mono',monospace;letter-spacing:.1em;color:rgba(246,244,239,.45)">{{ s.k }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:20px"></div>
+      <div style="display:flex;flex-direction:column;gap:1px;background:rgba(246,244,239,.07);border-radius:16px;overflow:hidden">
+        <sc-for list="{{ closeInsights }}" as="i" hint-placeholder-count="3">
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:15px 16px;background:#080A0F">
+            <span style="width:20px;height:20px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font:700 10px/1 'JetBrains Mono',monospace;background:{{ i.bg }};color:{{ i.fg }}">{{ i.mark }}</span>
+            <span style="flex:1;font:400 13px/1.5 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.78)">{{ i.text }}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="flex:1;min-height:16px"></div>
+      <div style="display:flex;gap:10px;padding-bottom:34px">
+        <div style="flex:1;height:52px;border-radius:13px;background:#F6F4EF;color:#080A0F;display:flex;align-items:center;justify-content:center;gap:9px;font:600 15px/1 'Schibsted Grotesk',sans-serif">Görseli kaydet</div>
+        <div style="width:52px;height:52px;border-radius:13px;border:1px solid rgba(246,244,239,.18);display:flex;align-items:center;justify-content:center;font-size:16px;color:rgba(246,244,239,.7)">↗</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ══ D · GİRİŞ VE DÜZELTME ══ -->
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:14px"><span style="font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:#9184d9">D · GİRİŞ VE DÜZELTME</span><span style="flex:1;height:1px;background:linear-gradient(to right,rgba(145,132,217,.4),rgba(145,132,217,0))"></span></div>
+<div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+<!-- D1 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">D1</span>Düzeltme sayfası</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;padding:52px 24px 0;filter:blur(2px);opacity:.45">
+    <div style="font:700 66px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em">1.821,80</div>
+    <div style="height:26px"></div>
+    <div style="display:flex;height:9px;gap:2px"><div style="flex:43;background:#84CC16;border-radius:5px"></div><div style="flex:25;background:#64748B;border-radius:5px"></div><div style="flex:17;background:#38BDF8;border-radius:5px"></div><div style="flex:14;background:#10B981;border-radius:5px"></div></div>
+  </div>
+  <div style="position:absolute;inset:0;background:rgba(3,5,9,.6)"></div>
+  <div style="position:absolute;left:0;right:0;bottom:0;background:#101520;border-radius:26px 26px 0 0;border-top:1px solid rgba(246,244,239,.09);animation:bbSheet .55s cubic-bezier(.2,.9,.25,1) both">
+    <div style="width:38px;height:4px;border-radius:2px;background:rgba(246,244,239,.25);margin:11px auto 0"></div>
+    <div style="padding:13px 22px 32px;display:flex;flex-direction:column">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(246,244,239,.4)">İŞLEMİ DÜZELT</div>
+        <div style="width:27px;height:27px;border-radius:8px;background:rgba(246,244,239,.06);display:flex;align-items:center;justify-content:center;font:400 12px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.55)">✕</div>
+      </div>
+      <div style="height:15px"></div>
+      <div style="display:flex;align-items:flex-start;gap:6px">
+        <div style="font:700 44px/.92 'Schibsted Grotesk',sans-serif;letter-spacing:-.045em;font-variant-numeric:tabular-nums">449,00</div>
+        <div style="font:500 16px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.4);padding-top:5px">TL</div>
+      </div>
+      <div style="height:5px"></div>
+      <div style="font:400 10.5px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.4);letter-spacing:.06em">20 AĞU 12:15 · HARCAMA</div>
+
+      <div style="height:20px"></div>
+      <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:rgba(246,244,239,.4)">İŞYERİ</div>
+      <div style="height:9px"></div>
+      <div style="height:52px;border-radius:13px;background:rgba(246,244,239,.05);border:1px solid #14C79A;padding:0 15px;display:flex;align-items:center;gap:2px">
+        <span style="font:500 16px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.36)">Bilinmeyen işyeri</span>
+        <span style="width:1.5px;height:19px;background:#14C79A;animation:bbBlink 1.1s steps(1) infinite"></span>
+      </div>
+      <div style="height:8px"></div>
+      <div style="display:flex;gap:7px">
+        <div style="padding:7px 11px;border-radius:8px;background:rgba(246,244,239,.06);font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.68)">Trendyol</div>
+        <div style="padding:7px 11px;border-radius:8px;background:rgba(246,244,239,.06);font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.68)">Boyner</div>
+        <div style="padding:7px 11px;border-radius:8px;background:rgba(246,244,239,.06);font:400 11.5px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.42)">geçmişten</div>
+      </div>
+
+      <div style="height:20px"></div>
+      <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:rgba(246,244,239,.4)">KATEGORİ</div>
+      <div style="height:10px"></div>
+      <div style="display:flex;gap:7px;overflow:hidden">
+        <sc-for list="{{ chips }}" as="ch" hint-placeholder-count="4">
+          <div style="flex:none;height:38px;padding:0 13px;border-radius:11px;display:flex;align-items:center;gap:7px;white-space:nowrap;background:{{ ch.bg }};border:1px solid {{ ch.border }};color:{{ ch.fg }};font:600 13px/1 'Schibsted Grotesk',sans-serif"><span style="font-size:14px">{{ ch.emoji }}</span>{{ ch.label }}</div>
+        </sc-for>
+      </div>
+      <div style="height:9px"></div>
+      <div style="display:flex;align-items:center;gap:9px;padding:10px 12px;border-radius:11px;background:rgba(20,199,154,.07)">
+        <span style="font:700 10px/1 'JetBrains Mono',monospace;color:#14C79A">↺</span>
+        <span style="font:400 11.5px/1.4 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.62)">Bu işyerini bir daha sormam — kuralı öğreniyorum.</span>
+      </div>
+
+      <div style="height:16px"></div>
+      <div style="font:400 10.5px/1.75 'JetBrains Mono',monospace;color:rgba(246,244,239,.32);padding-left:10px;border-left:1px solid rgba(246,244,239,.12)">kaynak &nbsp;com.garanti.cepsubesi<br>desen &nbsp;&nbsp;merchant_then_amount<br>güven &nbsp;&nbsp;0.62</div>
+
+      <div style="height:18px"></div>
+      <div style="display:flex;gap:10px;align-items:center">
+        <div style="flex:1;height:52px;border-radius:13px;background:#14C79A;color:#04231B;display:flex;align-items:center;justify-content:center;font:600 15.5px/1 'Schibsted Grotesk',sans-serif">Kaydet</div>
+        <div style="width:52px;height:52px;border-radius:13px;border:1px solid rgba(248,113,113,.38);color:#F87171;display:flex;align-items:center;justify-content:center;font-size:16px">🗑</div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- D2 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">D2</span>Manuel harcama girişi</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between">
+      <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Elle harcama</div>
+      <div style="width:30px;height:30px;border-radius:9px;background:rgba(246,244,239,.06);display:flex;align-items:center;justify-content:center;font:400 13px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.6)">✕</div>
+    </div>
+
+    <div style="flex:none;padding:36px 24px 0;display:flex;flex-direction:column;align-items:center">
+      <div style="display:flex;align-items:flex-start;gap:7px">
+        <div style="font:700 60px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;font-variant-numeric:tabular-nums">248<span style="color:rgba(246,244,239,.4)">,50</span></div>
+        <div style="font:500 20px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.4);padding-top:8px">₺</div>
+      </div>
+      <div style="height:14px"></div>
+      <div style="height:36px;padding:0 14px;border-radius:11px;background:rgba(246,244,239,.05);border:1px solid rgba(246,244,239,.1);display:flex;align-items:center;gap:8px;font:500 13px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.7)">🚗 Ulaşım <span style="font:400 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.4)">▾</span></div>
+    </div>
+
+    <div style="flex:none;padding:24px 24px 0">
+      <div style="height:48px;border-radius:13px;background:rgba(246,244,239,.05);border:1px solid rgba(246,244,239,.1);padding:0 15px;display:flex;align-items:center;gap:10px">
+        <span style="font:400 12px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.36)">İŞYERİ</span>
+        <span style="font:500 15px/1 'Schibsted Grotesk',sans-serif">Otopark</span>
+        <span style="flex:1"></span>
+        <span style="font:400 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.36)">21 AĞU</span>
+      </div>
+    </div>
+
+    <div style="flex:1"></div>
+    <div style="flex:none;padding:0 16px 30px">
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px">
+        <sc-for list="{{ keys }}" as="k" hint-placeholder-count="12">
+          <div style="height:58px;border-radius:14px;background:{{ k.bg }};border:1px solid {{ k.border }};display:flex;align-items:center;justify-content:center;font:{{ k.font }};color:{{ k.fg }}">{{ k.label }}</div>
+        </sc-for>
+      </div>
+      <div style="height:11px"></div>
+      <div style="height:54px;border-radius:14px;background:#14C79A;color:#04231B;display:flex;align-items:center;justify-content:center;font:600 16px/1 'Schibsted Grotesk',sans-serif">Kaydet</div>
+    </div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div style="padding:0 56px 110px;color:#e9e9ed;display:flex;flex-direction:column;gap:56px;font-family:'Schibsted Grotesk',sans-serif">
+
+<!-- ══ E · PRO VE REKLAM ══ -->
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:14px"><span style="font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:#D9A84E">E · PRO VE REKLAM</span><span style="flex:1;height:1px;background:linear-gradient(to right,rgba(217,168,78,.4),rgba(217,168,78,0))"></span></div>
+<div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+<!-- E1 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(217,168,78,.18);color:#D9A84E;border-radius:5px;margin-right:8px">E1</span>Pro · tek seferlik satın alma</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:absolute;left:50%;top:-10%;width:520px;height:420px;margin-left:-260px;border-radius:50%;background:radial-gradient(circle,rgba(217,168,78,.26),rgba(217,168,78,0) 68%);filter:blur(34px);animation:bbGlow 9s ease-in-out infinite"></div>
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;justify-content:flex-end">
+      <div style="width:30px;height:30px;border-radius:9px;background:rgba(246,244,239,.06);display:flex;align-items:center;justify-content:center;font:400 13px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.6)">✕</div>
+    </div>
+
+    <div style="flex:none;padding:22px 24px 0">
+      <div style="height:34px;padding:0 12px;border-radius:9px;background:rgba(217,168,78,.14);border:1px solid rgba(217,168,78,.32);display:inline-flex;align-items:center;gap:7px;font:600 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.14em;color:#D9A84E;animation:bbRise .6s ease-out both">BILDIRIM BÜTÇE PRO</div>
+      <div style="height:20px"></div>
+      <div style="font:600 31px/1.08 'Schibsted Grotesk',sans-serif;letter-spacing:-.032em;animation:bbRise .7s .07s ease-out both">Bir kere öde, ömür boyu kullan.</div>
+      <div style="height:11px"></div>
+      <div style="font:400 13.5px/1.55 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.58);animation:bbRise .7s .14s ease-out both">Abonelik yok, yenileme yok. Satın alma Play Store üzerinden yapılır — uygulamanın kendisi hâlâ internete çıkmaz.</div>
+    </div>
+
+    <div style="flex:1;padding:20px 24px 0;overflow:hidden">
+      <div style="padding:12px 14px;border-radius:12px;background:rgba(20,199,154,.07);border:1px solid rgba(20,199,154,.2);display:flex;gap:11px;align-items:flex-start">
+        <span style="font:700 10px/1.5 'JetBrains Mono',monospace;color:#14C79A">i</span>
+        <span style="font:400 11.5px/1.55 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.62)">Ödeme <span style="font-family:'JetBrains Mono',monospace;color:rgba(246,244,239,.85)">com.android.vending.BILLING</span> ile Play Store uygulamasına devredilir. Manifest'e INTERNET izni <span style="color:#14C79A">eklenmez</span>.</span>
+      </div>
+      <div style="height:14px"></div>
+      <div style="display:flex;flex-direction:column;gap:1px;background:rgba(246,244,239,.07);border-radius:16px;overflow:hidden">
+        <sc-for list="{{ proFeatures }}" as="f" hint-placeholder-count="4">
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:12px 16px;background:#080A0F;animation:bbRise .5s ease-out both;animation-delay:{{ f.delay }}">
+            <span style="width:20px;height:20px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font:700 10px/1 'JetBrains Mono',monospace;background:rgba(217,168,78,.16);color:#D9A84E">{{ f.mark }}</span>
+            <span style="flex:1">
+              <span style="display:block;font:600 13.5px/1.35 'Schibsted Grotesk',sans-serif">{{ f.title }}</span>
+              <span style="display:block;font:400 12px/1.5 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.5)">{{ f.body }}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:0 24px 34px">
+      <div style="height:60px;border-radius:15px;background:linear-gradient(100deg,#E8BC63,#D9A84E 55%,#C08F35);color:#2B1D02;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:relative;overflow:hidden">
+        <span style="position:absolute;inset:0;background:linear-gradient(105deg,rgba(255,255,255,0),rgba(255,255,255,.4),rgba(255,255,255,0));width:45%;animation:bbShine 3.2s 1.2s ease-in-out infinite"></span>
+        <span style="position:relative;font:600 16px/1 'Schibsted Grotesk',sans-serif">Pro'ya geç</span>
+        <span style="position:relative;font:700 17px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums">149,00 ₺</span>
+      </div>
+      <div style="height:11px"></div>
+      <div style="display:flex;justify-content:center;gap:18px;font:400 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.45)"><span>Satın almayı geri yükle</span><span>·</span><span>Şartlar</span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- E2 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(217,168,78,.18);color:#D9A84E;border-radius:5px;margin-right:8px">E2</span>Ücretsiz sürüm · ev-içi promo yuvası</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;justify-content:space-between">
+      <div style="font:500 11.5px/1 'JetBrains Mono',monospace;letter-spacing:.16em;color:rgba(246,244,239,.78)">AĞUSTOS 2026</div>
+      <div style="width:30px;height:30px;border-radius:9px;background:rgba(246,244,239,.06);display:flex;align-items:center;justify-content:center;font-size:13px;color:rgba(246,244,239,.66)">⚙</div>
+    </div>
+    <div style="flex:none;padding:22px 24px 0">
+      <div style="display:flex;align-items:flex-start;gap:6px">
+        <div style="font:700 62px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;font-variant-numeric:tabular-nums">1.821,80</div>
+        <div style="font:500 20px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.4);padding-top:8px">₺</div>
+      </div>
+      <div style="height:10px"></div>
+      <div style="font:400 13px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.5)">bu ay harcadın · <span style="color:rgba(246,244,239,.4)">3 ay geçmiş görünür</span></div>
+    </div>
+    <div style="flex:none;padding:20px 24px 0">
+      <div style="display:flex;height:9px;gap:2px">
+        <sc-for list="{{ cats }}" as="c" hint-placeholder-count="5">
+          <div style="width:{{ c.pct }};background:{{ c.color }};border-radius:5px"></div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:none;padding:22px 24px 0">
+      <div style="border-radius:16px;padding:16px;background:rgba(217,168,78,.07);border:1px solid rgba(217,168,78,.22);display:flex;gap:13px;align-items:center;position:relative;overflow:hidden">
+        <span style="position:absolute;inset:0;background:linear-gradient(105deg,rgba(255,255,255,0),rgba(217,168,78,.14),rgba(255,255,255,0));width:50%;animation:bbShine 4.5s 1.5s ease-in-out infinite"></span>
+        <div style="position:relative;width:40px;height:40px;border-radius:12px;background:rgba(217,168,78,.16);border:1px solid rgba(217,168,78,.3);display:flex;align-items:center;justify-content:center;font:600 13px/1 'JetBrains Mono',monospace;color:#D9A84E;flex:none">PRO</div>
+        <div style="position:relative;flex:1">
+          <div style="font:600 14px/1.25 'Schibsted Grotesk',sans-serif">Tüm geçmişi aç</div>
+          <div style="height:3px"></div>
+          <div style="font:400 11.5px/1.4 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.55)">Sınırsız ay, widget çeşitleri, CSV dışa aktarma</div>
+        </div>
+        <div style="position:relative;height:32px;padding:0 12px;border-radius:9px;background:#D9A84E;color:#2B1D02;display:flex;align-items:center;font:600 12px/1 'Schibsted Grotesk',sans-serif;flex:none">149 ₺</div>
+      </div>
+      <div style="height:7px"></div>
+      <div style="font:400 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:rgba(246,244,239,.3);text-align:right">KENDİ REKLAMIMIZ · AĞ ÇAĞRISI YOK</div>
+    </div>
+
+    <div style="flex:none;padding:20px 24px 6px;font:500 10.5px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(246,244,239,.4)">İŞLEMLER</div>
+    <div style="flex:1;overflow:hidden;padding:0 24px">
+      <sc-for list="{{ txs }}" as="t" hint-placeholder-count="4">
+        <div style="display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid rgba(246,244,239,.06)">
+          <div style="width:37px;height:37px;border-radius:11px;flex:none;display:flex;align-items:center;justify-content:center;font-size:16px;background:{{ t.tint }};border:1px solid {{ t.tintBorder }}">{{ t.emoji }}</div>
+          <div style="flex:1;min-width:0">
+            <div style="font:600 15px/1.25 'Schibsted Grotesk',sans-serif;color:{{ t.nameColor }}">{{ t.merchant }}</div>
+            <div style="height:3px"></div>
+            <div style="font:400 10px/1 'JetBrains Mono',monospace;letter-spacing:.06em;color:rgba(246,244,239,.4)">{{ t.meta }}</div>
+          </div>
+          <div style="font:600 15.5px/1 'Schibsted Grotesk',sans-serif;font-variant-numeric:tabular-nums;color:{{ t.amountColor }}">{{ t.amount }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(246,244,239,.32)"></div>
+  </div>
+</div>
+</div>
+
+<!-- E3 karar paneli -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(248,113,113,.18);color:#F87171;border-radius:5px;margin-right:8px">E3</span>Ağ reklamı isterseniz ne kırılır</div>
+<div style="width:430px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(248,113,113,.22);padding:26px">
+  <div style="font:600 19px/1.25 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em;color:#e9e9ed">AdMob eklenirse ürünün iddiası biter</div>
+  <div style="height:12px"></div>
+  <div style="font:400 12.5px/1.65 'Schibsted Grotesk',sans-serif;color:#9a9aa8">Reklam SDK'sı manifest'e <span style="font-family:'JetBrains Mono',monospace;color:#F87171">INTERNET</span> ve <span style="font-family:'JetBrains Mono',monospace;color:#F87171">AD_ID</span> ekler. O satır eklendiği anda tanıtım sitesindeki kanıt görseli, PRIVACY.md ve “%100 çevrimdışı” cümlesi çöker.</div>
+  <div style="height:20px"></div>
+  <div style="display:flex;flex-direction:column;gap:1px;background:rgba(255,255,255,.06);border-radius:10px;overflow:hidden">
+    <sc-for list="{{ adCompare }}" as="r" hint-placeholder-count="5">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:#0b0d16;font:400 11.5px/1.4 'JetBrains Mono',monospace">
+        <span style="flex:1;color:#c9c9d4">{{ r.k }}</span>
+        <span style="width:74px;text-align:right;color:{{ r.proColor }}">{{ r.pro }}</span>
+        <span style="width:74px;text-align:right;color:{{ r.adColor }}">{{ r.ad }}</span>
+      </div>
+    </sc-for>
+    <div style="display:flex;gap:12px;padding:10px 14px;background:rgba(255,255,255,.04);font:500 9.5px/1 'JetBrains Mono',monospace;letter-spacing:.1em;color:#6c6c78"><span style="flex:1"></span><span style="width:74px;text-align:right">PRO</span><span style="width:74px;text-align:right">ADMOB</span></div>
+  </div>
+  <div style="height:18px"></div>
+  <div style="font:400 12.5px/1.7 'Schibsted Grotesk',sans-serif;color:#9a9aa8">Yine de reklam istiyorsan tek dürüst yol: reklamı <span style="color:#c9c9d4">ayrı bir “Bildirim Bütçe Free”</span> uygulaması olarak yayınlamak ve çevrimdışı sürümü ücretli tutmak. Aynı APK'da ikisi bir arada duramaz.</div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ══ F · AYARLAR ══ -->
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:14px"><span style="font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:#9184d9">F · AYARLAR VE ŞEFFAFLIK</span><span style="flex:1;height:1px;background:linear-gradient(to right,rgba(145,132,217,.4),rgba(145,132,217,0))"></span></div>
+<div style="display:flex;flex-wrap:wrap;gap:36px;align-items:flex-start">
+
+<!-- F1 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">F1</span>Ayarlar</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(246,244,239,.14);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.66)">‹</div>
+      <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Ayarlar</div>
+    </div>
+    <div style="flex:1;overflow:hidden;padding:22px 24px 0;display:flex;flex-direction:column;gap:20px">
+      <sc-for list="{{ settingGroups }}" as="g" hint-placeholder-count="3">
+        <div>
+          <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:rgba(246,244,239,.38);padding-bottom:11px">{{ g.name }}</div>
+          <div style="display:flex;flex-direction:column;gap:1px;background:rgba(246,244,239,.07);border-radius:14px;overflow:hidden">
+            <sc-for list="{{ g.rows }}" as="r" hint-placeholder-count="3">
+              <div style="display:flex;align-items:center;gap:12px;padding:14px 15px;background:#080A0F">
+                <span style="width:28px;height:28px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;font-size:13px;background:{{ r.iconBg }}">{{ r.icon }}</span>
+                <span style="flex:1;min-width:0">
+                  <span style="display:block;font:600 13.5px/1.3 'Schibsted Grotesk',sans-serif">{{ r.label }}</span>
+                  <span style="display:block;font:400 11px/1.35 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.45)">{{ r.sub }}</span>
+                </span>
+                <span style="font:500 11px/1 'JetBrains Mono',monospace;color:{{ r.valueColor }};flex:none">{{ r.value }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+      <div style="font:400 10.5px/1.7 'JetBrains Mono',monospace;color:rgba(246,244,239,.28)">sürüm 1.0.0 · desen seti v1 · 167 test örneği<br>MIT lisansı · kaynak kodu açık</div>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(246,244,239,.32)"></div>
+  </div>
+</div>
+</div>
+
+<!-- F2 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">F2</span>Bildirim kaynakları</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(246,244,239,.14);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.66)">‹</div>
+      <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Kaynaklar</div>
+    </div>
+    <div style="flex:none;padding:16px 24px 0">
+      <div style="font:400 12.5px/1.6 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.55)">Yalnızca işaretli uygulamaların bildirimleri okunur. Diğerleri servise gelse bile ayrıştırılmadan atılır.</div>
+      <div style="height:14px"></div>
+      <div style="height:44px;border-radius:12px;background:rgba(246,244,239,.05);border:1px solid rgba(246,244,239,.1);padding:0 14px;display:flex;align-items:center;gap:9px">
+        <span style="font:400 13px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.36)">⌕</span>
+        <span style="font:400 14px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.36)">Banka ara</span>
+      </div>
+    </div>
+    <div style="flex:1;overflow:hidden;padding:18px 24px 0">
+      <div style="display:flex;flex-direction:column;gap:1px;background:rgba(246,244,239,.07);border-radius:14px;overflow:hidden">
+        <sc-for list="{{ banks }}" as="b" hint-placeholder-count="8">
+          <div style="display:flex;align-items:center;gap:12px;padding:13px 15px;background:#080A0F">
+            <span style="width:30px;height:30px;border-radius:9px;flex:none;display:flex;align-items:center;justify-content:center;font:700 11px/1 'JetBrains Mono',monospace;background:{{ b.bg }};color:{{ b.fg }}">{{ b.initial }}</span>
+            <span style="flex:1;min-width:0">
+              <span style="display:block;font:600 13.5px/1.3 'Schibsted Grotesk',sans-serif;color:{{ b.nameColor }}">{{ b.name }}</span>
+              <span style="display:block;font:400 9.5px/1.3 'JetBrains Mono',monospace;color:rgba(246,244,239,.34)">{{ b.pkg }}</span>
+            </span>
+            <span style="width:38px;height:22px;border-radius:11px;flex:none;position:relative;background:{{ b.trackBg }}">
+              <span style="position:absolute;top:3px;left:{{ b.knobLeft }};width:16px;height:16px;border-radius:50%;background:{{ b.knobBg }}"></span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="height:14px"></div>
+      <div style="font:400 11px/1.6 'JetBrains Mono',monospace;color:rgba(246,244,239,.3);text-align:center">+ 9 kaynak daha · patterns.json v1</div>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(246,244,239,.32)"></div>
+  </div>
+</div>
+</div>
+
+<!-- F3 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">F3</span>Öğrenilen kurallar</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(246,244,239,.14);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.66)">‹</div>
+      <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Kurallar</div>
+    </div>
+    <div style="flex:none;padding:22px 24px 0">
+      <div style="display:flex;align-items:flex-start;gap:6px">
+        <div style="font:700 46px/.9 'Schibsted Grotesk',sans-serif;letter-spacing:-.045em;font-variant-numeric:tabular-nums">14</div>
+      </div>
+      <div style="height:9px"></div>
+      <div style="font:400 13px/1.5 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.52)">işyeri kuralı öğrenildi. Her düzeltmen bir sonrakini otomatik doğru yapıyor.</div>
+    </div>
+    <div style="flex:1;overflow:hidden;padding:24px 24px 0">
+      <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:rgba(246,244,239,.38);padding-bottom:12px">İŞYERİ → KATEGORİ</div>
+      <sc-for list="{{ rules }}" as="r" hint-placeholder-count="7">
+        <div style="display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid rgba(246,244,239,.06)">
+          <span style="flex:1;font:600 14px/1.25 'Schibsted Grotesk',sans-serif">{{ r.merchant }}</span>
+          <span style="font:400 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.3)">→</span>
+          <span style="display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:8px;background:{{ r.tint }};font:500 12px/1 'Schibsted Grotesk',sans-serif;color:{{ r.fg }}"><span style="font-size:13px">{{ r.emoji }}</span>{{ r.category }}</span>
+          <span style="font:400 12px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.28)">✕</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(246,244,239,.32)"></div>
+  </div>
+</div>
+</div>
+
+<!-- F4 -->
+<div style="display:flex;flex-direction:column;gap:11px">
+<div style="font:400 12px/1.3 'Schibsted Grotesk',sans-serif;color:#9a9aa8"><span style="font:500 10.5px/1 'JetBrains Mono',monospace;padding:4px 7px;background:rgba(145,132,217,.16);color:#b5abe8;border-radius:5px;margin-right:8px">F4</span>Gizlilik kanıtı · uygulama içi</div>
+<div style="width:390px;height:844px;border-radius:26px;overflow:hidden;position:relative;background:#080A0F;box-shadow:0 24px 60px -18px rgba(0,0,0,.8);color:#F6F4EF">
+  <div style="position:relative;height:100%;display:flex;flex-direction:column">
+    <div style="flex:none;height:52px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 24px;font:500 11px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.5)"><span>09:41</span><span style="letter-spacing:.1em">▮▮ ▲ ■</span></div>
+    <div style="flex:none;padding:18px 24px 0;display:flex;align-items:center;gap:12px">
+      <div style="width:30px;height:30px;border-radius:9px;border:1px solid rgba(246,244,239,.14);display:flex;align-items:center;justify-content:center;font:400 15px/1 'JetBrains Mono',monospace;color:rgba(246,244,239,.66)">‹</div>
+      <div style="font:600 17px/1 'Schibsted Grotesk',sans-serif;letter-spacing:-.02em">Verilerin nereye gidiyor</div>
+    </div>
+
+    <div style="flex:none;padding:26px 24px 0">
+      <div style="font:600 30px/1.1 'Schibsted Grotesk',sans-serif;letter-spacing:-.03em">Hiçbir yere.</div>
+      <div style="height:12px"></div>
+      <div style="font:400 13.5px/1.6 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.56)">Bu bir pazarlama cümlesi değil, izin listesinin sonucu. Aşağıdaki listeyi Android'in uygulama bilgisi ekranından da doğrulayabilirsin.</div>
+    </div>
+
+    <div style="flex:none;padding:22px 24px 0">
+      <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:rgba(246,244,239,.38);padding-bottom:11px">İSTENEN İZİNLER</div>
+      <div style="display:flex;flex-direction:column;gap:1px;background:rgba(246,244,239,.07);border-radius:14px;overflow:hidden">
+        <sc-for list="{{ permissions }}" as="p" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:11px;padding:13px 15px;background:#080A0F">
+            <span style="width:20px;height:20px;border-radius:6px;flex:none;display:flex;align-items:center;justify-content:center;font:700 10px/1 'JetBrains Mono',monospace;background:{{ p.bg }};color:{{ p.fg }}">{{ p.mark }}</span>
+            <span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 11px/1.35 'JetBrains Mono',monospace;color:{{ p.nameColor }}">{{ p.name }}</span>
+            <span style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.08em;color:{{ p.fg }};flex:none">{{ p.state }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="flex:1;padding:22px 24px 0;overflow:hidden">
+      <div style="font:500 10px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:rgba(246,244,239,.38);padding-bottom:11px">MANIFEST · SATIR SATIR</div>
+      <div style="border-radius:14px;background:#04060A;border:1px solid rgba(246,244,239,.08);padding:15px;font:400 10.5px/1.85 'JetBrains Mono',monospace">
+        <sc-for list="{{ manifestLines }}" as="l" hint-placeholder-count="6">
+          <div style="color:{{ l.color }};white-space:pre">{{ l.text }}</div>
+        </sc-for>
+      </div>
+      <div style="height:14px"></div>
+      <div style="display:flex;gap:9px">
+        <div style="flex:1;height:44px;border-radius:12px;border:1px solid rgba(246,244,239,.16);display:flex;align-items:center;justify-content:center;font:500 13px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.8)">Kaynak kodu aç</div>
+        <div style="flex:1;height:44px;border-radius:12px;border:1px solid rgba(248,113,113,.34);display:flex;align-items:center;justify-content:center;font:500 13px/1 'Schibsted Grotesk',sans-serif;color:#F87171">Tüm veriyi sil</div>
+      </div>
+    </div>
+    <div style="position:absolute;left:50%;transform:translateX(-50%);bottom:9px;width:108px;height:4px;border-radius:2px;background:rgba(246,244,239,.32)"></div>
+  </div>
+</div>
+</div>
+
+</div>
+</div>
+
+<!-- ══ G · WIDGET ══ -->
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:14px"><span style="font:500 12px/1 'JetBrains Mono',monospace;letter-spacing:.2em;color:#9184d9">G · WIDGET</span><span style="flex:1;height:1px;background:linear-gradient(to right,rgba(145,132,217,.4),rgba(145,132,217,0))"></span></div>
+<div style="display:flex;flex-wrap:wrap;gap:26px;align-items:flex-start">
+
+  <div style="width:340px;padding:26px;background:linear-gradient(150deg,#F6F4EF,#E9E5DB);border-radius:22px;display:flex;flex-direction:column;gap:11px">
+    <div style="width:250px;background:#FFFFFF;border-radius:22px;padding:16px 18px;box-shadow:0 6px 18px -8px rgba(17,21,28,.3)">
+      <div style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:2px;background:#0E7C66"></span><span style="font:500 8.5px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(17,21,28,.45)">AĞUSTOS HARCAMASI</span></div>
+      <div style="height:8px"></div>
+      <div style="display:flex;align-items:flex-start;gap:3px"><span style="font:700 31px/.95 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;color:#11151C;font-variant-numeric:tabular-nums">1.821,80</span><span style="font:500 12px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.4);padding-top:3px">₺</span></div>
+      <div style="height:10px"></div>
+      <div style="display:flex;height:5px;gap:2px"><div style="flex:43;background:#5E900F;border-radius:3px"></div><div style="flex:25;background:#5B6673;border-radius:3px"></div><div style="flex:17;background:#0E7FA8;border-radius:3px"></div><div style="flex:14;background:#0E7C66;border-radius:3px"></div></div>
+    </div>
+    <div style="font:400 11px/1.3 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.45)">2×1 · açık tema</div>
+  </div>
+
+  <div style="width:340px;padding:26px;background:linear-gradient(150deg,#12161E,#080A0F);border-radius:22px;display:flex;flex-direction:column;gap:11px">
+    <div style="width:250px;background:rgba(246,244,239,.07);border:1px solid rgba(246,244,239,.11);border-radius:22px;padding:16px 18px">
+      <div style="display:flex;align-items:center;gap:6px"><span style="width:6px;height:6px;border-radius:2px;background:#14C79A"></span><span style="font:500 8.5px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(246,244,239,.5)">AĞUSTOS HARCAMASI</span></div>
+      <div style="height:8px"></div>
+      <div style="display:flex;align-items:flex-start;gap:3px"><span style="font:700 31px/.95 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;color:#F6F4EF;font-variant-numeric:tabular-nums">1.821,80</span><span style="font:500 12px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.4);padding-top:3px">₺</span></div>
+      <div style="height:10px"></div>
+      <div style="display:flex;height:5px;gap:2px"><div style="flex:43;background:#84CC16;border-radius:3px"></div><div style="flex:25;background:#64748B;border-radius:3px"></div><div style="flex:17;background:#38BDF8;border-radius:3px"></div><div style="flex:14;background:#10B981;border-radius:3px"></div></div>
+    </div>
+    <div style="font:400 11px/1.3 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.45)">2×1 · koyu tema</div>
+  </div>
+
+  <div style="width:340px;padding:26px;background:linear-gradient(150deg,#F6F4EF,#E9E5DB);border-radius:22px;display:flex;flex-direction:column;gap:11px">
+    <div style="width:288px;background:#FFFFFF;border-radius:24px;padding:18px 20px;box-shadow:0 6px 18px -8px rgba(17,21,28,.3)">
+      <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:500 8.5px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(17,21,28,.45)">AĞUSTOS 2026</span><span style="font:500 9px/1 'JetBrains Mono',monospace;color:#0E7C66">↓ %12</span></div>
+      <div style="height:9px"></div>
+      <div style="display:flex;align-items:flex-start;gap:3px"><span style="font:700 34px/.95 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;color:#11151C;font-variant-numeric:tabular-nums">1.821,80</span><span style="font:500 13px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.4);padding-top:3px">₺</span></div>
+      <div style="height:14px"></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ widgetRows }}" as="w" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:9px">
+            <span style="width:5px;height:5px;border-radius:2px;background:{{ w.colorLight }};flex:none"></span>
+            <span style="flex:1;font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.72)">{{ w.label }}</span>
+            <span style="font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.5);font-variant-numeric:tabular-nums">{{ w.amount }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="font:400 11px/1.3 'Schibsted Grotesk',sans-serif;color:rgba(17,21,28,.45)">4×2 · açık tema · Pro</div>
+  </div>
+
+  <div style="width:340px;padding:26px;background:linear-gradient(150deg,#12161E,#080A0F);border-radius:22px;display:flex;flex-direction:column;gap:11px">
+    <div style="width:288px;background:rgba(246,244,239,.07);border:1px solid rgba(246,244,239,.11);border-radius:24px;padding:18px 20px">
+      <div style="display:flex;align-items:center;justify-content:space-between"><span style="font:500 8.5px/1 'JetBrains Mono',monospace;letter-spacing:.18em;color:rgba(246,244,239,.5)">AĞUSTOS 2026</span><span style="font:500 9px/1 'JetBrains Mono',monospace;color:#14C79A">↓ %12</span></div>
+      <div style="height:9px"></div>
+      <div style="display:flex;align-items:flex-start;gap:3px"><span style="font:700 34px/.95 'Schibsted Grotesk',sans-serif;letter-spacing:-.05em;color:#F6F4EF;font-variant-numeric:tabular-nums">1.821,80</span><span style="font:500 13px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.4);padding-top:3px">₺</span></div>
+      <div style="height:14px"></div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{ widgetRows }}" as="w" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:9px">
+            <span style="width:5px;height:5px;border-radius:2px;background:{{ w.color }};flex:none"></span>
+            <span style="flex:1;font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.75)">{{ w.label }}</span>
+            <span style="font:500 11.5px/1 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.5);font-variant-numeric:tabular-nums">{{ w.amount }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="font:400 11px/1.3 'Schibsted Grotesk',sans-serif;color:rgba(246,244,239,.45)">4×2 · koyu tema · Pro</div>
+  </div>
+
+</div>
+<div style="font:400 12.5px/1.7 'Schibsted Grotesk',sans-serif;color:#6c6c78;max-width:700px;padding-top:8px">Token listesi v1 dosyasında duruyor ve hâlâ geçerli — v2'de yalnızca kategori renkleri bir tık kısıldı ve Pro için <span style="color:#9a9aa8">proAccent #D9A84E / onProAccent #2B1D02</span> eklendi. Tipografi ölçeğindeki üç aile ikiye indi: Bricolage yerine her yerde Schibsted Grotesk.</div>
+</div>
+
+</div></x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1800,&quot;height&quot;:1300}}">
+class Component extends DCLogic {
+  componentDidMount() { this.runCount(); }
+
+  runCount() {
+    const el = this.totalEl;
+    if (!el) return;
+    const target = 182180, dur = 1200, t0 = performance.now();
+    const fmt = (m) => {
+      const lira = Math.floor(m / 100), k = m % 100;
+      const g = String(lira).split("").reverse().join("").match(/.{1,3}/g).join(".").split("").reverse().join("");
+      return g + "," + String(k).padStart(2, "0");
+    };
+    const step = (now) => {
+      const p = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt(Math.round(target * e));
+      if (p < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+
+  renderVals() {
+    const C = {
+      market: "#10B981", yeme: "#F59E0B", ulasim: "#84CC16", fatura: "#38BDF8",
+      alisveris: "#F87171", saglik: "#F472B6", eglence: "#818CF8", diger: "#64748B"
+    };
+    const CL = {
+      market: "#0E7C66", yeme: "#B4740A", ulasim: "#5E900F", fatura: "#0E7FA8",
+      alisveris: "#C7443C", saglik: "#B5477A", eglence: "#5B5CC4", diger: "#5B6673"
+    };
+
+    const chapters = ["A · Onboarding ×3", "B · Ana ekran ×4", "C · Rapor ×3", "D · Giriş ×2", "E · Pro & reklam ×3", "F · Ayarlar ×4", "G · Widget ×4"];
+
+    const cats = [
+      { label: "Ulaşım", amount: "780,00", pct: "42.8%", color: C.ulasim, colorLight: CL.ulasim },
+      { label: "Diğer", amount: "449,00", pct: "24.6%", color: C.diger, colorLight: CL.diger },
+      { label: "Fatura", amount: "302,00", pct: "16.6%", color: C.fatura, colorLight: CL.fatura },
+      { label: "Market", amount: "245,90", pct: "13.5%", color: C.market, colorLight: CL.market },
+      { label: "Yeme & İçme", amount: "89,90", pct: "4.9%", color: C.yeme, colorLight: CL.yeme }
+    ];
+
+    const ink = "#F6F4EF", dim = "rgba(246,244,239,.55)";
+    const inkL = "#11151C", dimL = "rgba(17,21,28,.5)";
+    const row = (emoji, merchant, meta, amount, key, i, opts = {}) => ({
+      emoji, merchant, meta, amount,
+      delay: (0.24 + i * 0.06).toFixed(2) + "s",
+      nameColor: opts.unknown ? dim : ink,
+      nameColorLight: opts.unknown ? dimL : inkL,
+      amountColor: opts.refund ? "#10B981" : ink,
+      amountColorLight: opts.refund ? "#0E7C66" : inkL,
+      tint: opts.unknown ? "rgba(100,116,139,.14)" : C[key] + "22",
+      tintBorder: opts.unknown ? "rgba(245,158,11,.5)" : C[key] + "3D",
+      tintLight: opts.unknown ? "rgba(91,102,115,.09)" : CL[key] + "1A",
+      tintBorderLight: opts.unknown ? "rgba(180,116,10,.5)" : CL[key] + "33"
+    });
+
+    const txs = [
+      row("🛒", "Migros", "MARKET · 21 AĞU 18:42", "−245,90", "market", 0),
+      row("🛍", "Boyner", "İADE · 20 AĞU 11:40", "+45,00", "alisveris", 1, { refund: true }),
+      row("❓", "Bilinmeyen işyeri", "DOKUN VE DÜZELT · 20 AĞU 12:15", "−449,00", "diger", 2, { unknown: true }),
+      row("🚗", "Shell", "ULAŞIM · 18 AĞU 09:03", "−780,00", "ulasim", 3),
+      row("📄", "Turkcell", "FATURA · 15 AĞU 07:00", "−302,00", "fatura", 4),
+      row("🍽", "Starbucks", "YEME & İÇME · 14 AĞU 16:22", "−89,90", "yeme", 5)
+    ];
+
+    const promises = [
+      { title: "İnternet iznimiz yok", body: "Manifest'te INTERNET yazmıyor; uygulama ağa teknik olarak çıkamaz." },
+      { title: "Veri telefondan çıkmıyor", body: "Okunan metin cihazdaki veritabanına yazılır, buluta yedeklenmez." },
+      { title: "Sadece banka bildirimleri", body: "17 tanımlı uygulamanın dışındakiler okunmadan atılır." }
+    ];
+
+    const readyStats = [
+      { n: "17", k: "BANKA" }, { n: "5", k: "DESEN" }, { n: "0", k: "SUNUCU" }
+    ];
+
+    const readiness = [
+      { mark: "✓", label: "Bildirim erişimi", value: "açık", bg: "rgba(14,124,102,.14)", fg: "#0E7C66" },
+      { mark: "✓", label: "Desen seti v1", value: "5 desen", bg: "rgba(14,124,102,.14)", fg: "#0E7C66" },
+      { mark: "—", label: "İlk harcama", value: "bekliyor", bg: "rgba(17,21,28,.07)", fg: "rgba(17,21,28,.5)" }
+    ];
+
+    const skeletons = [
+      { w: "56%", d: "0s" }, { w: "44%", d: ".25s" }, { w: "62%", d: ".5s" }
+    ];
+
+    const monthData = [
+      { name: "MAR", v: 2140 }, { name: "NİS", v: 1980 }, { name: "MAY", v: 2410 },
+      { name: "HAZ", v: 1760 }, { name: "TEM", v: 2070 }, { name: "AĞU", v: 1821.8 }
+    ];
+    const maxM = 2410;
+    const months = monthData.map((m, i) => {
+      const cur = i === monthData.length - 1;
+      return {
+        name: m.name,
+        short: cur ? "1.821" : String(Math.round(m.v)),
+        h: Math.round((m.v / maxM) * 96) + "px",
+        fill: cur ? "#14C79A" : "rgba(246,244,239,.13)",
+        nameColor: cur ? "#14C79A" : "rgba(246,244,239,.4)",
+        labelColor: cur ? "rgba(20,199,154,.75)" : "rgba(246,244,239,.26)",
+        delay: (0.15 + i * 0.07).toFixed(2) + "s"
+      };
+    });
+
+    const reportStats = [
+      { k: "GÜN ORTALAMASI", v: "58,77", sub: "₺ / gün", color: "#F6F4EF" },
+      { k: "EN YÜKSEK GÜN", v: "780,00", sub: "18 Ağustos", color: "#F87171" },
+      { k: "İŞLEM SAYISI", v: "6", sub: "5 harcama, 1 iade", color: "#F6F4EF" }
+    ];
+
+    const wd = [
+      { label: "Pt", v: 120 }, { label: "Sa", v: 90 }, { label: "Ça", v: 260 },
+      { label: "Pe", v: 150 }, { label: "Cu", v: 520 }, { label: "Ct", v: 380 }, { label: "Pz", v: 210 }
+    ];
+    const weekdays = wd.map((d, i) => ({
+      label: d.label,
+      h: Math.round((d.v / 520) * 40) + "px",
+      fill: d.v === 520 ? "#F59E0B" : "rgba(246,244,239,.13)",
+      delay: (0.2 + i * 0.05).toFixed(2) + "s"
+    }));
+
+    const topMerchants = [
+      { rank: "01", name: "Shell", meta: "ULAŞIM · 1 İŞLEM", amount: "780,00" },
+      { rank: "02", name: "Turkcell", meta: "FATURA · 1 İŞLEM", amount: "302,00" },
+      { rank: "03", name: "Migros", meta: "MARKET · 1 İŞLEM", amount: "245,90" }
+    ];
+
+    const ulasimTxs = [
+      { name: "Shell", meta: "18 AĞU 09:03 · com.garanti.cepsubesi", amount: "−780,00" },
+      { name: "İstanbulkart", meta: "12 AĞU 08:14 · ELLE", amount: "−100,00" },
+      { name: "Otopark", meta: "21 AĞU 14:02 · ELLE", amount: "−48,50" }
+    ];
+
+    const closeStats = [
+      { v: "6", k: "İŞLEM" }, { v: "58,77", k: "₺ / GÜN" }, { v: "5", k: "KATEGORİ" }
+    ];
+
+    const closeInsights = [
+      { mark: "↓", text: "Ulaşım son üç ayın en yükseği — tek bir 780 ₺'lik akaryakıt işlemi ayın %43'ü.", bg: "rgba(248,113,113,.14)", fg: "#F87171" },
+      { mark: "✓", text: "Yeme & içme geçen aya göre yarıya indi.", bg: "rgba(16,185,129,.14)", fg: "#10B981" },
+      { mark: "?", text: "449 ₺'lik bir işlem hâlâ kategorisiz. Düzeltirsen eylül raporu daha doğru olur.", bg: "rgba(245,158,11,.14)", fg: "#F59E0B" }
+    ];
+
+    const chipOff = { bg: "rgba(246,244,239,.06)", border: "rgba(246,244,239,.12)", fg: "rgba(246,244,239,.78)" };
+    const chips = [
+      { emoji: "🛍", label: "Alışveriş", bg: "rgba(248,113,113,.16)", border: "#F87171", fg: "#FFD9D5" },
+      { emoji: "🛒", label: "Market", ...chipOff },
+      { emoji: "🍽", label: "Yeme & İçme", ...chipOff },
+      { emoji: "🚗", label: "Ulaşım", ...chipOff }
+    ];
+
+    const keyBg = "rgba(246,244,239,.05)", keyBorder = "rgba(246,244,239,.09)";
+    const numFont = "600 22px/1 'Schibsted Grotesk',sans-serif";
+    const keys = ["1", "2", "3", "4", "5", "6", "7", "8", "9", ",", "0", "⌫"].map((k) => ({
+      label: k,
+      bg: k === "⌫" ? "transparent" : keyBg,
+      border: k === "⌫" ? "transparent" : keyBorder,
+      font: k === "⌫" ? "400 17px/1 'JetBrains Mono',monospace" : numFont,
+      fg: k === "⌫" ? "rgba(246,244,239,.5)" : "#F6F4EF"
+    }));
+
+    const proFeatures = [
+      { mark: "∞", title: "Sınırsız geçmiş", body: "Ücretsiz sürümde son 3 ay görünür; Pro'da tamamı.", delay: "0.2s" },
+      { mark: "▦", title: "Widget çeşitleri", body: "4×2 kategori kırılımı ve kilit ekranı widget'ı.", delay: "0.26s" },
+      { mark: "↓", title: "CSV dışa aktarma", body: "Defterin cihazda dosya olarak dışa aktarılır.", delay: "0.32s" },
+      { mark: "✎", title: "Kendi desenini yaz", body: "Bankan tanınmıyorsa regex'i uygulama içinde ekle.", delay: "0.38s" }
+    ];
+
+    const ok = "#14C79A", bad = "#F87171", mut = "#6c6c78";
+    const adCompare = [
+      { k: "INTERNET izni", pro: "yok", ad: "zorunlu", proColor: ok, adColor: bad },
+      { k: "AD_ID izni", pro: "yok", ad: "zorunlu", proColor: ok, adColor: bad },
+      { k: "Manifest kanıtı", pro: "geçerli", ad: "çöker", proColor: ok, adColor: bad },
+      { k: "Üçüncü taraf SDK", pro: "0", ad: "1+", proColor: ok, adColor: bad },
+      { k: "Play veri beyanı", pro: "veri yok", ad: "reklam kimliği", proColor: ok, adColor: bad },
+      { k: "Gelir tavanı", pro: "tek seferlik", ad: "sürekli", proColor: mut, adColor: mut }
+    ];
+
+    const settingGroups = [
+      { name: "YAKALAMA", rows: [
+        { icon: "🔔", iconBg: "rgba(20,199,154,.14)", label: "Bildirim erişimi", sub: "Harcamaları otomatik yakalar", value: "AÇIK", valueColor: "#14C79A" },
+        { icon: "🏦", iconBg: "rgba(56,189,248,.14)", label: "Kaynaklar", sub: "Hangi uygulamalar okunuyor", value: "17", valueColor: "rgba(246,244,239,.5)" },
+        { icon: "↺", iconBg: "rgba(132,204,22,.14)", label: "Öğrenilen kurallar", sub: "İşyeri → kategori eşleşmeleri", value: "14", valueColor: "rgba(246,244,239,.5)" }
+      ]},
+      { name: "GÖRÜNÜM", rows: [
+        { icon: "◐", iconBg: "rgba(129,140,248,.14)", label: "Tema", sub: "Sistemi izler", value: "OTOMATİK", valueColor: "rgba(246,244,239,.5)" },
+        { icon: "▦", iconBg: "rgba(217,168,78,.14)", label: "Widget", sub: "2×1 · 4×2 Pro ile", value: "2×1", valueColor: "rgba(246,244,239,.5)" }
+      ]},
+      { name: "VERİ VE GİZLİLİK", rows: [
+        { icon: "🛡", iconBg: "rgba(20,199,154,.14)", label: "Verilerin nereye gidiyor", sub: "İzin listesi ve manifest", value: "→", valueColor: "rgba(246,244,239,.4)" },
+        { icon: "↓", iconBg: "rgba(217,168,78,.14)", label: "CSV dışa aktar", sub: "Pro", value: "PRO", valueColor: "#D9A84E" },
+        { icon: "🗑", iconBg: "rgba(248,113,113,.14)", label: "Tüm veriyi sil", sub: "Geri alınamaz", value: "→", valueColor: "rgba(246,244,239,.4)" }
+      ]}
+    ];
+
+    const bankData = [
+      ["Garanti BBVA", "com.garanti.cepsubesi", true], ["İş Bankası", "com.pozitron.iscep", true],
+      ["Akbank", "com.akbank.android.apps.akbank_direkt", true], ["Yapı Kredi", "com.ykb.android", true],
+      ["Ziraat Bankası", "com.ziraat.ziraatmobil", true], ["Enpara", "finansbank.enpara", true],
+      ["Papara", "com.papara.mobile", false], ["Mesajlar (SMS)", "com.google.android.apps.messaging", true]
+    ];
+    const banks = bankData.map(([name, pkg, on]) => ({
+      name, pkg,
+      initial: name.charAt(0),
+      bg: on ? "rgba(20,199,154,.13)" : "rgba(246,244,239,.06)",
+      fg: on ? "#14C79A" : "rgba(246,244,239,.4)",
+      nameColor: on ? "#F6F4EF" : "rgba(246,244,239,.5)",
+      trackBg: on ? "#14C79A" : "rgba(246,244,239,.14)",
+      knobBg: on ? "#04231B" : "rgba(246,244,239,.55)",
+      knobLeft: on ? "19px" : "3px"
+    }));
+
+    const ruleData = [
+      ["Shell", "Ulaşım", "🚗", "ulasim"], ["Migros", "Market", "🛒", "market"],
+      ["Starbucks", "Yeme & İçme", "🍽", "yeme"], ["Turkcell", "Fatura", "📄", "fatura"],
+      ["Trendyol", "Alışveriş", "🛍", "alisveris"], ["Eczane Şifa", "Sağlık", "💊", "saglik"],
+      ["Cinemaximum", "Eğlence", "🎬", "eglence"]
+    ];
+    const rules = ruleData.map(([merchant, category, emoji, key]) => ({
+      merchant, category, emoji, tint: C[key] + "1F", fg: C[key]
+    }));
+
+    const permissions = [
+      { mark: "✓", name: "BIND_NOTIFICATION_LISTENER_SERVICE", state: "GEREKLİ", bg: "rgba(20,199,154,.14)", fg: "#14C79A", nameColor: "rgba(246,244,239,.82)" },
+      { mark: "✓", name: "com.android.vending.BILLING", state: "PRO İÇİN", bg: "rgba(217,168,78,.14)", fg: "#D9A84E", nameColor: "rgba(246,244,239,.82)" },
+      { mark: "✕", name: "android.permission.INTERNET", state: "İSTENMİYOR", bg: "rgba(248,113,113,.14)", fg: "#F87171", nameColor: "rgba(246,244,239,.45)" },
+      { mark: "✕", name: "com.google.android.gms.permission.AD_ID", state: "İSTENMİYOR", bg: "rgba(248,113,113,.14)", fg: "#F87171", nameColor: "rgba(246,244,239,.45)" }
+    ];
+
+    const dimC = "rgba(246,244,239,.34)", txtC = "rgba(246,244,239,.7)";
+    const manifestLines = [
+      { text: "<manifest xmlns:android=\"…\">", color: dimC },
+      { text: "  <!-- INTERNET izni BILEREK", color: "#14C79A" },
+      { text: "       istenmiyor -->", color: "#14C79A" },
+      { text: "  <uses-permission android:name=", color: txtC },
+      { text: "    \"com.android.vending.BILLING\"/>", color: txtC },
+      { text: "  <application", color: dimC },
+      { text: "    android:allowBackup=\"false\"", color: txtC },
+      { text: "    …", color: dimC },
+      { text: "</manifest>", color: dimC }
+    ];
+
+    const widgetRows = [
+      { label: "Ulaşım", amount: "780,00", color: "#84CC16", colorLight: "#5E900F" },
+      { label: "Diğer", amount: "449,00", color: "#64748B", colorLight: "#5B6673" },
+      { label: "Fatura", amount: "302,00", color: "#38BDF8", colorLight: "#0E7FA8" }
+    ];
+
+    return {
+      chapters, cats, txs, promises, readyStats, readiness, skeletons,
+      months, reportStats, weekdays, topMerchants, ulasimTxs, closeStats, closeInsights,
+      chips, keys, proFeatures, adCompare, settingGroups, banks, rules, permissions,
+      manifestLines, widgetRows,
+      totalRef: (el) => { this.totalEl = el; if (el) this.runCount(); }
+    };
+  }
+}
+</script>
+</body>
+</html>
