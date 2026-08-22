@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import android.widget.Toast
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -30,6 +31,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,11 +43,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.bildirimbutce.app.BuildConfig
 import com.bildirimbutce.app.data.db.ExpenseEntity
+import com.bildirimbutce.app.debug.TestNotificationSeeder
 import com.bildirimbutce.parser.Category
 import com.bildirimbutce.app.util.NotificationAccess
 import com.bildirimbutce.parser.Money
 import com.bildirimbutce.parser.TxKind
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -58,6 +63,7 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
     var permissionGranted by remember { mutableStateOf(NotificationAccess.isGranted(context)) }
     var editing by remember { mutableStateOf<ExpenseEntity?>(null) }
+    val scope = rememberCoroutineScope()
 
     Scaffold(
         topBar = {
@@ -89,6 +95,17 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
                     onPrevious = viewModel::previousMonth,
                     onNext = viewModel::nextMonth
                 )
+            }
+
+            if (BuildConfig.DEBUG) {
+                item {
+                    TextButton(onClick = {
+                        scope.launch {
+                            val added = TestNotificationSeeder.seed(context)
+                            Toast.makeText(context, "$added test kaydı eklendi", Toast.LENGTH_SHORT).show()
+                        }
+                    }) { Text("Test bildirimi") }
+                }
             }
 
             if (state.byCategory.isNotEmpty()) {
