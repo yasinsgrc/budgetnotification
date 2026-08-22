@@ -1,0 +1,8 @@
+<resources>
+    <!-- Theme.kt ile senkron tutulmalı: bkz. values/colors.xml (koyu tema karsiliklari). -->
+    <color name="widget_bg">#FF12161E</color>        <!-- SurfaceDark -->
+    <color name="widget_border">#1FF6F4EF</color>    <!-- OutlineDark -->
+    <color name="widget_ink">#FFF6F4EF</color>       <!-- OnBackgroundDark -->
+    <color name="widget_ink_muted">#FF98A0AC</color> <!-- OnBackgroundMutedDark -->
+    <color name="widget_accent">#FF14B88F</color>    <!-- brandBright (iki temada da ayni) -->
+</resources>

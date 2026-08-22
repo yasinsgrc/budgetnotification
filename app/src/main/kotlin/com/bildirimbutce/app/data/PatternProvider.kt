@@ -29,6 +29,11 @@ object PatternProvider {
         cached = null
     }
 
+    /** Bos durum ekranindaki "hazirlik durumu" listesi icin gercek desen sayisi. */
+    fun patternCount(context: Context): Int = runCatching {
+        PatternSet.fromJson(readCache(context) ?: readAsset(context)).patterns.size
+    }.getOrDefault(0)
+
     private fun build(context: Context): BankNotificationParser {
         val raw = readCache(context) ?: readAsset(context)
         return BankNotificationParser(PatternSet.fromJson(raw))

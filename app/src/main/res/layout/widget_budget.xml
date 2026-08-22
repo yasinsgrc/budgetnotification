@@ -1,27 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- 2x1 widget. RemoteViews Compose token'larina erisemez; renkler
+     values/colors.xml + values-night/colors.xml icinde Theme.kt ile
+     senkron tutulur (bkz. o dosyalardaki yorumlar). -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/widget_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center_vertical"
-    android:padding="16dp"
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="16dp"
     android:background="@drawable/widget_bg">
+
+    <TextView
+        android:id="@+id/widget_kicker"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/jetbrains_mono_medium"
+        android:textSize="9sp"
+        android:letterSpacing="0.18"
+        android:textColor="@color/widget_ink_muted"
+        android:text="@string/widget_description" />
 
     <TextView
         android:id="@+id/widget_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="26sp"
-        android:textStyle="bold"
-        android:textColor="@color/ink"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/schibsted_grotesk_semibold"
+        android:textSize="28sp"
+        android:letterSpacing="-0.04"
+        android:textColor="@color/widget_ink"
         android:text="0,00 ₺" />
 
-    <TextView
-        android:id="@+id/widget_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:textColor="@color/teal"
-        android:text="@string/widget_description" />
+    <ImageView
+        android:id="@+id/widget_ribbon"
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_marginTop="10dp"
+        android:scaleType="fitXY"
+        android:contentDescription="@null" />
+
 </LinearLayout>

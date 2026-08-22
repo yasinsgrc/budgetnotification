@@ -1,7 +1,14 @@
 <resources>
     <color name="background">#F6F4EF</color>
-    <color name="ink">#11151C</color>
-    <color name="teal">#0E7C66</color>
-    <color name="widget_bg">#FFFFFF</color>
     <color name="ic_launcher_background">#0E7C66</color>
+
+    <!-- Widget renkleri: RemoteViews Compose token'larina erisemez, bu yuzden
+         Theme.kt'deki AppColors degerleriyle birebir ayni tutulmali. Theme.kt
+         degisirse buradaki (ve values-night/colors.xml'deki) degerler de
+         guncellenmeli. -->
+    <color name="widget_bg">#FFFFFDF9</color>        <!-- SurfaceLight -->
+    <color name="widget_border">#FFDAD5CA</color>    <!-- OutlineLight -->
+    <color name="widget_ink">#FF11151C</color>       <!-- OnBackgroundLight -->
+    <color name="widget_ink_muted">#FF5C6470</color> <!-- OnBackgroundMutedLight -->
+    <color name="widget_accent">#FF14B88F</color>    <!-- brandBright (iki temada da ayni) -->
 </resources>
