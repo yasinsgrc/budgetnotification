@@ -2,13 +2,11 @@ package com.bildirimbutce.app.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
-import com.bildirimbutce.app.R
 
 /**
  * Tipografi olcegi (tasarim v2).
@@ -27,16 +25,11 @@ import com.bildirimbutce.app.R
  * Dosya adlari kucuk harf ve alt cizgi olmali; Android kaynak adi kurali.
  */
 
-private val Grotesk = FontFamily(
-    Font(R.font.schibsted_grotesk_regular, FontWeight.Normal),
-    Font(R.font.schibsted_grotesk_medium, FontWeight.Medium),
-    Font(R.font.schibsted_grotesk_semibold, FontWeight.SemiBold)
-)
+// GECICI: TTF'ler gelince geri al
+private val Grotesk = FontFamily.Default
 
-private val Mono = FontFamily(
-    Font(R.font.jetbrains_mono_regular, FontWeight.Normal),
-    Font(R.font.jetbrains_mono_medium, FontWeight.Medium)
-)
+// GECICI: TTF'ler gelince geri al
+private val Mono = FontFamily.Default
 
 /**
  * Para tutarlarinda tabular rakam ZORUNLU. Aksi halde tutar animasyonla
