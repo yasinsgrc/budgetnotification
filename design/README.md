@@ -5,9 +5,9 @@ doğrudan açılır.
 
 | Dosya | İçerik |
 |---|---|
-| `Yeni Tasarım v2 - Tüm Ekranlar.dc.html` | **Güncel.** 20 ekran: onboarding, ana ekran, rapor, düzeltme, Pro, ayarlar, widget |
-| `Yeni Tasarım - Uygulama Ekranları.dc.html` | v1. Token listesi burada duruyor |
-| `Mevcut Ekranlar (kod kopyası).dc.html` | Kodun tasarımdan önceki hali |
+| `design-v2-tum-ekranlar.dc.html` | **Güncel.** 20 ekran: onboarding, ana ekran, rapor, düzeltme, Pro, ayarlar, widget |
+| `design-v1-uygulama-ekranlari.dc.html` | v1. Token listesi burada duruyor |
+| `design-v0-mevcut-ekranlar.dc.html` | Kodun tasarımdan önceki hali |
 
 ## Koda aktarım durumu
 
