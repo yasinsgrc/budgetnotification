@@ -99,6 +99,10 @@ Emulator, Android SDK, hatta Maven bağımlılığı olmadan derlenip çalışt�
 diye. Kategori tahmini, tekrar koruması (`sourceKey`) ve aylık toplama da bu
 modülde — Android katmanı yalnızca Room'a çevirip ekrana basan ince bir kabuk.
 
+`app/schemas/` altındaki Room şema JSON'ları sürüm yükseltmelerinde migration
+yazmak için gereklidir; derlemede otomatik üretilirler ama **repoya commit
+edilmeleri gerekir, silinmemelidir**.
+
 Pratik sonucu: bu projede **iş mantığının tamamı** `kotlinc` + `java` ile,
 internet bağlantısı olmadan doğrulanabilir. JSON okuyucusu bile kendi
 içinde (`Json.kt`, ~150 satır) — sadece `patterns.json` okunacağı için tam bir
