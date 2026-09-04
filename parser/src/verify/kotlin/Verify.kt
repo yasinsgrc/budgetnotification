@@ -15,6 +15,16 @@ import java.util.Calendar
  */
 object Verify {
 
+    /** Dogruluk esigi. Altina duserse dogrulama basarisiz sayilir. */
+    private const val THRESHOLD = 95.0
+
+    /**
+     * Yayin karari icin gereken en az GERCEK ornek sayisi (roadmap madde 2).
+     * Bu sayiya ulasilmadan gercek alt kumenin orani anlamli degildir; az
+     * sayida ornekte %100 gormek guven vermez, yalnizca ornek azligini gosterir.
+     */
+    private const val REAL_SAMPLE_TARGET = 150
+
     @JvmStatic
     fun main(args: Array<String>) {
         val patternsPath = args.getOrElse(0) { "patterns/patterns.json" }
@@ -42,26 +52,38 @@ object Verify {
     // ---------- 1) Ayristirma dogrulugu ----------
 
     private fun runAccuracy(parser: BankNotificationParser, file: File): Boolean {
-        data class Row(val line: Int, val text: String, val kind: String, val amount: String, val merchant: String)
+        data class Row(
+            val line: Int, val text: String, val kind: String,
+            val amount: String, val merchant: String, val origin: String
+        )
 
         val rows = file.readLines()
             .mapIndexed { i, l -> i + 1 to l }
             .filter { (_, l) -> l.isNotBlank() && !l.startsWith("#") }
             .map { (n, l) ->
                 val c = l.split("\t")
-                require(c.size >= 4) { "fixtures satir $n: 4 kolon bekleniyor, ${c.size} var" }
-                Row(n, c[0].trim(), c[1].trim(), c[2].trim(), c[3].trim())
+                require(c.size >= 4) { "fixtures satir $n: en az 4 kolon bekleniyor, ${c.size} var" }
+                // 5. kolon opsiyonel. Eksikse SYNTHETIC sayilir: guvenli yon bu.
+                // Tersi (eksigi REAL saymak) sentetik satirlarin yayin kararini
+                // sisirmesine yol acardi.
+                val origin = c.getOrNull(4)?.trim()?.uppercase()?.ifBlank { null } ?: "SYNTHETIC"
+                require(origin == "REAL" || origin == "SYNTHETIC") {
+                    "fixtures satir $n: koken 'REAL' ya da 'SYNTHETIC' olmali, '$origin' bulundu"
+                }
+                Row(n, c[0].trim(), c[1].trim(), c[2].trim(), c[3].trim(), origin)
             }
 
         val failures = mutableListOf<String>()
-        val byKind = mutableMapOf<String, IntArray>() // [dogru, toplam]
+        val byKind = mutableMapOf<String, IntArray>()   // [dogru, toplam]
+        val byOrigin = mutableMapOf<String, IntArray>() // [dogru, toplam]
 
         for (r in rows) {
             val (kind, amount, merchant) = outcome(parser, r.text)
             val ok = kind == r.kind && amount == r.amount && merchant == r.merchant
             byKind.getOrPut(r.kind) { IntArray(2) }.also { it[1]++; if (ok) it[0]++ }
+            byOrigin.getOrPut(r.origin) { IntArray(2) }.also { it[1]++; if (ok) it[0]++ }
             if (!ok) {
-                failures += "  satir ${r.line}: beklenen [${r.kind}|${r.amount}|${r.merchant}] " +
+                failures += "  satir ${r.line}: [${r.origin}] beklenen [${r.kind}|${r.amount}|${r.merchant}] " +
                     "gelen [$kind|$amount|$merchant]\n     ${r.text}"
             }
         }
@@ -77,7 +99,50 @@ object Verify {
             failures.take(25).forEach { println(it) }
             if (failures.size > 25) println("  ... ve ${failures.size - 25} tane daha")
         }
-        return acc >= 95.0
+
+        val realOk = reportByOrigin(byOrigin)
+        return acc >= THRESHOLD && realOk
+    }
+
+    /**
+     * Kokene gore dogruluk ve yayin karari (roadmap madde 2).
+     *
+     * Neden ayri: sentetik ornekler kendi ureteclerinden geldikleri icin kolay
+     * orneklerdir ve toplam orani yukari ceker. Yayin karari yalnizca gercek
+     * bildirimlerin oranina bakmalidir.
+     *
+     * @return gercek alt kume kapisi gecti mi (yeterli ornek yoksa true)
+     */
+    private fun reportByOrigin(byOrigin: Map<String, IntArray>): Boolean {
+        val real = byOrigin["REAL"] ?: IntArray(2)
+        val synthetic = byOrigin["SYNTHETIC"] ?: IntArray(2)
+
+        println("\n--- 1b) Kokene gore dogruluk ---")
+        listOf("SYNTHETIC" to synthetic, "REAL" to real).forEach { (label, v) ->
+            if (v[1] == 0) {
+                println("  %-9s   0/0    (ornek yok)".format(label))
+            } else {
+                println("  %-9s %3d/%-3d  (%.1f%%)".format(label, v[0], v[1], v[0] * 100.0 / v[1]))
+            }
+        }
+
+        println("\n  Yayin karari (roadmap madde 2):")
+        if (real[1] < REAL_SAMPLE_TARGET) {
+            println("    KARAR VERILEMEZ - ${real[1]}/$REAL_SAMPLE_TARGET gercek ornek.")
+            println("    ${REAL_SAMPLE_TARGET - real[1]} gercek bildirim daha gerekiyor.")
+            println("    Ekleme:  ./scripts/add-fixture.sh \"<metin>\" EXPENSE <kurus> \"<isyeri>\"")
+            return true // ornek yoklugu basarisizlik degil, henuz olculmemis demek
+        }
+
+        val realAcc = real[0] * 100.0 / real[1]
+        return if (realAcc >= THRESHOLD) {
+            println("    YAYINLANABILIR - gercek ornek dogrulugu %.1f%% (esik %%%.0f)".format(realAcc, THRESHOLD))
+            true
+        } else {
+            println("    YAYINLAMA - gercek ornek dogrulugu %.1f%%, esik %%%.0f".format(realAcc, THRESHOLD))
+            println("    patterns/patterns.json'a desen ekleyip tekrar olcun.")
+            false
+        }
     }
 
     private fun outcome(parser: BankNotificationParser, text: String): Triple<String, String, String> =

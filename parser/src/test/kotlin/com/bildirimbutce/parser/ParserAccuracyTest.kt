@@ -33,7 +33,10 @@ class ParserAccuracyTest {
             .filter { (_, l) -> l.isNotBlank() && !l.startsWith("#") }
             .map { (n, l) ->
                 val c = l.split("\t")
-                require(c.size >= 4) { "fixtures.tsv satir $n: 4 sutun bekleniyor, ${c.size} bulundu (TAB kullanin)" }
+                // 5. sutun (koken: REAL/SYNTHETIC) opsiyoneldir ve burada
+                // kullanilmaz. Kokene gore ayrilmis dogruluk ve yayin karari
+                // icin: gradle :parser:verify
+                require(c.size >= 4) { "fixtures.tsv satir $n: en az 4 sutun bekleniyor, ${c.size} bulundu (TAB kullanin)" }
                 Fixture(n, c[0].trim(), c[1].trim(), c[2].trim(), c[3].trim())
             }
     }

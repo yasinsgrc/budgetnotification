@@ -46,12 +46,50 @@ README'nin kendi ifadesiyle "riskin tamamı regex kalitesinde". Depodaki 167
 örneğin tamamı `scripts/generate_corpus.py` çıktısı — sentetik. Ground truth
 üreteçten geliyor, gerçeklikten değil.
 
+**Ölçüm altyapısı hazır, veri toplama açık.** `fixtures.tsv`'ye 5. kolon
+eklendi (`origin`: `REAL`|`SYNTHETIC`, eksikse `SYNTHETIC`); mevcut 167 satır
+sentetik sayılıyor. `:parser:verify` artık kökene göre ayrı doğruluk ve yayın
+kararı basıyor. Bunlar olmadan karar noktası ölçülemezdi: sentetik örnekler
+kendi üreteçlerinden geldikleri için kolaydır ve karma oranı yukarı çeker.
+
+- [x] `fixtures.tsv`'ye köken kolonu, `:parser:verify`'a kökene göre rapor ve
+      yayın kapısı ekle (kapı ≥150 gerçek örnekte devreye girer)
+- [x] `./scripts/add-fixture.sh` gerçek örnekleri `REAL` damgalasın; aynı metni
+      iki kez eklemeyi reddetsin (tekrar, doğruluk oranını şişirir)
 - [ ] Kendi telefonundan + 4-5 kişiden gerçek banka bildirimi topla (kart no,
-      isim maskelenmiş)
+      isim maskelenmiş) — **ajan yapamaz, senin elinde**
 - [ ] `./scripts/add-fixture.sh` ile test setine ekle
-- [ ] `gradle :parser:verify` ile ölç
+- [ ] `gradle :parser:verify` ile ölç — şu an `0/150 gerçek örnek, KARAR
+      VERILEMEZ` basıyor
 - [ ] **Karar noktası:** 150-200 gerçek örnekte doğruluk %95'in altında kalıyor
       ve `patterns/patterns.json`'a desen ekleyerek yükselmiyorsa **yayınlama**
+
+**Dikkat:** `python3 scripts/generate_corpus.py > .../fixtures.tsv` dosyayı
+baştan yazar, elle eklenen `REAL` satırları siler. Üretecin docstring'inde
+`REAL` satırları koruyan tarif var; korpusu yeniden üretmeden önce oku.
+
+### 2b. Üreteç korpusu yeniden üretemiyor
+
+`generate_corpus.py` çalıştırıldığında yine 167 satır üretiyor ama **içerik
+kümesi depodakiyle aynı değil** — dosya, üreticisinin şu anki hâlinden
+türetilemiyor. Korpus, üreteç değiştikten sonra yeniden üretilmemiş olmalı.
+Sonuç: `fixtures.tsv` elle bakım gerektiren bir dosya, "üretilmiş" değil.
+
+- [ ] Ya üreteci korpusu yeniden üretecek hâle getir, ya da dosyanın
+      başındaki "OTOMATIK URETILDI" iddiasını kaldır
+
+### 2c. `gradle :parser:test` kırmızı, CI bunu görmüyor
+
+CI yalnızca `:parser:verify` koşuyor (`.github/workflows/ci.yml:25`), bu yüzden
+üç başarısız JUnit testi fark edilmemiş. Üçü de bu maddeden önce vardı:
+
+- [ ] `ParserAccuracyTest` — `UnknownFormatConversionException: '9'`. Sebebi
+      `%95` (satır 75); `%` biçim karakteri, kaçırılmamış. Assertion mesajı
+      koşuldan bağımsız değerlendiği için test **her zaman** patlıyor
+- [ ] `MerchantCleanerTest` — `Migros Ticaret A.S` yerine `A.s`; Türkçe locale
+      `uppercase()`/`lowercase()` farkı
+- [ ] `MerchantCleanerTest` — `A101` yerine `null`
+- [ ] CI'a `:parser:test` ekle, yoksa bu testler yine görünmez
 
 ### 3. `:app` için test yaz
 

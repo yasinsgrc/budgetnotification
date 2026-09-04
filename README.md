@@ -145,17 +145,28 @@ Depoda hazır gelen 167 örnek sentetiktir; gerçek olanları **eklemelisiniz**
 ./scripts/add-fixture.sh "Tek kullanımlık şifreniz 123456" IGNORE - -
 ```
 
+Eklenen satır `REAL` damgalanır (`fixtures.tsv`'nin 5. kolonu). Yayın kararı
+yalnızca `REAL` satırların doğruluğuna bakar — sentetik örnekler kendi
+üreteçlerinden geldikleri için kolaydır ve karma oranı yukarı çeker.
+
 3. Ölçün:
 
 ```bash
-gradle :parser:verify   # ayrıntılı rapor
+gradle :parser:verify   # ayrıntılı rapor + kökene göre doğruluk + yayın kararı
 gradle :parser:test     # CI eşiği (%95 altında build kırılır)
 ```
 
-Sentetik korpusu yeniden üretmek isterseniz:
+`:parser:verify` gerçek örnek sayısı 150'ye ulaşana kadar `KARAR VERILEMEZ`
+basar; o eşikten sonra gerçek alt kümede %95 aranır.
+
+Sentetik korpusu yeniden üretmek isterseniz — **aşağıdaki `>` dosyayı baştan
+yazar ve eklediğiniz `REAL` satırları siler**, önce onları ayırın:
 
 ```bash
-python3 scripts/generate_corpus.py > parser/src/test/resources/fixtures.tsv
+F=parser/src/test/resources/fixtures.tsv
+grep -P '\tREAL$' "$F" > /tmp/real.tsv || true
+python3 scripts/generate_corpus.py > /tmp/new.tsv
+cat /tmp/real.tsv >> /tmp/new.tsv && mv /tmp/new.tsv "$F"
 ```
 
 **Karar noktası:** 150–200 gerçek örnekte doğruluk %95'in altında kalıyorsa ve

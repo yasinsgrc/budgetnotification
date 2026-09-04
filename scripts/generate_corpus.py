@@ -13,6 +13,14 @@ cikmadan once gercek bildirimlerle degistirilmeli/desteklenmelidir
 (scripts/add-fixture.sh).
 
 Kullanim:  python3 scripts/generate_corpus.py > parser/src/test/resources/fixtures.tsv
+
+DIKKAT - yukaridaki '>' dosyayi bastan yazar, add-fixture.sh ile eklenmis
+GERCEK ornekleri siler. Korpusu yeniden uretirken REAL satirlari koruyun:
+
+    F=parser/src/test/resources/fixtures.tsv
+    grep -P '\\tREAL$' "$F" > /tmp/real.tsv || true
+    python3 scripts/generate_corpus.py > /tmp/new.tsv
+    cat /tmp/real.tsv >> /tmp/new.tsv && mv /tmp/new.tsv "$F"
 """
 import random
 import sys
@@ -156,7 +164,8 @@ rows = []
 
 def emit(text, kind, minor, merchant):
     amount = "-" if minor is None else str(minor)
-    rows.append((text, kind, amount, merchant))
+    # 5. kolon koken: bu uretecin cikardigi her satir tanim geregi SYNTHETIC.
+    rows.append((text, kind, amount, merchant, "SYNTHETIC"))
 
 
 def fill(tpl, m_raw="", a_str="", cur="TL", card=None, date=None, otp=None, a2=None):
@@ -217,7 +226,9 @@ out = sys.stdout
 out.write("# OTOMATIK URETILDI - scripts/generate_corpus.py\n")
 out.write("# Bu metinler gercege benzetilmis SABLONLARDIR, gercek bildirim degildir.\n")
 out.write("# Gercek ornekleri ./scripts/add-fixture.sh ile ekleyin.\n")
-out.write("# kolonlar: metin <TAB> kind <TAB> amountMinor <TAB> merchant\n")
+out.write("# kolonlar: metin <TAB> kind <TAB> amountMinor <TAB> merchant <TAB> origin\n")
+out.write("# origin: REAL|SYNTHETIC. Eksikse SYNTHETIC sayilir.\n")
+out.write("# Yayin karari YALNIZCA REAL satirlarin dogruluguna bakar.\n")
 for r in rows:
     out.write("\t".join(r) + "\n")
 

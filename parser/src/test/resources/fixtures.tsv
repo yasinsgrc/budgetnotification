@@ -1,7 +1,9 @@
 # OTOMATIK URETILDI - scripts/generate_corpus.py
 # Bu metinler gercege benzetilmis SABLONLARDIR, gercek bildirim degildir.
 # Gercek ornekleri ./scripts/add-fixture.sh ile ekleyin.
-# kolonlar: metin <TAB> kind <TAB> amountMinor <TAB> merchant
+# kolonlar: metin <TAB> kind <TAB> amountMinor <TAB> merchant <TAB> origin
+# origin: REAL|SYNTHETIC. Eksikse SYNTHETIC sayilir - asagidaki 167 satirin
+# tamami boyledir. Yayin karari YALNIZCA REAL satirlarin dogruluguna bakar.
 Garanti BBVA: 1234 kartiniz ile MIGROS isyerinde 8,99 TL tutarinda harcama yapilmistir.	EXPENSE	899	Migros
 Garanti BBVA: 4455 kartiniz ile MIGROS TICARET A.S. isyerinde 12,50 TL tutarinda harcama yapilmistir.	EXPENSE	1250	Migros Ticaret A.S
 Garanti BBVA: 9012 kartiniz ile A101 YENI MAGAZACILIK isyerinde 45,00 TL tutarinda harcama yapilmistir.	EXPENSE	4500	A101 Yeni Magazacilik
