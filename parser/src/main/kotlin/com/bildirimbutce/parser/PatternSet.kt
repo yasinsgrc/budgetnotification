@@ -12,6 +12,15 @@ data class PatternSet(
     val updatedAt: String = "",
     val macros: Map<String, String> = emptyMap(),
     val sources: List<String> = emptyList(),
+    /**
+     * Paket adi -> ekranda gorunecek ad ("com.ykb.android" -> "Yapi Kredi").
+     *
+     * Adlar kaynak listesiyle ayni dosyada duruyor: koda gomulu bir tablo
+     * olsaydi desen setine banka eklendigi gun eksik kalirdi. Karsiligi
+     * olmayan paket icin ekran paket adinin kendisini gosterir - uydurma bir
+     * ad, listeyi dogrulanamaz hale getirirdi.
+     */
+    val sourceLabels: Map<String, String> = emptyMap(),
     val brandTokens: Set<String> = emptySet(),
     val ignore: List<String> = emptyList(),
     val patterns: List<BankPattern> = emptyList()
@@ -25,6 +34,7 @@ data class PatternSet(
                 updatedAt = root["updatedAt"].string(),
                 macros = root["macros"].stringMap(),
                 sources = root["sources"].stringList(),
+                sourceLabels = root["sourceLabels"].stringMap(),
                 brandTokens = root["brandTokens"].stringList().toSet(),
                 ignore = root["ignore"].stringList(),
                 patterns = root["patterns"].list().map { item ->

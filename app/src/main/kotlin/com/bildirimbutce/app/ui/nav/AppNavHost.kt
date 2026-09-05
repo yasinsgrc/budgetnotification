@@ -4,10 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.bildirimbutce.app.ui.AddExpenseScreen
@@ -15,6 +18,11 @@ import com.bildirimbutce.app.ui.HomeScreen
 import com.bildirimbutce.app.ui.MonthCursor
 import com.bildirimbutce.app.ui.onboarding.OnboardingScreen
 import com.bildirimbutce.app.ui.report.ReportScreen
+import com.bildirimbutce.app.ui.settings.PrivacyScreen
+import com.bildirimbutce.app.ui.settings.RulesScreen
+import com.bildirimbutce.app.ui.settings.SettingsScreen
+import com.bildirimbutce.app.ui.settings.SettingsViewModel
+import com.bildirimbutce.app.ui.settings.SourcesScreen
 import com.bildirimbutce.app.util.Prefs
 
 /**
@@ -25,6 +33,16 @@ object Route {
     const val ONBOARDING = "onboarding"
     const val HOME = "home"
     const val ADD_EXPENSE = "add-expense"
+
+    /**
+     * Ayarlar bolumu (F1-F4). Dort hedef ic ice bir grafta duruyor; sebebi
+     * [AppNavHost] icindeki `settingsViewModel` yorumunda.
+     */
+    const val SETTINGS_GRAPH = "settings-graph"
+    const val SETTINGS = "settings"
+    const val SETTINGS_SOURCES = "settings/sources"
+    const val SETTINGS_RULES = "settings/rules"
+    const val SETTINGS_PRIVACY = "settings/privacy"
 
     /** Rapor rotasinin ay argumanlari; 0-tabanli ay, [MonthCursor] ile ayni sozlesme. */
     const val ARG_YEAR = "year"
@@ -55,10 +73,9 @@ fun startDestination(onboardingDone: Boolean): String =
 /**
  * Uygulamanin tek NavHost'u.
  *
- * Dort hedef var: onboarding akisi [OnboardingScreen] (A1-A3), B1-B4
- * ekranlarini barindiran [HomeScreen], elle harcama girisi [AddExpenseScreen]
- * ve aylik rapor [ReportScreen] (C1). Sirada bekleyen ayarlar ekrani bir
- * `composable(...)` satiriyla eklenecek - yol haritasindaki 9. madde.
+ * Hedefler: onboarding akisi [OnboardingScreen] (A1-A3), B1-B4 ekranlarini
+ * barindiran [HomeScreen], elle harcama girisi [AddExpenseScreen], aylik rapor
+ * [ReportScreen] (C1) ve ayarlar bolumu (F1-F4) - sonuncusu ic ice bir graf.
  *
  * `EditExpenseSheet` bilerek rota degil: modal alt sayfa olarak kendi geri
  * tusunu zaten yonetiyor ve yalnizca listedeki bir kayittan aciliyor. Rotaya
@@ -99,7 +116,8 @@ fun AppNavHost(
         composable(Route.HOME) {
             HomeScreen(
                 onAddExpense = { navController.navigate(Route.ADD_EXPENSE) },
-                onReport = { navController.navigate(Route.report(it)) }
+                onReport = { navController.navigate(Route.report(it)) },
+                onSettings = { navController.navigate(Route.SETTINGS_GRAPH) }
             )
         }
         composable(Route.ADD_EXPENSE) {
@@ -124,5 +142,54 @@ fun AppNavHost(
                 onBack = { navController.popBackStack() }
             )
         }
+
+        // Ayarlar bolumu (F1-F4). Ic ice graf, ekranlarin tek bir ViewModel
+        // paylasabilmesi icin - gerekcesi asagidaki `settingsViewModel`de.
+        navigation(startDestination = Route.SETTINGS, route = Route.SETTINGS_GRAPH) {
+            composable(Route.SETTINGS) { entry ->
+                SettingsScreen(
+                    viewModel = settingsViewModel(navController, entry),
+                    onBack = { navController.popBackStack() },
+                    onSources = { navController.navigate(Route.SETTINGS_SOURCES) },
+                    onRules = { navController.navigate(Route.SETTINGS_RULES) },
+                    onPrivacy = { navController.navigate(Route.SETTINGS_PRIVACY) }
+                )
+            }
+            composable(Route.SETTINGS_SOURCES) { entry ->
+                SourcesScreen(
+                    viewModel = settingsViewModel(navController, entry),
+                    onBack = { navController.popBackStack() }
+                )
+            }
+            composable(Route.SETTINGS_RULES) { entry ->
+                RulesScreen(
+                    viewModel = settingsViewModel(navController, entry),
+                    onBack = { navController.popBackStack() }
+                )
+            }
+            composable(Route.SETTINGS_PRIVACY) { entry ->
+                PrivacyScreen(
+                    viewModel = settingsViewModel(navController, entry),
+                    onBack = { navController.popBackStack() }
+                )
+            }
+        }
     }
+}
+
+/**
+ * Ayarlar bolumunun dort ekrani icin ortak ViewModel.
+ *
+ * Ornek, ekranin kendi hedefine degil ic graf girisine baglaniyor: sayaclar
+ * F1'de, anahtarlar F2'de duruyor ve ikisi ayni durumu gosteriyor. Ekran basina
+ * ayri ornek olsaydi F2'de kapatilan banka F1'e donuldugunde hala acik
+ * gorunurdu - tercih diske yazilmis olsa bile eski ornegin akisi bunu duymazdi.
+ */
+@Composable
+private fun settingsViewModel(
+    navController: NavHostController,
+    entry: NavBackStackEntry
+): SettingsViewModel {
+    val parent = remember(entry) { navController.getBackStackEntry(Route.SETTINGS_GRAPH) }
+    return viewModel(parent)
 }

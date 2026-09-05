@@ -135,6 +135,35 @@ class ExpenseRepository internal constructor(db: AppDatabase) {
         expenses.recategorizeMerchant(merchant, category.name)
     }
 
+    /** Ogrenilmis "isyeri -> kategori" kurallari (ayarlar > F3). */
+    fun observeMerchantRules(): Flow<List<MerchantRuleEntity>> = rules.observeAll()
+
+    /** Ayarlardaki kayit sayaci - secili ay degil, defterin tamami. */
+    fun observeExpenseCount(): Flow<Int> = expenses.observeCount()
+
+    /**
+     * Bir kurali unutur.
+     *
+     * Gecmis kayitlara bilerek dokunulmuyor: kural ogrenilirken duzeltilen
+     * satirlar `userEdited = true` oldu, yani kullanicinin kendi karari.
+     * "Kurali sil" demek "bundan sonrasini yeniden tahmin et" demektir,
+     * "gecmiste verdigim kararlari geri al" demek degil.
+     */
+    suspend fun forgetRule(merchantKey: String) = rules.deleteByKey(merchantKey)
+
+    /**
+     * Tum yerel veriyi siler (ayarlar > F4).
+     *
+     * Tercihlere (dinlenen kaynaklar, onboarding bayragi) dokunulmuyor: onlar
+     * veri degil ayar. Kurallar siliniyor, cunku her kural kullanicinin harcama
+     * gecmisinden turedi - "verimi sil" dedikten sonra isyeri->kategori
+     * eslesmelerinin durmasi, verinin gercekten silinmedigi anlamina gelirdi.
+     */
+    suspend fun eraseAll() {
+        expenses.deleteAll()
+        rules.deleteAll()
+    }
+
     private suspend fun resolveCategory(merchant: String?): Category {
         val key = merchant?.merchantKey()
         if (key != null) {

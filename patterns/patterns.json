@@ -26,6 +26,25 @@
     "com.papara.mobile",
     "tr.com.ininal.mobile"
   ],
+  "sourceLabels": {
+    "com.google.android.apps.messaging": "Google Mesajlar",
+    "com.samsung.android.messaging": "Samsung Mesajlar",
+    "com.android.mms": "Mesajlar",
+    "com.garanti.cepsubesi": "Garanti BBVA",
+    "com.pozitron.iscep": "İşCep",
+    "com.akbank.android.apps.akbank_direkt": "Akbank",
+    "com.ykb.android": "Yapı Kredi",
+    "com.tmobtech.halkbank": "Halkbank",
+    "com.ziraat.ziraatmobil": "Ziraat Bankası",
+    "com.vakifbank.mobile": "VakıfBank",
+    "com.finansbank.mobile.cepsube": "QNB",
+    "com.denizbank.mobildeniz": "DenizBank",
+    "com.teb.cepsube": "TEB",
+    "com.magiclick.odeabank": "Odeabank",
+    "finansbank.enpara": "Enpara",
+    "com.papara.mobile": "Papara",
+    "tr.com.ininal.mobile": "ininal"
+  },
   "ignore": [
     "(?iu)(tek kullanımlık|dogrulama kodu|doğrulama kodu|onay kodu|şifreniz|sifreniz|otp)",
     "(?iu)(kullanılabilir bakiye|hesap bakiye|\\bbakiye(?:niz|si)\\b)",

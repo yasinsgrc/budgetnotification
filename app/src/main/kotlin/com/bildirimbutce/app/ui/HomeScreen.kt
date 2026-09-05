@@ -64,6 +64,7 @@ import java.util.Locale
 fun HomeScreen(
     onAddExpense: () -> Unit,
     onReport: (MonthCursor) -> Unit,
+    onSettings: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -95,7 +96,8 @@ fun HomeScreen(
                     label = cursor.label,
                     showPro = showTransactions,
                     onPrevious = viewModel::previousMonth,
-                    onNext = viewModel::nextMonth
+                    onNext = viewModel::nextMonth,
+                    onSettings = onSettings
                 )
             }
 
@@ -213,7 +215,8 @@ private fun MonthTopBar(
     label: String,
     showPro: Boolean,
     onPrevious: () -> Unit,
-    onNext: () -> Unit
+    onNext: () -> Unit,
+    onSettings: () -> Unit
 ) {
     Row(
         Modifier
@@ -229,7 +232,7 @@ private fun MonthTopBar(
         }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppSpace.s2)) {
             if (showPro) ProChip()
-            SettingsGearButton()
+            SettingsGearButton(onSettings)
         }
     }
 }
@@ -262,15 +265,15 @@ private fun ProChip() {
     }
 }
 
-/** Ayarlar ekrani (F) bu asamada yok - yalnizca gorsel yer tutucu, EKSIKLER.md'de not var. */
+/** Ayarlar bolumunu (F1-F4) aciyor. */
 @Composable
-private fun SettingsGearButton() {
+private fun SettingsGearButton(onClick: () -> Unit) {
     Box(
         Modifier
             .size(AppSpace.s6)
             .clip(RoundedCornerShape(AppRadius.sm))
             .background(AppTheme.colors.surfaceMuted)
-            .clickable(onClick = {}),
+            .clickable(onClick = onClick),
         contentAlignment = Alignment.Center
     ) {
         Text("⚙", style = AppText.bodyLarge, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.66f))

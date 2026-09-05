@@ -13,6 +13,15 @@ import java.io.File
  * incelemesini (1-3 gun) beklemeden ayni gun duzeltme yayinlayabilirsiniz.
  * Uzaktan guncelleme varsayilan olarak KAPALI - manifest'te INTERNET izni yok.
  */
+/**
+ * Ayarlarda listelenen tek bir bildirim kaynagi.
+ *
+ * [label] desen setinden geliyor; karsiligi yoksa paket adinin kendisi
+ * gosteriliyor. Uydurulmus bir ad, kullanicinin listeyi Android'in uygulama
+ * listesiyle karsilastirip dogrulamasini imkansiz kilardi.
+ */
+data class NotificationSource(val packageName: String, val label: String)
+
 object PatternProvider {
 
     private const val TAG = "PatternProvider"
@@ -30,18 +39,34 @@ object PatternProvider {
     }
 
     /** Bos durum ekranindaki "hazirlik durumu" listesi icin gercek desen sayisi. */
-    fun patternCount(context: Context): Int = runCatching {
-        PatternSet.fromJson(readCache(context) ?: readAsset(context)).patterns.size
-    }.getOrDefault(0)
+    fun patternCount(context: Context): Int = readSet(context)?.patterns?.size ?: 0
 
     /**
      * Onboarding'in "N tanimli uygulama" ve "N banka" satirlari icin dinlenen
      * kaynak sayisi. Ekrana elle yazilsaydi, desen setine banka eklendigi gun
      * sessizce yanlis sayi gosterirdi.
      */
-    fun sourceCount(context: Context): Int = runCatching {
-        PatternSet.fromJson(readCache(context) ?: readAsset(context)).sources.size
-    }.getOrDefault(0)
+    fun sourceCount(context: Context): Int = readSet(context)?.sources?.size ?: 0
+
+    /** Ayarlardaki "desen seti v1" satiri icin yururlukteki setin surumu. */
+    fun patternVersion(context: Context): Int = readSet(context)?.version ?: 0
+
+    /**
+     * Ayarlar ekranindaki (F2) kaynak listesi.
+     *
+     * Liste desen setinden geliyor, koddan degil: hangi paketlerin dinlendigi
+     * iki yerde tanimli olsaydi ekran ile [BankNotificationParser.isKnownSource]
+     * birbirinden sapar, kullanici ekranda hic gormedigi bir kaynagi kapatamazdi.
+     */
+    fun sources(context: Context): List<NotificationSource> {
+        val set = readSet(context) ?: return emptyList()
+        return set.sources.map { NotificationSource(it, set.sourceLabels[it] ?: it) }
+    }
+
+    /** Ayni okuma yolu (onbellek > assets) uzerinden desen seti; okunamazsa null. */
+    private fun readSet(context: Context): PatternSet? = runCatching {
+        PatternSet.fromJson(readCache(context) ?: readAsset(context))
+    }.getOrNull()
 
     private fun build(context: Context): BankNotificationParser {
         val raw = readCache(context) ?: readAsset(context)

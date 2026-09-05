@@ -32,6 +32,13 @@ interface ExpenseDao {
 
     @Query("UPDATE expenses SET category = :category, userEdited = 1 WHERE merchant = :merchant AND userEdited = 0")
     suspend fun recategorizeMerchant(merchant: String, category: String)
+
+    /** Ayarlardaki kayit sayaci; ay penceresine bagli degil, tablonun tamami. */
+    @Query("SELECT COUNT(*) FROM expenses")
+    fun observeCount(): Flow<Int>
+
+    @Query("DELETE FROM expenses")
+    suspend fun deleteAll()
 }
 
 @Dao
@@ -42,4 +49,14 @@ interface MerchantRuleDao {
 
     @Query("SELECT * FROM merchant_rules WHERE merchantKey = :key")
     suspend fun find(key: String): MerchantRuleEntity?
+
+    /** F3 listesi. Siralama sabit olmali, yoksa liste her yenilemede karisir. */
+    @Query("SELECT * FROM merchant_rules ORDER BY merchantKey")
+    fun observeAll(): Flow<List<MerchantRuleEntity>>
+
+    @Query("DELETE FROM merchant_rules WHERE merchantKey = :key")
+    suspend fun deleteByKey(key: String)
+
+    @Query("DELETE FROM merchant_rules")
+    suspend fun deleteAll()
 }

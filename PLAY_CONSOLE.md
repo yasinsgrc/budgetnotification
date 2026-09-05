@@ -24,7 +24,9 @@ ekibi çelişkiyi gerekçe sayar.
 >
 > Erişim, tüm bildirimlere değil, uygulamayla birlikte gelen `patterns.json`
 > dosyasında tanımlı 17 banka uygulamasına sınırlıdır. Tanımlı olmayan bir
-> paketten gelen bildirim, metni okunmadan önce reddedilir.
+> paketten gelen bildirim, metni okunmadan önce reddedilir. Kullanıcı bu listeyi
+> uygulama içindeki ayarlar ekranından daha da daraltabilir; kapattığı
+> uygulamanın bildirimi servise ulaşsa bile ayrıştırılmadan atılır.
 >
 > Okunan veriler cihazdan çıkmaz. Uygulama `android.permission.INTERNET`
 > iznini istemez; bu, yayınlanan APK'nın manifest dosyasından doğrulanabilir.
@@ -40,7 +42,9 @@ ekibi çelişkiyi gerekçe sayar.
 >
 > Access is limited to the 17 banking apps declared in the bundled
 > `patterns.json` file, not to all notifications. A notification from any
-> other package is rejected before its text is read.
+> other package is rejected before its text is read. The user can narrow this
+> list further from the in-app settings screen; a notification from an app the
+> user has switched off is discarded without being parsed.
 >
 > The data never leaves the device. The app does not request
 > `android.permission.INTERNET`, which can be verified from the manifest of
@@ -54,15 +58,18 @@ dayandığı için **kod değişirse metin de değişmeli**:
 | İddia | Nerede doğrulanır |
 |---|---|
 | İnternet erişimi yok | `AndroidManifest.xml` — `INTERNET` izni yok; birleştirilmiş release manifest'inde de yalnızca AGP'nin eklediği `DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION` var |
-| Yalnızca tanımlı bankalar okunuyor | `NotificationService.kt:50` — `if (!parser.isKnownSource(pkg)) return`, bildirim metni **okunmadan önce** çalışır |
+| Yalnızca tanımlı bankalar okunuyor | `NotificationService.kt:51` — `if (!parser.isKnownSource(pkg)) return`, bildirim metni **okunmadan önce** çalışır |
+| Kullanıcı listeyi daraltabiliyor | Ayarlar → Kaynaklar (`ui/settings/SourcesScreen.kt`); tercih `Prefs.enabledSources`'a yazılır, `NotificationService.kt:55` metni okumadan önce `SourceSelection.listensTo` ile bakar |
 | Veri cihazda kalıyor | Room veritabanı; ağa yazan kod yok |
 | Buluta yedeklenmiyor | `AndroidManifest.xml` — `allowBackup="false"` + `@xml/data_extraction_rules` |
+| Kullanıcı verisini silebiliyor | Ayarlar → Verilerin nereye gidiyor → "Tüm veriyi sil" (`ExpenseRepository.eraseAll`) |
 
-**Bilerek yazılmadı:** "kullanıcı dinlenen banka listesini daraltabilir".
-`Prefs.enabledSources` kodda var ve `NotificationService.kt:52-53` onu
-okuyor, ama **hiçbir yer yazmıyor** — ayarlar ekranı yok (yol haritası 9.
-madde). Beyanda yazsaydık inceleme ekibinin uygulamada bulamayacağı bir
-özelliği vaat etmiş olurduk. Ayarlar ekranı gelince bu satır beyana eklenmeli.
+**Beyandaki iki cümle 9. madde ile doğru oldu.** "Kullanıcı dinlenen banka
+listesini daraltabilir" ve "verisini uygulama içinden silebilir" cümleleri, F
+bölümü (ayarlar) yazılana kadar bilerek yazılmamıştı: `Prefs.enabledSources`
+kodda vardı ama hiçbir yer yazmıyordu, silme yolu ise hiç yoktu. İkisinin de
+artık uygulamada karşılığı var; inceleme ekibi ayarlar dişlisinden ikisine de
+ulaşabilir.
 
 ---
 
@@ -73,7 +80,7 @@ madde). Beyanda yazsaydık inceleme ekibinin uygulamada bulamayacağı bir
 | Veri topluyor musunuz? | **Hayır** |
 | Veri paylaşıyor musunuz? | **Hayır** |
 | Veriler aktarım sırasında şifreleniyor mu? | Uygulanamaz — veri aktarılmıyor (internet izni yok) |
-| Kullanıcı verisinin silinmesini isteyebilir mi? | Veriler yalnızca cihazda; uygulamayı kaldırmak hepsini siler |
+| Kullanıcı verisinin silinmesini isteyebilir mi? | Veriler yalnızca cihazda; uygulama içinden "Tüm veriyi sil" ile ya da uygulamayı kaldırarak silinir |
 
 **Dikkat:** "Veri topluyor musunuz?" sorusunun Play'deki tanımı
 "uygulamanızdan **cihaz dışına** veri çıkıyor mu"dur. Bildirimlerin okunup

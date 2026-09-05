@@ -151,11 +151,11 @@ artık her biri bir `composable(...)` satırıyla bağlanabilir.**
 **Hâlâ açık:** Grafın kendisi otomatik test edilmiyor — `TestNavHostController`
 için `compose-ui-test` + `navigation-testing` bağımlılıkları gerekiyor, tek
 hedefli bir graf için maliyeti kazancından büyük. Graf artık dört hedefli (5,
-6 ve 8. maddeler), ama hâlâ test edilmiyor; grafın *hangi hedefle açıldığı*
+6, 8 ve 9. maddeler), ama hâlâ test edilmiyor; grafın *hangi hedefle açıldığı*
 kararı `startDestination` olarak ayrıldığı için o kadarı test ediliyor (madde
-6). Ekranlardaki ölü `onClick = {}` çağrılarından "elle ekle" (madde 5) ve
-"RAPOR →" (madde 8) bağlandı; ayarlar dişlisi hâlâ ölü, bağlanması 9 numaralı
-maddenin işi.
+6). Ekranlardaki ölü `onClick = {}` çağrılarından "elle ekle" (madde 5),
+"RAPOR →" (madde 8) ve ayarlar dişlisi (madde 9) bağlandı; geriye yalnızca PRO
+rozeti kaldı (madde 11).
 
 ### 5. D2 — Manuel harcama girişi
 
@@ -307,12 +307,12 @@ anlamsızdı. `ic_launcher_round.xml` **silindi** ve manifest'ten
 `android:roundIcon` kaldırıldı: `minSdk 26` ve adaptive icon her maske şeklini
 zaten karşılıyor, dosya birebir kopyaydı.
 
-**Beyana bilerek yazılmayan bir cümle var.** "Kullanıcı dinlenen banka
-listesini daraltabilir" doğru değil: `Prefs.enabledSources` kodda var ve
-`NotificationService.kt:52` onu okuyor, ama **hiçbir yer yazmıyor** — ayarlar
-ekranı yok (9. madde). Gerekçelendirmeye koysaydık inceleme ekibinin
-uygulamada bulamayacağı bir özellik vaat etmiş olurduk. 9. madde bitince
-`PLAY_CONSOLE.md`'ye eklenmeli.
+**Beyana bilerek yazılmayan bir cümle vardı.** "Kullanıcı dinlenen banka
+listesini daraltabilir" o gün doğru değildi: `Prefs.enabledSources` kodda vardı
+ve `NotificationService` onu okuyordu, ama **hiçbir yer yazmıyordu** — ayarlar
+ekranı yoktu. Gerekçelendirmeye koysaydık inceleme ekibinin uygulamada
+bulamayacağı bir özellik vaat etmiş olurduk. **9. madde ile beyana eklendi**
+(F2, `ui/settings/SourcesScreen.kt`).
 
 **Hâlâ açık — bu madde "yayına hazır" demek değil:** anahtar deposu henüz
 üretilmedi (`keytool` komutu örnek dosyada), dolayısıyla **imzalı** bir APK
@@ -399,8 +399,93 @@ büyüme animasyonu uygulanmadı; çubuklar animasyonsuz çiziliyor. `₺` font 
 
 ### 9. F — Ayarlar ekranı
 
-- [ ] Ayarlar ekranı
-- [ ] `HomeScreen.kt:273` `SettingsGearButton` → ekrana bağla (şu an `onClick = {}`)
+Yapıldı — F1-F4. `ui/settings/` altında dört ekran, `Route.SETTINGS_GRAPH`
+altında iç içe bir graf. Bölümün işi tercih toplamak değil, **görünür kılmak**:
+bildirimleri okuyan bir uygulamanın neyi okuduğunu, neyi okumadığını ve ne
+öğrendiğini gösterebilmesi gerekiyor.
+
+- [x] Ayarlar ekranı — F1 `SettingsScreen.kt` (izin durumu + iki grup), F2
+      `SourcesScreen.kt` (dinlenen kaynaklar), F3 `RulesScreen.kt` (öğrenilen
+      kurallar), F4 `PrivacyScreen.kt` (izin kanıtı, tüm veriyi sil)
+- [x] `SettingsGearButton` → ekrana bağlandı (`HomeScreen.kt:235`, artık ölü
+      değil); ekranlardaki ölü `onClick = {}` çağrılarından geriye yalnızca PRO
+      rozeti kaldı (11. madde)
+
+**`Prefs.enabledSources` artık üç durumlu.** Eskiden `Set<String>` idi ve boş
+küme "hepsi" demekti; hiçbir yer yazmadığı için sorun çıkmamıştı. Ekran yazmaya
+başlayınca kural tuzağa dönüşüyordu: son anahtarı da kapatan kullanıcı boş küme
+yazar, boş küme "hepsi" sayılır ve kullanıcı **tüm** bankaları farkında olmadan
+geri açmış olurdu. Şimdi `null` = hiç seçim yapılmadı (hepsi), boş küme = hepsi
+kapalı, dolu küme = seçilenler. `null`'ın ikinci faydası: desen setine yarın
+eklenecek banka, hiç seçim yapmamış kullanıcı için kendiliğinden dinlenir; tam
+liste saklansaydı yeni banka kapalı doğardı.
+
+**Kural iki yerde değil, `data/SourceSelection.kt`'de.** Ekran anahtarları buna
+göre çiziyor, `NotificationService` gelen bildirimi buna göre süzüyor. İki kopya
+olsaydı biri değişip diğeri kalabilir, kullanıcı kapattığı bankanın
+harcamalarını listede görmeye devam ederdi.
+
+**Banka adları `patterns.json`'a girdi** (`sourceLabels`, yeni). Kodda bir tablo
+olsaydı desen setine banka eklendiği gün eksik kalırdı — 6. maddedeki "17 banka"
+sayısının okunarak yazılmasıyla aynı gerekçe. Karşılığı olmayan paket için ekran
+paket adının kendisini gösteriyor; uydurma bir ad, listenin Android'in uygulama
+listesiyle karşılaştırılmasını imkânsız kılardı. Satırlarda paket adı da yazıyor,
+tam olarak bu karşılaştırma yapılabilsin diye.
+
+**Dört ekran tek ViewModel paylaşıyor.** Sayaçlar F1'de ("12 / 17", "14 kural"),
+anahtarlar F2'de. Ekran başına ayrı örnek olsaydı F2'de kapatılan banka F1'e
+dönüldüğünde hâlâ açık görünürdü — tercih diske yazılmış olsa bile eski örneğin
+akışı bunu duymazdı. Çözüm, ekranları iç içe bir grafa koyup ViewModel'i graf
+girişine bağlamak (`AppNavHost.kt`, `settingsViewModel`).
+
+**Kural silmek geçmişi geri almıyor.** Kural öğrenilirken düzeltilen kayıtlar
+`userEdited = true` oldu, yani kullanıcının kendi kararı. "✕" yalnızca kuralı
+unutturuyor; geçmişe dokunsaydı kullanıcının elle verdiği kararları da silmiş
+olurduk.
+
+**"Tüm veriyi sil" veriyi siliyor, ayarı değil.** Kayıtlar ve öğrenilmiş
+kurallar gidiyor (kural da kullanıcının harcama geçmişinden türedi; kalsaydı
+veri gerçekten silinmemiş olurdu), dinlenen kaynak tercihi ve onboarding bayrağı
+kalıyor. Onay diyaloğu var: silme geri alınamıyor ve veri yalnızca cihazda
+olduğu için geri getirilebilecek bir kopya yok.
+
+**F4 izin listesini metinden değil `PackageManager`'dan okuyor.** Ekranın tek
+iddiası "veri cihazdan çıkmıyor"; iddia cümle olarak yazılsaydı doğrulanamazdı.
+Şimdi liste kurulu paketin manifest'inden geliyor, `INTERNET` satırı **yokluğu**
+gösterecek şekilde her zaman basılıyor ve koda bir gün o izin eklenirse ekran
+başlığı kendiliğinden "Hiçbir yere."den "Bir yere gidebilir."e dönüyor — metni
+güncellemeyi unutmak mümkün değil. Buluta yedekleme satırı da
+`FLAG_ALLOW_BACKUP` bayrağından okunuyor.
+
+**`PLAY_CONSOLE.md` güncellendi** — 7. maddede "ayarlar ekranı gelince beyana
+eklenmeli" diye bırakılan cümle artık doğru olduğu için eklendi.
+
+**Testler:** `SourceSelectionTest` (7, saf JVM — üç durumun ayrımı, açma/kapama
+geçişleri), `SettingsDataTest` (7, Robolectric + gerçek SQLite + gerçek
+`patterns.json` — kaynak listesinin desen setinden gelmesi, tercihin kalıcılığı,
+kural silmenin geçmişe dokunmaması, silmenin ayarları bırakması). `:app` toplamı
+92 → 106. Testlerin ısırdığı doğrulandı: `listensTo`'ya eski "boş küme = hepsi"
+kuralı geri konunca iki test kırmızı yandı, sonra geri alındı. Release derlemesi
+de koştu: imzasız APK 1.40 MB (7. maddede 1.33 MB'tı).
+
+**Kapsam dışı bırakıldı:**
+
+- **F2'deki "Banka ara" alanı** — 17 satır tek ekrana sığıyor; arama kutusu
+  aradığı şeyden fazla yer kaplardı. Kaynak sayısı büyürse gerekir.
+- **F4'teki "Kaynak kodu aç" düğmesi** — bağlanacak adres yok; depo henüz
+  yayınlanmadı ve `README.md` dâhil hiçbir yerde URL geçmiyor. Hiçbir yere
+  gitmeyen bir düğme koymak, bu maddede kaldırdığımız ölü tıklamanın aynısı
+  olurdu.
+- **F4'teki "MANIFEST · SATIR SATIR" bloğu** — tasarımdaki sabit kod dökümü
+  yerine `PackageManager`'dan okunan izin listesi ve sayılar konuldu. Ekrana
+  elle yazılmış bir manifest, doğruladığını iddia ettiği şeyle bağını ilk
+  değişiklikte koparırdı.
+
+**Hâlâ açık:** Ekranların kendisi (Compose) otomatik test edilmiyor — 4, 5, 6 ve
+8. maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ yok.
+Test edilen kısım kuralların ve veri yollarının davranışı; kapsam dışı kalan
+yalnızca çizim. Ekranlar gerçek cihazda denenmedi (1. maddedeki açık kutu) ve
+`₺` font hatası (1. madde) bu ekranları da etkiliyor.
 
 ### 10. Aylık değişim rozeti ("↓ %12 TEMMUZ")
 

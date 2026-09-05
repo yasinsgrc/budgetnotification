@@ -12,8 +12,9 @@ görünen ama bu kapsamda **görsel olarak konup işlevsiz bırakılan** öğele
   ikisi de `Route.ADD_EXPENSE` hedefini açıyor. Ayrıntı: `roadmap.md` madde 5.
 - **PRO rozeti** (MonthTopBar) — E bölümü (Pro/paywall) bu aşamada yok.
   Sadece görsel; hiçbir tıklama davranışı yok.
-- **Ayarlar dişlisi** (MonthTopBar, ⚙) — F bölümü (ayarlar ekranı) bu
-  aşamada yok. Tıklanınca hiçbir şey yapmıyor.
+- ~~**Ayarlar dişlisi** (MonthTopBar, ⚙)~~ — **bağlandı.** F bölümü yapıldı
+  (`ui/settings/`, F1-F4); dişli `Route.SETTINGS_GRAPH`'ı açıyor. Ayrıntı:
+  `roadmap.md` madde 9.
 
 ## Bilinçli kapsam dışı bırakılanlar (talimatta belirtildiği gibi)
 

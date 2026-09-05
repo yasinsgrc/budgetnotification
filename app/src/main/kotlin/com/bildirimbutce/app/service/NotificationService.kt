@@ -6,6 +6,7 @@ import android.service.notification.StatusBarNotification
 import android.util.Log
 import com.bildirimbutce.app.data.ExpenseRepository
 import com.bildirimbutce.app.data.PatternProvider
+import com.bildirimbutce.app.data.SourceSelection
 import com.bildirimbutce.app.util.Prefs
 import com.bildirimbutce.app.widget.BudgetWidget
 import com.bildirimbutce.parser.ParseResult
@@ -49,8 +50,9 @@ class NotificationService : NotificationListenerService() {
         val parser = PatternProvider.parser(applicationContext)
         if (!parser.isKnownSource(pkg)) return
 
-        val enabled = prefs.enabledSources
-        if (enabled.isNotEmpty() && pkg !in enabled) return
+        // Kullanicinin ayarlardan daralttigi liste (F2). Kural SourceSelection'da
+        // duruyor: ekran ile servis ayni cevabi vermek zorunda.
+        if (!SourceSelection.listensTo(prefs.enabledSources, pkg)) return
 
         val text = notification.extractText().ifBlank { return }
 
