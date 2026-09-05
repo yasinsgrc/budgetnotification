@@ -24,6 +24,9 @@ data class LedgerEntry(
 
 object Ledger {
 
+    /** Tekrar korumasinin kova boyu; testler de bunu kullanir ki degisirse birlikte degissin. */
+    const val HOUR_MILLIS = 3_600_000L
+
     /**
      * Bildirim kimligi.
      *
@@ -33,7 +36,7 @@ object Ledger {
      * (kaybolmamali).
      */
     fun sourceKey(sourceApp: String, rawText: String, postedAt: Long): String {
-        val hourBucket = postedAt / 3_600_000L
+        val hourBucket = postedAt / HOUR_MILLIS
         val seed = "$sourceApp|${rawText.trim()}|$hourBucket"
         val digest = MessageDigest.getInstance("SHA-256").digest(seed.toByteArray(Charsets.UTF_8))
         return digest.joinToString("") { "%02x".format(it) }.take(32)

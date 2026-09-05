@@ -12,9 +12,11 @@ import com.bildirimbutce.parser.TxKind
 import kotlinx.coroutines.flow.Flow
 import java.util.Locale
 
-class ExpenseRepository(context: Context) {
+class ExpenseRepository internal constructor(db: AppDatabase) {
 
-    private val db = AppDatabase.get(context)
+    /** Uygulama icindeki normal kullanim: tek surumlu veritabanini kullanir. */
+    constructor(context: Context) : this(AppDatabase.get(context))
+
     private val expenses = db.expenseDao()
     private val rules = db.merchantRuleDao()
 

@@ -47,6 +47,25 @@ data class HomeUiState(
     val byCategory: List<Pair<Category, Long>> = emptyList()
 )
 
+/**
+ * Kayit listesini ekran durumuna cevirir. Iade (REFUND) toplamdan dusulur;
+ * bu kural bozulursa kullanici ayin toplamina guvenemez.
+ *
+ * ViewModel'in disinda duruyor ki Android baglami olmadan test edilebilsin.
+ */
+internal fun List<ExpenseEntity>.toUiState(): HomeUiState {
+    val total = sumOf { if (it.kind == TxKind.REFUND.name) -it.amountMinor else it.amountMinor }
+    val grouped = groupBy { Category.from(it.category) }
+        .map { (category, items) ->
+            category to items.sumOf {
+                if (it.kind == TxKind.REFUND.name) -it.amountMinor else it.amountMinor
+            }
+        }
+        .filter { it.second > 0 }
+        .sortedByDescending { it.second }
+    return HomeUiState(expenses = this, totalMinor = total, byCategory = grouped)
+}
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
@@ -74,18 +93,5 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     fun delete(expense: ExpenseEntity) = viewModelScope.launch {
         repository.delete(expense)
-    }
-
-    private fun List<ExpenseEntity>.toUiState(): HomeUiState {
-        val total = sumOf { if (it.kind == TxKind.REFUND.name) -it.amountMinor else it.amountMinor }
-        val grouped = groupBy { Category.from(it.category) }
-            .map { (category, items) ->
-                category to items.sumOf {
-                    if (it.kind == TxKind.REFUND.name) -it.amountMinor else it.amountMinor
-                }
-            }
-            .filter { it.second > 0 }
-            .sortedByDescending { it.second }
-        return HomeUiState(expenses = this, totalMinor = total, byCategory = grouped)
     }
 }

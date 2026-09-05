@@ -93,15 +93,39 @@ CI yalnızca `:parser:verify` koşuyor (`.github/workflows/ci.yml:25`), bu yüzd
 
 ### 3. `:app` için test yaz
 
-`testInstrumentationRunner` tanımlı ama `app/src/test` ve `app/src/androidTest`
-dizinleri hiç yok. Test edilmemiş kritik yollar:
+`app/src/test` kuruldu: 36 test, Robolectric üzerinde gerçek SQLite ve gerçek
+`patterns.json` ile — emülatör gerekmiyor, CI'da koşuyor.
 
-- [ ] `sourceKey` tekrar koruması — Room unique index'i gerçekten çalışıyor mu
-      (saat kovası dahil)
-- [ ] `NotificationService` parse → kayıt akışı
-- [ ] `ExpenseRepository.correctCategory` ve mağaza→kategori öğrenmesi
-- [ ] Room migration testi (`app/schemas/` şemaları bunun için repoda)
-- [ ] `HomeViewModel.toUiState` — REFUND'ın toplamdan düşülmesi
+- [x] `sourceKey` tekrar koruması — Room unique index'i gerçekten çalışıyor mu
+      (saat kovası dahil) — `SourceKeyDedupTest`: aynı kova içindeki tekrar
+      teslim yok sayılıyor, bir sonraki saatteki gerçek alışveriş kaydediliyor,
+      koruma DAO seviyesinde de doğrulandı
+- [x] `NotificationService` parse → kayıt akışı — `NotificationFlowTest`
+- [x] `ExpenseRepository.correctCategory` ve mağaza→kategori öğrenmesi —
+      `CategoryLearningTest`: kural öğrenme, geçmişe dönük düzeltme, kullanıcının
+      elle verdiği kararın ezilmemesi
+- [x] Room migration testi (`app/schemas/` şemaları bunun için repoda) —
+      `AppDatabaseMigrationTest`: v1 şemasıyla kurulmuş dolu bir veritabanı
+      güncel kodla açılıyor; v1 parmak izi (`identityHash`) teste sabitlendi,
+      entity değişip sürüm artmazsa test kırmızı yanıyor
+- [x] `HomeViewModel.toUiState` — REFUND'ın toplamdan düşülmesi —
+      `HomeUiStateTest`
+- [x] CI'a `:app:testDebugUnitTest` eklendi (`.github/workflows/ci.yml`)
+
+**Testlerin ısırdığı doğrulandı:** `toUiState`'teki REFUND işareti kaldırılınca
+`HomeUiStateTest` iki testte kırmızı yandı, sonra geri alındı.
+
+**Hâlâ açık:** `NotificationService.onNotificationPosted`'ın kendisi test
+edilmiyor — `StatusBarNotification`'ın kurucusu `@hide`, derleme SDK'sında yok,
+yani sınıf JVM testinde kurulamıyor. Servisin yaptığı iş (paket süzgeci →
+ayrıştırma → `record` → tekrar teslim) birebir aynı sırayla test ediliyor;
+kapsam dışı kalan yalnızca Android bağlantısı. `app/src/androidTest` hâlâ yok.
+
+**Test edilebilirlik için değişen üretim kodu** (davranış aynı):
+`ExpenseRepository`'ye `AppDatabase` alan `internal` kurucu, `toUiState`'in
+dosya düzeyine taşınması, bildirim metni kuralının `NotificationText`'e
+ayrılması, `AppDatabase.MIGRATIONS` dizisi (üretim ve test aynı diziyi
+kullanıyor), `Ledger.HOUR_MILLIS` sabiti.
 
 ---
 

@@ -43,6 +43,23 @@ android {
         resources.excludes += "/META-INF/{AL2.0,LGPL2.1}"
     }
 
+    // Robolectric testleri gercek assets'i (patterns.json) okuyor; bu bayrak
+    // olmadan asset yukleyici bos doner ve testler emulator ister.
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+
+            all {
+                // Conscrypt yerel kutuphane adini varsayilan yerel ayarla
+                // kucultuyor; Turkce yerel ayarda "windows" -> "wındows" olur,
+                // kutuphane bulunamaz ve tum Robolectric testleri patlar.
+                // Testlerin TLS'e ihtiyaci yok.
+                it.systemProperty("robolectric.conscryptMode", "OFF")
+            }
+        }
+    }
+
     // Tek kaynak: kokteki patterns/patterns.json dogrudan assets olarak paketlenir.
     sourceSets["main"].assets.srcDir(rootProject.file("patterns"))
 }
@@ -75,4 +92,7 @@ dependencies {
     ksp(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.kotlinx.coroutines.test)
 }

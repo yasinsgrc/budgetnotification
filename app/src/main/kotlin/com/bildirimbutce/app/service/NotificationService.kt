@@ -66,22 +66,37 @@ class NotificationService : NotificationListenerService() {
         }
     }
 
-    /**
-     * Banka SMS'leri uzun oldugu icin sikca kisaltilir; bigText mevcutsa
-     * tercih edilir, yoksa baslik + govde birlestirilir.
-     */
     private fun StatusBarNotification.extractText(): String {
         val extras = notification.extras
-        val big = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()
-        val body = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()
-        val title = extras.getString(Notification.EXTRA_TITLE)
-        val main = big?.takeIf { it.isNotBlank() } ?: body.orEmpty()
-        return listOfNotNull(title?.takeIf { it.isNotBlank() }, main.takeIf { it.isNotBlank() })
-            .joinToString(" ")
-            .trim()
+        return NotificationText.compose(
+            title = extras.getString(Notification.EXTRA_TITLE),
+            body = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString(),
+            bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()
+        )
     }
 
     private companion object {
         const val TAG = "NotificationService"
+    }
+}
+
+/**
+ * Bildirim alanlarindan ayristirilacak metni kurar.
+ *
+ * Banka bildirimleri uzun oldugu icin govde sikca kisaltilir; bigText
+ * mevcutsa tercih edilir, yoksa baslik + govde birlestirilir. Kisaltilmis
+ * govdeyi kullanmak "245,90 TL"yi "245,9..." haline getirip ayristirmayi
+ * sessizce bozar - bu yuzden kural ayri ve test altinda.
+ *
+ * Servisten ayri duruyor cunku StatusBarNotification derleme SDK'sinda
+ * kurulamaz (kurucusu @hide), yani kural servis uzerinden test edilemez.
+ */
+internal object NotificationText {
+
+    fun compose(title: String?, body: String?, bigText: String?): String {
+        val main = bigText?.takeIf { it.isNotBlank() } ?: body.orEmpty()
+        return listOfNotNull(title?.takeIf { it.isNotBlank() }, main.takeIf { it.isNotBlank() })
+            .joinToString(" ")
+            .trim()
     }
 }
