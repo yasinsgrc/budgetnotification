@@ -1,0 +1,41 @@
+<!--
+  Temali ikon (Android 13+) katmani. ic_launcher_foreground.xml ile AYNI
+  geometri; tek fark rozetin de govde ile ayni renkte olmasi.
+
+  Ayri dosya olmasinin sebebi: monochrome katmani tek renkli olmali, sistem
+  cizimi kullanicinin duvar kagidindan turettigi renkle boyar. Iki renkli
+  foreground'u buraya baglamak (onceki hali) rozetin marka yesilini anlamsiz
+  kiliyordu - boyama zaten tum renkleri eziyor.
+
+  Geometri gerekcesi ve guvenli bolge hesabi ic_launcher_foreground.xml'de.
+  Birini degistirirken digerini de guncelleyin.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M42,40 L49,80 L69,69" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7.5"
+        android:strokeLineCap="round"
+        android:pathData="M41,56 L63,44" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7.5"
+        android:strokeLineCap="round"
+        android:pathData="M43,69 L67,56" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M64,36a7,7 0 1,0 14,0a7,7 0 1,0 -14,0z" />
+</vector>

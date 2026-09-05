@@ -1,8 +1,33 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ksp)
 }
+
+// --- Release imzalama ---
+// Anahtar deposu ve parolalar repoda YOK ve olmamali (.gitignore: *.jks,
+// *.keystore, keystore.properties). Iki kaynak okunuyor; ortam degiskeni once
+// geliyor (CI sirri), yoksa kokteki keystore.properties (yerel makine).
+// Hicbiri yoksa release derlemesi IMZASIZ cikar ve `assembleRelease` yine de
+// calisir - CI'in imzalama sirri olmadan da R8/kucultme yolunu derleyebilmesi
+// gerekiyor. Ornek dosya: keystore.properties.example
+val keystoreProperties = Properties().apply {
+    val file = rootProject.file("keystore.properties")
+    if (file.exists()) file.inputStream().use { load(it) }
+}
+
+fun signingSecret(envName: String, propertyName: String): String? =
+    (System.getenv(envName) ?: keystoreProperties.getProperty(propertyName))
+        ?.takeIf { it.isNotBlank() }
+
+val releaseStoreFile = signingSecret("BB_KEYSTORE_FILE", "storeFile")
+val releaseStorePassword = signingSecret("BB_KEYSTORE_PASSWORD", "storePassword")
+val releaseKeyAlias = signingSecret("BB_KEY_ALIAS", "keyAlias")
+val releaseKeyPassword = signingSecret("BB_KEY_PASSWORD", "keyPassword")
+val releaseSigningReady = releaseStoreFile != null && releaseStorePassword != null &&
+    releaseKeyAlias != null && releaseKeyPassword != null
 
 android {
     namespace = "com.bildirimbutce.app"
@@ -17,8 +42,24 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        create("release") {
+            if (releaseSigningReady) {
+                storeFile = rootProject.file(releaseStoreFile!!)
+                storePassword = releaseStorePassword
+                keyAlias = releaseKeyAlias
+                keyPassword = releaseKeyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
+            // Sir yoksa signingConfig atanmiyor: imzasiz APK uretilir, derleme
+            // kirilmaz. Yayin oncesi `releaseSigningReady` true olmali - asagidaki
+            // uyari basiliyorsa yuklenecek APK/AAB imzasizdir.
+            signingConfig = if (releaseSigningReady) signingConfigs.getByName("release") else null
+
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
@@ -96,4 +137,18 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.kotlinx.coroutines.test)
+}
+
+// Imzasiz bir release APK'si sessizce uretilirse Play'e yuklenene kadar fark
+// edilmez. Uyari yalnizca release gorevi calisirken basiliyor - her `assembleDebug`
+// ciktisini kirletmesin.
+gradle.taskGraph.whenReady {
+    val buildsRelease = allTasks.any { it.project == project && it.name.contains("Release") }
+    if (buildsRelease && !releaseSigningReady) {
+        logger.warn(
+            "UYARI: release imzalama yapilandirilmadi (keystore.properties yok ve " +
+                "BB_KEYSTORE_* ortam degiskenleri bos). Cikan APK/AAB IMZASIZ - " +
+                "Play Console kabul etmez. keystore.properties.example'a bakin."
+        )
+    }
 }

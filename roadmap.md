@@ -246,14 +246,81 @@ gerçek cihazda da denenmedi (1. maddedeki açık kutu). Tasarımdaki `bbRise` /
 
 ### 7. Yayın hazırlığı
 
-- [ ] Release imzalama yapılandırması (`app/build.gradle.kts` içinde
-      `signingConfigs` yok)
-- [ ] `proguard-rules.pro` gözden geçir — 217 byte; Room, Compose ve `:parser`
-      reflection kuralları doğrulanmadı, `isMinifyEnabled = true` açık
-- [ ] Uygulama ikonu — hâlâ tek `ic_launcher_foreground.xml` vektörü, marka
-      ikonu değil
-- [ ] Play Console: bildirim erişimi (`BIND_NOTIFICATION_LISTENER_SERVICE`)
-      gerekçelendirme metni + gizlilik beyanı; `PRIVACY.md` ile tutarlı olmalı
+Yapıldı. Bu maddeye kadar release yolu (`assembleRelease`) hiç çalıştırılmamıştı;
+R8 kuralları "yazıldı ama denenmedi" durumundaydı. Artık release derlemesi
+geçiyor ve iddiaların her biri çıktıdan doğrulandı.
+
+- [x] Release imzalama yapılandırması — `signingConfigs` eklendi. Sırlar iki
+      kaynaktan okunuyor: önce `BB_KEYSTORE_*` ortam değişkenleri (CI), yoksa
+      kökteki `keystore.properties` (yerel, `.gitignore`'da). Şablon:
+      `keystore.properties.example`
+- [x] `proguard-rules.pro` gözden geçirildi — kural sayısı azaldı, dosya
+      büyüdü: kalan iki kuralın **neden** kaldığı ve gerisinin nereden geldiği
+      yazılı
+- [x] Uygulama ikonu — `ic_launcher_foreground.xml` yeniden çizildi (₺ monogramı
+      + bildirim rozeti), ayrı `ic_launcher_monochrome.xml` eklendi
+- [x] Play Console metinleri — `PLAY_CONSOLE.md`: bildirim erişimi
+      gerekçelendirmesi (TR + EN), veri güvenliği formu cevapları ve her
+      iddianın kod karşılığı
+
+**İmzalama sırrı yoksa derleme kırılmıyor**, imzasız APK üretiliyor. Bunun
+sebebi CI: `.github/workflows/ci.yml` imzalama sırrına sahip değil, ama R8 /
+küçültme yolunun derlenebildiğini görebilmesi gerekiyor. Sessizce imzasız APK
+çıkmasın diye release görevi çalışırken uyarı basılıyor; doğrulandı:
+
+```
+UYARI: release imzalama yapilandirilmadi (keystore.properties yok ve
+BB_KEYSTORE_* ortam degiskenleri bos). Cikan APK/AAB IMZASIZ - ...
+```
+
+**R8 kuralları ölçüldü, varsayılmadı.** `NotificationService` için elle yazılmış
+`-keep` kuralı **silindi**: AGP zaten manifest'teki her bileşen için kural
+üretiyor. Kanıt `aapt_proguard_file/release/.../aapt_rules.txt` içinde:
+
+```
+-keep class com.bildirimbutce.app.App { <init>(); }
+-keep class com.bildirimbutce.app.MainActivity { <init>(); }
+-keep class com.bildirimbutce.app.service.NotificationService { <init>(); }
+-keep class com.bildirimbutce.app.widget.BudgetWidget { <init>(); }
+```
+
+Room kuralı kaldı (ucuz sigorta); `mapping.txt` içinde `AppDatabase_Impl`
+duruyor, yani veritabanı R8'den sağ çıkıyor. `:parser` için kural gerekmedi:
+`Class.forName`, `javaClass`, `@Keep`, `Serializable` ve `getIdentifier`
+aramaları `:app` ve `:parser` kaynaklarında **sıfır** sonuç veriyor —
+ayrıştırıcı JSON'u elle okuyor, reflection yok. `patterns.json` ise kaynak
+değil *asset*, `isShrinkResources` ona dokunmuyor.
+
+Sonuç: release APK **1.33 MB** (debug 9.26 MB). `:app` 69 testin 69'u yeşil.
+
+**İkon kâğıt üstünde bırakılmadı, çizilip bakıldı.** İlk üç deneme ₺ yerine
+"モ"ye benziyordu; sebep, kolların gövdeden sola fazla taşmasıydı. Son hâlde
+taşma ~4 birime indi, kollar dikleşti ve çizgi inceldi. Geometri sayıyla
+sınırlandı: adaptive icon'un her maskede görüneceği garanti alan merkezden 33
+birim; çizgi uçları en fazla **30.2**, rozet **31.8** yarıçapta kalıyor
+(hesap dosyanın başındaki yorumda). 48dp'de de okunuyor.
+
+`monochrome` katmanı artık ayrı dosya. Önceden iki renkli foreground'a
+bağlıydı; sistem o katmanı tek renge boyadığı için rozetin marka yeşili
+anlamsızdı. `ic_launcher_round.xml` **silindi** ve manifest'ten
+`android:roundIcon` kaldırıldı: `minSdk 26` ve adaptive icon her maske şeklini
+zaten karşılıyor, dosya birebir kopyaydı.
+
+**Beyana bilerek yazılmayan bir cümle var.** "Kullanıcı dinlenen banka
+listesini daraltabilir" doğru değil: `Prefs.enabledSources` kodda var ve
+`NotificationService.kt:52` onu okuyor, ama **hiçbir yer yazmıyor** — ayarlar
+ekranı yok (9. madde). Gerekçelendirmeye koysaydık inceleme ekibinin
+uygulamada bulamayacağı bir özellik vaat etmiş olurduk. 9. madde bitince
+`PLAY_CONSOLE.md`'ye eklenmeli.
+
+**Hâlâ açık — bu madde "yayına hazır" demek değil:** anahtar deposu henüz
+üretilmedi (`keytool` komutu örnek dosyada), dolayısıyla **imzalı** bir APK
+hiç kurulmadı; imzasız APK da cihazda denenmedi (1. maddedeki açık kutu).
+Mağaza varlıkları (512×512 ikon, öne çıkan görsel, ekran görüntüleri,
+açıklama metinleri) ve gizlilik politikası URL'si depoya konamaz —
+`PLAY_CONSOLE.md`'nin 4. bölümünde liste hâlinde duruyor. Ayrıca 1. maddedeki
+`₺` font hatası yayın öncesi düzeltilmeli; ikon vektör olduğu için ondan
+etkilenmiyor, ama uygulama içi ekranlar etkileniyor.
 
 ---
 

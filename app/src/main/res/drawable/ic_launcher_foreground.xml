@@ -1,12 +1,58 @@
+<!--
+  Marka isareti: lira (TL) monogrami + sag ustte bildirim rozeti.
+  Uygulamanin adini tek sekilde anlatiyor: bildirim + butce.
+
+  GEOMETRI - degistirmeden once okuyun:
+  Adaptive icon katmanlari 108x108, ama gorunen alan merkezdeki 72x72; bunun
+  da her launcher maskesinde (daire, squircle, kare) kesilmeyecegi garanti
+  olan kismi merkezden (54,54) 33 birim yaricapindaki dairedir. Asagidaki tum
+  uc noktalar cizgi kalinliginin yarisi (3.75) eklendikten sonra en fazla 30.2,
+  rozet ise 31.8 yaricapta kaliyor. Koordinat oynatirsaniz yeniden olcun.
+
+  Isaret uc paralel koldan olusuyor (egim ~ -0.54): iki capraz kol ve dipteki
+  ayak. Kollarin govdeden SOLA tasma payi kucuk (~4 birim) - buyuk tasma
+  isareti "モ"ye benzetiyor, ₺'ye degil.
+
+  Rozet ile ust kolun ucu arasinda 11.3 birim var; gereken en az 10.75
+  (rozet yaricapi 7 + cizgi yarim kalinligi 3.75). Rozeti buyutmeyin.
+
+  Renkler Theme.kt ile ayni: zemin @color/ic_launcher_background (#0E7C66,
+  BrandLight), rozet #14B88F (brandBright).
+
+  Tek renkli surum ayri dosyada: ic_launcher_monochrome.xml. Geometri ikisinde
+  ayni; birini degistirirken digerini de guncelleyin.
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- Govde + dipte saga yukselen ayak -->
     <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M54,30a8,8 0,0 1,8 8v2h-16v-2a8,8 0,0 1,8 -8zM36,44h36a4,4 0,0 1,4 4v22a4,4 0,0 1,-4 4h-36a4,4 0,0 1,-4 -4v-22a4,4 0,0 1,4 -4z" />
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7.5"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M42,40 L49,80 L69,69" />
+
+    <!-- Iki capraz kol -->
     <path
-        android:fillColor="#0E7C66"
-        android:pathData="M46,54h16v4h-16zM46,62h11v4h-11z" />
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7.5"
+        android:strokeLineCap="round"
+        android:pathData="M41,56 L63,44" />
+    <path
+        android:fillColor="#00000000"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="7.5"
+        android:strokeLineCap="round"
+        android:pathData="M43,69 L67,56" />
+
+    <!-- Bildirim rozeti -->
+    <path
+        android:fillColor="#14B88F"
+        android:pathData="M64,36a7,7 0 1,0 14,0a7,7 0 1,0 -14,0z" />
 </vector>
