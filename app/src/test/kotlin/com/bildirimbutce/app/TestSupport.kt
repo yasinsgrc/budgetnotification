@@ -9,6 +9,7 @@ import com.bildirimbutce.parser.Category
 import com.bildirimbutce.parser.Ledger
 import com.bildirimbutce.parser.ParsedTransaction
 import com.bildirimbutce.parser.TxKind
+import java.util.Calendar
 
 /**
  * Testler icin ortak yardimcilar.
@@ -26,6 +27,16 @@ internal fun inMemoryDb(): AppDatabase =
 /** Saat kovasinin basi. Tekrar korumasi kova bazli oldugu icin testler buna gore kurulur. */
 internal fun hourBucketStart(millis: Long): Long =
     millis / Ledger.HOUR_MILLIS * Ledger.HOUR_MILLIS
+
+/**
+ * Belirli bir takvim anini zaman damgasina cevirir; [month] 0-tabanli.
+ *
+ * Rapor testleri "hangi gune, hangi aya, haftanin hangi gunune dustu"
+ * sorularina bakiyor. Varsayilan yerel saat dilimi kullaniliyor cunku uretim
+ * kodu da (`Ledger.monthRange`, `MonthCursor.of`) onu kullaniyor.
+ */
+internal fun millisAt(year: Int, month: Int, day: Int, hour: Int = 12): Long =
+    Calendar.getInstance().apply { clear(); set(year, month, day, hour, 0, 0) }.timeInMillis
 
 internal fun parsedTx(
     merchant: String? = "MIGROS",

@@ -63,6 +63,7 @@ import java.util.Locale
 @Composable
 fun HomeScreen(
     onAddExpense: () -> Unit,
+    onReport: (MonthCursor) -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -157,7 +158,12 @@ fun HomeScreen(
                     if (state.byCategory.isNotEmpty()) {
                         item { CategoryRibbon(state.byCategory, state.totalMinor) }
                     }
-                    item { TransactionsHeader(count = state.expenses.size) }
+                    item {
+                        TransactionsHeader(
+                            count = state.expenses.size,
+                            onReport = { onReport(cursor) }
+                        )
+                    }
                     items(state.expenses, key = { it.id }) { expense ->
                         ExpenseRow(expense) { editing = expense }
                         HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
@@ -337,8 +343,12 @@ private fun CategoryRibbon(rows: List<Pair<Category, Long>>, totalMinor: Long) {
     }
 }
 
+/**
+ * "RAPOR →" acik olan ayin raporunu aciyor, "bu ay"in degil: kullanici
+ * temmuza bakarken agustos raporunu gormek istemez.
+ */
 @Composable
-private fun TransactionsHeader(count: Int) {
+private fun TransactionsHeader(count: Int, onReport: () -> Unit) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -347,8 +357,12 @@ private fun TransactionsHeader(count: Int) {
         verticalAlignment = Alignment.Bottom
     ) {
         Text("İŞLEMLER · $count", style = AppText.kicker, color = AppTheme.colors.onBackgroundMuted)
-        // "Rapor" (C bölümü) bu asamada yok - yalnizca gorsel, EKSIKLER.md'de not var.
-        Text("RAPOR →", style = AppText.kicker, color = AppTheme.colors.brandBright, modifier = Modifier.clickable(onClick = {}))
+        Text(
+            "RAPOR →",
+            style = AppText.kicker,
+            color = AppTheme.colors.brandBright,
+            modifier = Modifier.clickable(onClick = onReport)
+        )
     }
 }
 

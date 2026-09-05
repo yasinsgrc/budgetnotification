@@ -26,6 +26,19 @@ class ExpenseRepository internal constructor(db: AppDatabase) {
         return expenses.observeBetween(from, to)
     }
 
+    /**
+     * [year]/[month] ayinda biten [monthCount] aylik pencere - rapor ekrani icin.
+     *
+     * Tek akis donuyor, ay basina bir tane degil: rapor hem aylik cubuklari hem
+     * secili ayin ayrintisini ayni listeden turetiyor. Ayri sorgular olsaydi
+     * aylar birbirinden farkli anlik goruntulere dusebilir, cubuklarin toplami
+     * ile ekrandaki ay toplami tutmayabilirdi.
+     */
+    fun observeMonths(year: Int, month: Int, monthCount: Int): Flow<List<ExpenseEntity>> {
+        val (from, to) = Ledger.rangeEndingAt(year, month, monthCount)
+        return expenses.observeBetween(from, to)
+    }
+
     suspend fun monthTotalMinor(year: Int, month: Int): Long {
         val (from, to) = Ledger.monthRange(year, month)
         return expenses.getBetween(from, to).sumOf { it.signedAmount() }

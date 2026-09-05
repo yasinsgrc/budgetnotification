@@ -3,8 +3,10 @@
 Görev 2 kapsamı yalnızca B1-B4, D1 ve widget'ın 2×1 sürümüydü. Tasarımda
 görünen ama bu kapsamda **görsel olarak konup işlevsiz bırakılan** öğeler:
 
-- **"RAPOR →"** (HomeScreen, B1/B2 işlemler başlığı) — C bölümü (rapor
-  ekranları) bu aşamada yok. Tıklanınca hiçbir şey yapmıyor.
+- ~~**"RAPOR →"** (HomeScreen, B1/B2 işlemler başlığı)~~ — **bağlandı.** C1
+  yapıldı (`ui/report/ReportScreen.kt`); açık olan ayın raporunu `Route.REPORT`
+  üzerinden açıyor. C2 (kategori detayı) ve C3 (paylaşılabilir ay kapanışı)
+  hâlâ yok; gerekçeleri `roadmap.md` madde 8'de.
 - ~~**"+ Elle ekle"** (HomeScreen, kayan buton) ve **"+ Elle harcama ekle"**
   (B4 boş durum kartı)~~ — **bağlandı.** D2 yapıldı (`ui/AddExpenseScreen.kt`);
   ikisi de `Route.ADD_EXPENSE` hedefini açıyor. Ayrıntı: `roadmap.md` madde 5.

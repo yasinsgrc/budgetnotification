@@ -150,11 +150,12 @@ artık her biri bir `composable(...)` satırıyla bağlanabilir.**
 
 **Hâlâ açık:** Grafın kendisi otomatik test edilmiyor — `TestNavHostController`
 için `compose-ui-test` + `navigation-testing` bağımlılıkları gerekiyor, tek
-hedefli bir graf için maliyeti kazancından büyük. Graf artık üç hedefli (5. ve
-6. maddeler), ama hâlâ test edilmiyor; grafın *hangi hedefle açıldığı* kararı
-`startDestination` olarak ayrıldığı için o kadarı test ediliyor (madde 6).
-Ekranlardaki ölü `onClick = {}` çağrılarından "elle ekle" bağlandı (madde 5);
-ayarlar ve rapor hâlâ ölü, bağlanmaları 8 ve 9 numaralı maddelerin işi.
+hedefli bir graf için maliyeti kazancından büyük. Graf artık dört hedefli (5,
+6 ve 8. maddeler), ama hâlâ test edilmiyor; grafın *hangi hedefle açıldığı*
+kararı `startDestination` olarak ayrıldığı için o kadarı test ediliyor (madde
+6). Ekranlardaki ölü `onClick = {}` çağrılarından "elle ekle" (madde 5) ve
+"RAPOR →" (madde 8) bağlandı; ayarlar dişlisi hâlâ ölü, bağlanması 9 numaralı
+maddenin işi.
 
 ### 5. D2 — Manuel harcama girişi
 
@@ -328,18 +329,85 @@ etkilenmiyor, ama uygulama içi ekranlar etkileniyor.
 
 ### 8. C — Rapor ekranları
 
-- [ ] Rapor ekranı/ekranları
-- [ ] `HomeScreen.kt:313` "RAPOR →" → ekrana bağla (şu an ölü)
+Yapıldı — C1. `ui/report/ReportScreen.kt`, `Route.REPORT` hedefi. Bu katmanın
+işi yeni veri üretmek değil, zaten kaydedilmiş olana bir soru sormak: "geçen
+aya göre ne oldu", "en çok nereye gitti", "hangi gün zayıfım".
+
+- [x] Rapor ekranı — C1: son 6 ay çubukları, üç sayı kutusu (gün ortalaması /
+      en yüksek gün / işlem sayısı), haftanın ritmi ve en çok gidilen yerler
+- [x] "RAPOR →" → ekrana bağlandı (`HomeScreen.kt:361`, artık ölü değil)
+
+**Ay adreste taşınıyor, ekranda varsayılmıyor.** Rota `report/{year}/{month}`;
+"RAPOR →" ana ekranda hangi ay açıksa onu geçiyor. Ekran kendi başına "bu ay"ı
+varsaysaydı kullanıcı temmuza bakarken ağustos raporu açılırdı. Ay adreste
+durduğu için süreç öldürüldüğünde geri dönüşte de aynı rapor açılıyor.
+
+**Altı ay tek sorguyla okunuyor.** `Ledger.rangeEndingAt` pencereyi hesaplıyor,
+`ExpenseRepository.observeMonths` bir kez çekiyor, aylara bölme bellekte
+oluyor. Ay başına ayrı sorgu açılsaydı aylar birbirinden farklı anlık
+görüntülere düşebilir, çubukların toplamı ekrandaki ay toplamıyla tutmazdı.
+
+**Gün ortalamasının böleni ayın gün sayısı değil, geçen gün.** Ayın 10'unda
+3.100,00 ₺ harcamış birine 31'e bölünmüş bir ortalama göstermek "iyi
+gidiyorsun" demektir; kullanıcı ortalamasını üçte biri kadar görür. Kapanmış
+aylarda bölen ayın tamamı. Hangi sayıya bölündüğü ekranda yazıyor
+("₺ / gün · 10 gün"), yoksa iki ayın kutusu karşılaştırılamazdı.
+
+**Haftanın ritmi cümlesi susabiliyor.** "Cuma günleri ortalamanın %64 üstünde
+harcıyorsun" ancak tepe gün yedi kovanın ortalamasını **%15'ten fazla** aşarsa
+yazılıyor. Tek aylık, yedi kovaya bölünmüş bir örneklemde %5-10 sapma
+tesadüfün kendisidir; her ay bir "tespit" uydurmak raporun güvenilirliğini
+tüketirdi.
+
+**İşyeri adı olmayan kayıtlar "en çok giden yerler"e girmiyor.** "Bilinmeyen
+işyeri" bir yer değil, ayrıştırıcının okuyamadığı bir satır; listenin başına
+çıksaydı kullanıcıya gitmediği bir yeri gösterirdik. Aynı listede kategori en
+**yeni** kayıttan okunuyor: kullanıcı bir düzeltme yaptıysa öğrenilen kural son
+satırda görünür, rapor kullanıcının kendi düzeltmesini yok saymış gibi durmaz.
+
+**Bütün toplamlar işaretli.** İade (REFUND) ay toplamından, gün toplamından,
+hafta kovasından ve işyeri satırından düşülüyor — kural tek yerde,
+`signedMinor` ana ekranla paylaşılıyor. Neti negatife düşen gün "en yüksek
+gün" olamıyor, neti negatif işyeri listeye girmiyor, ay iadeyle negatif
+kapandıysa gün ortalaması hiç gösterilmiyor.
+
+**Testler:** `ReportUiStateTest` (23, saf JVM — ay penceresi, bölen seçimi,
+hafta indeksi, sıralama ve süzgeçler), `LedgerRangeTest` (6, `:parser` —
+pencere sınırları, yıl sınırı, artık yıl şubatı). `:app` toplamı 69 → 92,
+`:parser` 18 → 24. Testlerin ısırdığı doğrulandı: pazartesi-ilk kaydırması
+(`(dow + 5) % 7`) bir birim kaydırılınca iki test kırmızı yandı, sonra geri
+alındı.
+
+**Kapsam dışı bırakıldı — C2 ve C3.** İkisi de bu maddenin iki kutusunu
+karşılamıyor ve ayrı kararlar gerektiriyor:
+
+- **C2 (kategori detayı)** — tasarımda ekranın *nereden açıldığı* yok. Tek
+  makul giriş ana ekrandaki kategori şeridine tıklamak, o da B1'in davranışını
+  değiştirmek demek; bu maddenin istediği iş "RAPOR →"yu bağlamaktı.
+- **C3 (ay kapanış özeti, paylaşılabilir)** — "Görseli kaydet" bitmap üretimi,
+  `FileProvider` ve paylaşım niyeti istiyor; ayrıca ekranı tetikleyecek bir "ay
+  kapandı" olayı uygulamada yok. Dosya paylaşımı, "veri telefondan çıkmaz"
+  anlatısına dokunan bir yüzey açıyor (kullanıcının başlattığı paylaşım da
+  olsa) — kararı `PLAY_CONSOLE.md`'deki beyanla birlikte verilmeli.
+
+**Hâlâ açık:** Ekranın kendisi (Compose) otomatik test edilmiyor — 4, 5 ve 6.
+maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ yok.
+Test edilen kısım raporun aritmetiği; kapsam dışı kalan yalnızca çizim. Ekran
+gerçek cihazda denenmedi (1. maddedeki açık kutu) ve tasarımdaki `bbBar` çubuk
+büyüme animasyonu uygulanmadı; çubuklar animasyonsuz çiziliyor. `₺` font hatası
+(1. madde) bu ekranı da etkiliyor.
 
 ### 9. F — Ayarlar ekranı
 
 - [ ] Ayarlar ekranı
-- [ ] `HomeScreen.kt:229` `SettingsGearButton` → ekrana bağla (şu an `onClick = {}`)
+- [ ] `HomeScreen.kt:273` `SettingsGearButton` → ekrana bağla (şu an `onClick = {}`)
 
 ### 10. Aylık değişim rozeti ("↓ %12 TEMMUZ")
 
 Tasarımda var, kodda hiç render edilmiyor. Önceki ayla karşılaştırma gerekiyor;
-`HomeViewModel.kt:44` `HomeUiState` yalnızca tek ayın verisini taşıyor.
+`HomeViewModel.kt:74` `HomeUiState` yalnızca tek ayın verisini taşıyor. (Rapor
+ekranı — madde 8 — önceki ayları zaten okuyor: `ExpenseRepository.observeMonths`
+burada da kullanılabilir.)
 
 - [ ] `HomeUiState`'e önceki ay toplamını ekle
 - [ ] `TotalHeader` altında rozeti render et

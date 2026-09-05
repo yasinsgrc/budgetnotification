@@ -5,12 +5,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.bildirimbutce.app.ui.AddExpenseScreen
 import com.bildirimbutce.app.ui.HomeScreen
+import com.bildirimbutce.app.ui.MonthCursor
 import com.bildirimbutce.app.ui.onboarding.OnboardingScreen
+import com.bildirimbutce.app.ui.report.ReportScreen
 import com.bildirimbutce.app.util.Prefs
 
 /**
@@ -21,6 +25,21 @@ object Route {
     const val ONBOARDING = "onboarding"
     const val HOME = "home"
     const val ADD_EXPENSE = "add-expense"
+
+    /** Rapor rotasinin ay argumanlari; 0-tabanli ay, [MonthCursor] ile ayni sozlesme. */
+    const val ARG_YEAR = "year"
+    const val ARG_MONTH = "month"
+
+    /**
+     * Rapor, hangi ayin raporu oldugunu adresinde tasiyor.
+     *
+     * Ekranin kendi basina "bu ay"i varsaymasi, kullanici gecmis bir aya
+     * bakarken raporu sessizce baska bir aya kaydirirdi. Ay adreste durdugu
+     * icin surec olduruldugunde geri donuste de ayni rapor aciliyor.
+     */
+    const val REPORT = "report/{$ARG_YEAR}/{$ARG_MONTH}"
+
+    fun report(cursor: MonthCursor): String = "report/${cursor.year}/${cursor.month}"
 }
 
 /**
@@ -36,10 +55,10 @@ fun startDestination(onboardingDone: Boolean): String =
 /**
  * Uygulamanin tek NavHost'u.
  *
- * Uc hedef var: onboarding akisi [OnboardingScreen] (A1-A3), B1-B4 ekranlarini
- * barindiran [HomeScreen] ve elle harcama girisi [AddExpenseScreen]. Sirada
- * bekleyen ekranlar (rapor, ayarlar) birer `composable(...)` satiriyla
- * eklenecek - yol haritasindaki 8 ve 9 numarali maddeler.
+ * Dort hedef var: onboarding akisi [OnboardingScreen] (A1-A3), B1-B4
+ * ekranlarini barindiran [HomeScreen], elle harcama girisi [AddExpenseScreen]
+ * ve aylik rapor [ReportScreen] (C1). Sirada bekleyen ayarlar ekrani bir
+ * `composable(...)` satiriyla eklenecek - yol haritasindaki 9. madde.
  *
  * `EditExpenseSheet` bilerek rota degil: modal alt sayfa olarak kendi geri
  * tusunu zaten yonetiyor ve yalnizca listedeki bir kayittan aciliyor. Rotaya
@@ -78,13 +97,32 @@ fun AppNavHost(
             )
         }
         composable(Route.HOME) {
-            HomeScreen(onAddExpense = { navController.navigate(Route.ADD_EXPENSE) })
+            HomeScreen(
+                onAddExpense = { navController.navigate(Route.ADD_EXPENSE) },
+                onReport = { navController.navigate(Route.report(it)) }
+            )
         }
         composable(Route.ADD_EXPENSE) {
             // Kaydettikten sonra da vazgectikten sonra da ayni sey olur: geri
             // don. Ana ekran listeyi Room'dan akisla okudugu icin yeni kayit
             // kendiliginden gorunur, elle yenileme gerekmiyor.
             AddExpenseScreen(onDone = { navController.popBackStack() })
+        }
+        composable(
+            Route.REPORT,
+            arguments = listOf(
+                navArgument(Route.ARG_YEAR) { type = NavType.IntType },
+                navArgument(Route.ARG_MONTH) { type = NavType.IntType }
+            )
+        ) { entry ->
+            // Argumanlar rotada zorunlu; yine de bir varsayilan veriliyor ki
+            // adres elle bozulursa ekran cokmek yerine icinde bulunulan ayi acsin.
+            val fallback = MonthCursor.now()
+            ReportScreen(
+                year = entry.arguments?.getInt(Route.ARG_YEAR) ?: fallback.year,
+                month = entry.arguments?.getInt(Route.ARG_MONTH) ?: fallback.month,
+                onBack = { navController.popBackStack() }
+            )
         }
     }
 }

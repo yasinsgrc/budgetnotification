@@ -26,8 +26,24 @@ data class MonthCursor(val year: Int, val month: Int) {
     fun next(): MonthCursor =
         if (month == 11) MonthCursor(year + 1, 0) else MonthCursor(year, month + 1)
 
+    /**
+     * [months] ay geri. Rapor penceresi ("son 6 ay") bunu kullaniyor.
+     *
+     * `previous()`'i tekrar tekrar cagirmak yerine 12 tabaninda hesaplaniyor:
+     * negatif ay indeksi `floorMod` ile duzeldigi icin yil siniri ayri bir
+     * durum olmaktan cikiyor.
+     */
+    fun minus(months: Int): MonthCursor {
+        val total = year * 12 + month - months
+        return MonthCursor(Math.floorDiv(total, 12), Math.floorMod(total, 12))
+    }
+
     val label: String
         get() = "${MONTHS[month]} $year"
+
+    /** Grafik ekseni icin kisa ad: "AĞU". */
+    val shortLabel: String
+        get() = SHORT_MONTHS[month]
 
     companion object {
         val MONTHS = listOf(
@@ -35,10 +51,23 @@ data class MonthCursor(val year: Int, val month: Int) {
             "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
         )
 
-        fun now(): MonthCursor {
-            val c = Calendar.getInstance()
+        /**
+         * Kisa adlar elle yazildi, `MONTHS`'tan kesilmedi: Turkce buyuk harf
+         * kurali "İ" ve "I"yi ayirir, `uppercase()` yanlis yerel ayarda
+         * "NIS"/"EKI" uretirdi.
+         */
+        val SHORT_MONTHS = listOf(
+            "OCA", "ŞUB", "MAR", "NİS", "MAY", "HAZ",
+            "TEM", "AĞU", "EYL", "EKİ", "KAS", "ARA"
+        )
+
+        /** Bir zaman damgasinin dustugu ay; rapor kayitlari aylara bununla boluyor. */
+        fun of(millis: Long): MonthCursor {
+            val c = Calendar.getInstance().apply { timeInMillis = millis }
             return MonthCursor(c.get(Calendar.YEAR), c.get(Calendar.MONTH))
         }
+
+        fun now(): MonthCursor = of(System.currentTimeMillis())
     }
 }
 
@@ -72,7 +101,11 @@ internal fun List<ExpenseEntity>.toUiState(): HomeUiState {
     )
 }
 
-private fun ExpenseEntity.signedMinor(): Long =
+/**
+ * Iade negatif sayilir. `internal`: rapor ekrani da ayni kurali kullaniyor ve
+ * kuralin iki kopyasi olsaydi biri degisip digeri kalabilirdi.
+ */
+internal fun ExpenseEntity.signedMinor(): Long =
     if (kind == TxKind.REFUND.name) -amountMinor else amountMinor
 
 @OptIn(ExperimentalCoroutinesApi::class)

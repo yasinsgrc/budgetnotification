@@ -126,4 +126,19 @@ object Ledger {
         cal.add(Calendar.MONTH, 1)
         return from to (cal.timeInMillis - 1)
     }
+
+    /**
+     * [year]/[month] ayinda biten, [monthCount] ay uzunlugunda aralik.
+     *
+     * Rapor ekrani "son 6 ay" grafigini tek sorguyla okuyor: ay basina ayri
+     * sorgu acmak yerine pencerenin tamami bir kez cekilip bellekte aylara
+     * bolunuyor. Hesabin burada durmasi, artik yil ve farkli ay uzunluklarinin
+     * emulator olmadan test edilebilmesini sagliyor.
+     */
+    fun rangeEndingAt(year: Int, month: Int, monthCount: Int): Pair<Long, Long> {
+        require(monthCount >= 1) { "monthCount en az 1 olmali: $monthCount" }
+        val cal = Calendar.getInstance().apply { clear(); set(year, month, 1, 0, 0, 0) }
+        cal.add(Calendar.MONTH, -(monthCount - 1))
+        return cal.timeInMillis to monthRange(year, month).second
+    }
 }
