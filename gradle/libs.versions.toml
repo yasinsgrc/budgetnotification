@@ -7,6 +7,8 @@ composeBom = "2024.06.00"
 coreKtx = "1.13.1"
 lifecycle = "2.8.2"
 activityCompose = "1.9.0"
+# 2.8.x compileSdk 35 istiyor; proje 34'te oldugu surece 2.7.7 son uyumlu surum.
+navigation = "2.7.7"
 room = "2.6.1"
 coroutines = "1.8.1"
 serialization = "1.6.3"
@@ -26,6 +28,7 @@ androidx-compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
 androidx-compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx-compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }

@@ -133,13 +133,26 @@ kullanıyor), `Ledger.HOUR_MILLIS` sabiti.
 
 ### 4. Navigasyon altyapısı kur
 
-`MainActivity.kt:16` doğrudan `HomeScreen()` çağırıyor. `NavHost` yok,
-`androidx.navigation:navigation-compose` bağımlılığı `gradle/libs.versions.toml`
-içinde hiç tanımlı değil. **5, 6, 8, 9 numaralı maddelerin hepsi buna bağlı.**
+Kuruldu. `MainActivity` artık `AppNavHost()` çağırıyor
+(`ui/nav/AppNavHost.kt`). **5, 6, 8, 9 numaralı maddelerin hepsi buna bağlıydı;
+artık her biri bir `composable(...)` satırıyla bağlanabilir.**
 
-- [ ] Karar: NavHost mu, tek Activity + state makinesi mi
-- [ ] Bağımlılığı `libs.versions.toml`'a ekle
-- [ ] Mevcut `HomeScreen` + `EditExpenseSheet`'i yeni yapıya taşı
+- [x] Karar: **NavHost**. Tek Activity + state makinesi, sıradaki dört ekranın
+      her biri için elle geri yığını yönetmek demekti; `navigation-compose`
+      bunu ve `ViewModel`'in hedefe göre kapsamlanmasını hazır veriyor
+- [x] Bağımlılığı `libs.versions.toml`'a ekle — `navigation = "2.7.7"`; 2.8.x
+      `compileSdk 35` istiyor, proje 34'te
+- [x] Mevcut `HomeScreen` + `EditExpenseSheet`'i yeni yapıya taşı —
+      `HomeScreen` `Route.HOME` hedefi oldu; `EditExpenseSheet` bilerek rota
+      **değil**: modal alt sayfa kendi geri tuşunu yönetiyor ve yalnızca
+      listedeki bir kayıttan açılıyor, rotaya çevirmek kaydın id'sini adresten
+      taşıyıp veritabanından yeniden okumayı gerektirirdi
+
+**Hâlâ açık:** Grafın kendisi otomatik test edilmiyor — `TestNavHostController`
+için `compose-ui-test` + `navigation-testing` bağımlılıkları gerekiyor, tek
+hedefli bir graf için maliyeti kazancından büyük. İkinci hedef eklendiğinde
+tekrar bakılmalı. Ekranlardaki ölü `onClick = {}` çağrıları (ayarlar, rapor,
+elle ekle) hâlâ ölü; bağlanmaları 5, 6, 8, 9 numaralı maddelerin işi.
 
 ### 5. D2 — Manuel harcama girişi
 
