@@ -150,8 +150,9 @@ artık her biri bir `composable(...)` satırıyla bağlanabilir.**
 
 **Hâlâ açık:** Grafın kendisi otomatik test edilmiyor — `TestNavHostController`
 için `compose-ui-test` + `navigation-testing` bağımlılıkları gerekiyor, tek
-hedefli bir graf için maliyeti kazancından büyük. İkinci hedef eklendiğinde
-tekrar bakılmalı — 5. madde ikinci hedefi ekledi, ama graf hâlâ test edilmiyor.
+hedefli bir graf için maliyeti kazancından büyük. Graf artık üç hedefli (5. ve
+6. maddeler), ama hâlâ test edilmiyor; grafın *hangi hedefle açıldığı* kararı
+`startDestination` olarak ayrıldığı için o kadarı test ediliyor (madde 6).
 Ekranlardaki ölü `onClick = {}` çağrılarından "elle ekle" bağlandı (madde 5);
 ayarlar ve rapor hâlâ ölü, bağlanmaları 8 ve 9 numaralı maddelerin işi.
 
@@ -199,8 +200,49 @@ gerçek cihazda da denenmedi (1. maddedeki açık kutu).
 
 ### 6. A — Onboarding akışı
 
-- [ ] İzin ekranına yönlendirme metni ve akışı
-- [ ] İlk açılışta gösterim, `Prefs.kt` üzerinden "görüldü" bayrağı
+Yapıldı. `ui/onboarding/OnboardingScreen.kt`, `Route.ONBOARDING` hedefi. Akışın
+işi izin *istemek* değil, izni **anlaşılır kılmak**: Android'in "tüm
+bildirimleri okuyabilecek" uyarısı, ne yaptığını bilmeyen kullanıcıyı ilk
+karşılaşmada kaçırıyor.
+
+- [x] İzin ekranına yönlendirme metni ve akışı — A1 (ne işe yarar) → A2 (izin
+      öncesi hazırlık) → A3 (dinlemeye başladım). A2, Android'in soracağı
+      diyaloğun bir örneğini önden gösteriyor ve yanına üç somut söz koyuyor:
+      internet izni yok, veri telefondan çıkmıyor, yalnızca tanımlı banka
+      uygulamaları okunuyor
+- [x] İlk açılışta gösterim, `Prefs.kt` üzerinden "görüldü" bayrağı —
+      `startDestination(onboardingDone)` (`ui/nav/AppNavHost.kt`) ilk açılışta
+      `Route.ONBOARDING`, sonrasında `Route.HOME` döndürüyor
+
+**Sayfalar rota değil, tek rotanın iç durumu.** Üçü birlikte tek bir kurulum
+sihirbazı; ayrı rota olsalardı her çıkışın kendi `popUpTo` zinciri olurdu ve
+grafta "izin verilmeden ulaşılabilen A3" gibi anlamsız adresler doğardı.
+
+**Bayrak her çıkışta yazılıyor** — izin verildiğinde de "şimdilik elle girerim"
+dendiğinde de. Aksi halde izni reddeden kullanıcı aynı üç sayfayı her açılışta
+görürdü; hatırlatmayı zaten ana ekrandaki izin kartı (B3) sürdürüyor.
+
+**İzin durumu dönüşte kendiliğinden okunuyor:** izin sistem ayarında veriliyor,
+`ON_RESUME`'da tekrar bakılıyor ve verilmişse A3'e geçiliyor. Ana ekranda
+kullanıcıya "izni verdim" dedirten bir düğme var; burada akışın sıradaki adımı
+izne bağlı olduğu için fazladan bir dokunuş istemenin anlamı yoktu.
+
+**Ekrandaki sayılar sabit değil:** "17 banka" ve "5 desen" `patterns.json`'dan
+okunuyor (`PatternProvider.sourceCount`, yeni). Elle yazılsalardı desen setine
+banka eklendiği gün sessizce yalan söylerlerdi. "0 sunucu" sabit — manifest'te
+INTERNET izni yok.
+
+**Testler:** `OnboardingFlowTest` (4, saf JVM — sayfa sırası ve başlangıç
+hedefi), `OnboardingSeenFlagTest` (3, Robolectric — bayrağın yeni bir `Prefs`
+örneğinde de okunması). `:app` toplamı 62 → 69. Testlerin ısırdığı doğrulandı:
+`startDestination` her zaman `Route.HOME` döndürecek şekilde bozulunca iki test
+kırmızı yandı, sonra geri alındı.
+
+**Hâlâ açık:** Ekranların kendisi (Compose) otomatik test edilmiyor — 4. ve 5.
+maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ yok.
+Test edilen kısım akışın kuralları; kapsam dışı kalan yalnızca çizim. Akış
+gerçek cihazda da denenmedi (1. maddedeki açık kutu). Tasarımdaki `bbRise` /
+`bbDrop` giriş animasyonları uygulanmadı; sayfalar animasyonsuz geçiyor.
 
 ### 7. Yayın hazırlığı
 

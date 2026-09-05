@@ -34,6 +34,15 @@ object PatternProvider {
         PatternSet.fromJson(readCache(context) ?: readAsset(context)).patterns.size
     }.getOrDefault(0)
 
+    /**
+     * Onboarding'in "N tanimli uygulama" ve "N banka" satirlari icin dinlenen
+     * kaynak sayisi. Ekrana elle yazilsaydi, desen setine banka eklendigi gun
+     * sessizce yanlis sayi gosterirdi.
+     */
+    fun sourceCount(context: Context): Int = runCatching {
+        PatternSet.fromJson(readCache(context) ?: readAsset(context)).sources.size
+    }.getOrDefault(0)
+
     private fun build(context: Context): BankNotificationParser {
         val raw = readCache(context) ?: readAsset(context)
         return BankNotificationParser(PatternSet.fromJson(raw))
