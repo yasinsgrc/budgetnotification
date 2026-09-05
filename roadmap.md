@@ -151,19 +151,51 @@ artık her biri bir `composable(...)` satırıyla bağlanabilir.**
 **Hâlâ açık:** Grafın kendisi otomatik test edilmiyor — `TestNavHostController`
 için `compose-ui-test` + `navigation-testing` bağımlılıkları gerekiyor, tek
 hedefli bir graf için maliyeti kazancından büyük. İkinci hedef eklendiğinde
-tekrar bakılmalı. Ekranlardaki ölü `onClick = {}` çağrıları (ayarlar, rapor,
-elle ekle) hâlâ ölü; bağlanmaları 5, 6, 8, 9 numaralı maddelerin işi.
+tekrar bakılmalı — 5. madde ikinci hedefi ekledi, ama graf hâlâ test edilmiyor.
+Ekranlardaki ölü `onClick = {}` çağrılarından "elle ekle" bağlandı (madde 5);
+ayarlar ve rapor hâlâ ölü, bağlanmaları 8 ve 9 numaralı maddelerin işi.
 
 ### 5. D2 — Manuel harcama girişi
 
-İlk yapılacak ekran bu. Sebebi estetik değil: Play Console bildirim erişimini
-reddederse elde yayınlanabilir bir bütçe defteri kalması gerekiyor.
+Yapıldı. Sebebi estetik değildi: Play Console bildirim erişimini reddederse
+elde yayınlanabilir bir bütçe defteri kalması gerekiyordu; artık kalıyor.
 
-- [ ] Manuel harcama giriş ekranı
-- [ ] `HomeScreen.kt:379` `FloatingAddButton` → ekrana bağla (şu an `onClick = {}`)
-- [ ] B4 boş durumundaki "+ Elle harcama ekle" → aynı ekrana bağla
-- [ ] B3 (izin kapalı) ekranına "elle girilenler" listesi ve soluk toplamı ekle
-      — D2'ye bağlı olduğu için bilerek atlanmıştı
+- [x] Manuel harcama giriş ekranı — `ui/AddExpenseScreen.kt`, `Route.ADD_EXPENSE`
+      hedefi. Tek zorunlu alan tutar; tutar çözülemedikçe Kaydet düğmesi soluk
+      ve tıklanamaz
+- [x] `FloatingAddButton` → ekrana bağlandı; artık izin kapalıyken de görünüyor
+      (elle giriş o durumda tek yol)
+- [x] B4 boş durumundaki "+ Elle harcama ekle" → aynı ekrana bağlandı
+- [x] B3 (izin kapalı) ekranına "elle girilenler" listesi ve soluk toplamı
+      eklendi — `HomeUiState.manualExpenses` / `manualTotalMinor`
+
+**Şema değişmedi:** elle girilenler `sourceApp = "manual"` damgasıyla ayrılıyor
+(`Ledger.MANUAL_SOURCE`); yeni kolon ve migration gerekmedi.
+
+**Tekrar koruması bilerek devre dışı:** bildirimde `sourceKey` metinden
+türetilir ve tekrar teslim yutulur; elle girişte anahtar rastgele üretiliyor.
+Aksi halde kullanıcının aynı gün ikinci kez girdiği aynı tutar sessizce yutulur
+ve ayın toplamı eksik çıkardı. `ManualEntryTest`'te doğrulandı: anahtar
+deterministik yapılınca test kırmızı yandı (2 bekleniyordu, 1 geldi), sonra
+geri alındı.
+
+**Kategori:** kullanıcı seçmezse işyeri adından çözülüyor (önce öğrenilmiş
+kural, sonra anahtar kelime) ve kayıt `userEdited = false` kalıyor — geçmişe
+dönük düzeltme bunu da yakalayabilsin. Kullanıcı çipe dokunduysa karar onun:
+`userEdited = true`, bir daha ezilmiyor.
+
+**Kapsam dışı bırakıldı:** tarih seçici yok, kayıt "şu an"a yazılıyor ve ekran
+hangi tarihe yazdığını açıkça gösteriyor. İade (REFUND) girişi de yok; elle
+giriş her zaman harcama. İkisi de bu maddenin istediği iş değildi.
+
+**Testler:** `LedgerManualEntryTest` (7, `:parser`), `ManualEntryTest` (9,
+Robolectric + gerçek SQLite), `ManualEntryDraftTest` (13, saf JVM) ve
+`HomeUiStateTest`'e elle giriş süzgeci için 4 test. `:app` toplamı 36 → 62.
+
+**Hâlâ açık:** Ekranın kendisi (Compose) otomatik test edilmiyor — 4. maddedeki
+gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ yok. Test edilen
+kısım formun kuralları ve kayıt yolu; kapsam dışı kalan yalnızca çizim. Ekran
+gerçek cihazda da denenmedi (1. maddedeki açık kutu).
 
 ### 6. A — Onboarding akışı
 

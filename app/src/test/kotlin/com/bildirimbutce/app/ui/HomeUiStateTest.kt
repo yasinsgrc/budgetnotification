@@ -3,6 +3,7 @@ package com.bildirimbutce.app.ui
 import com.bildirimbutce.app.data.db.ExpenseEntity
 import com.bildirimbutce.app.expenseEntity
 import com.bildirimbutce.parser.Category
+import com.bildirimbutce.parser.Ledger
 import com.bildirimbutce.parser.TxKind
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -113,5 +114,59 @@ class HomeUiStateTest {
         )
 
         assertEquals(rows, rows.toUiState().expenses)
+    }
+
+    /**
+     * Izin kapaliyken (B3) yalnizca elle girilenler gosteriliyor. Suzgec
+     * bozulursa kullanici, bildirim erisimi kapaliyken bildirimden gelmis
+     * kayitlar gorur ve sistemin hala calistigini saniyor.
+     */
+    @Test
+    fun `elle girilenler ayri suzuluyor`() {
+        val elle = expenseEntity(amountMinor = 8_990, sourceApp = Ledger.MANUAL_SOURCE)
+        val bildirimden = expenseEntity(amountMinor = 24_590, occurredAt = 1)
+
+        val state = listOf(elle, bildirimden).toUiState()
+
+        assertEquals(listOf(elle), state.manualExpenses)
+    }
+
+    @Test
+    fun `elle girilenlerin toplami yalnizca kendilerini sayiyor`() {
+        val state = listOf(
+            expenseEntity(amountMinor = 8_990, sourceApp = Ledger.MANUAL_SOURCE),
+            expenseEntity(amountMinor = 1_000, occurredAt = 1, sourceApp = Ledger.MANUAL_SOURCE),
+            expenseEntity(amountMinor = 24_590, occurredAt = 2)
+        ).toUiState()
+
+        assertEquals(8_990L + 1_000L, state.manualTotalMinor)
+        assertEquals(
+            "ay toplami her iki kaynagi da saymaya devam etmeli",
+            8_990L + 1_000L + 24_590L,
+            state.totalMinor
+        )
+    }
+
+    @Test
+    fun `elle girilmis iade kendi toplamindan dusuluyor`() {
+        val state = listOf(
+            expenseEntity(amountMinor = 8_990, sourceApp = Ledger.MANUAL_SOURCE),
+            expenseEntity(
+                amountMinor = 1_000,
+                kind = TxKind.REFUND,
+                occurredAt = 1,
+                sourceApp = Ledger.MANUAL_SOURCE
+            )
+        ).toUiState()
+
+        assertEquals(8_990L - 1_000L, state.manualTotalMinor)
+    }
+
+    @Test
+    fun `elle giris yoksa liste bos`() {
+        val state = listOf(expenseEntity(amountMinor = 24_590)).toUiState()
+
+        assertTrue(state.manualExpenses.isEmpty())
+        assertEquals(0L, state.manualTotalMinor)
     }
 }

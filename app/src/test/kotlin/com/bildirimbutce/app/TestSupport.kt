@@ -52,7 +52,9 @@ internal fun expenseEntity(
     category: Category = Category.MARKET,
     occurredAt: Long = 0L,
     sourceKey: String = "key-$merchant-$occurredAt-$amountMinor-${kind.name}",
-    userEdited: Boolean = false
+    userEdited: Boolean = false,
+    /** Elle girilenler [Ledger.MANUAL_SOURCE] tasir; ekranlar listeyi buna gore ayirir. */
+    sourceApp: String = "test.app"
 ) = ExpenseEntity(
     amountMinor = amountMinor,
     currency = "TL",
@@ -60,7 +62,7 @@ internal fun expenseEntity(
     category = category.name,
     kind = kind.name,
     occurredAt = occurredAt,
-    sourceApp = "test.app",
+    sourceApp = sourceApp,
     patternId = "test",
     confidence = 0.9f,
     rawText = "test",

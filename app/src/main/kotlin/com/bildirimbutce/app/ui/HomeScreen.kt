@@ -61,7 +61,10 @@ import java.util.Date
 import java.util.Locale
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
+fun HomeScreen(
+    onAddExpense: () -> Unit,
+    viewModel: HomeViewModel = viewModel()
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val cursor by viewModel.cursor.collectAsStateWithLifecycle()
     val context = LocalContext.current
@@ -72,6 +75,10 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
 
     val showEmptyState = permissionGranted && state.expenses.isEmpty()
     val showTransactions = permissionGranted && state.expenses.isNotEmpty()
+    // Izin kapaliyken (B3) yalnizca elle girilenler gosterilir: bildirimden
+    // gelenler zaten yakalanamiyor, eski kayitlarin listede durmasi kullaniciyi
+    // "demek ki hala calisiyor" yanilgisina dusururdu.
+    val manualEntries = state.manualExpenses
 
     Box(
         Modifier
@@ -110,12 +117,39 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
                             onRecheck = { permissionGranted = NotificationAccess.isGranted(context) }
                         )
                     }
-                    item { EmptyState(permissionGranted = false) }
+                    if (manualEntries.isEmpty()) {
+                        item { EmptyState(permissionGranted = false) }
+                        item {
+                            Box(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = AppSpace.s6),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                AddManuallyButton(onAddExpense)
+                            }
+                        }
+                    } else {
+                        // Toplam soluk: bu, ayin toplami degil - yalnizca elle
+                        // girilenlerin toplami. Solukluk farki tasiyor.
+                        item {
+                            TotalHeader(
+                                totalMinor = state.manualTotalMinor,
+                                subtitle = "elle girdiğin harcamalar",
+                                muted = true
+                            )
+                        }
+                        item { SectionHeader("ELLE GİRİLENLER · ${manualEntries.size}") }
+                        items(manualEntries, key = { it.id }) { expense ->
+                            ExpenseRow(expense) { editing = expense }
+                            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f))
+                        }
+                    }
                 }
 
                 showEmptyState -> {
                     item { TotalHeader(totalMinor = 0, subtitle = "bu ay henüz harcama yok", muted = true) }
-                    item { ReadinessCard(context = context, permissionGranted = true) }
+                    item { ReadinessCard(context = context, permissionGranted = true, onAdd = onAddExpense) }
                 }
 
                 else -> {
@@ -132,9 +166,13 @@ fun HomeScreen(viewModel: HomeViewModel = viewModel()) {
             }
         }
 
-        if (showTransactions) {
+        // Liste doluyken gorunur - izin acik olsun olmasin. Izin kapaliyken elle
+        // giris tek yol oldugu icin dugmenin orada da durmasi gerekiyor. Liste
+        // bosken bos durum kartinin kendi dugmesi isi goruyor, ikisi cakismasin.
+        if (showTransactions || manualEntries.isNotEmpty()) {
             FloatingAddButton(
-                Modifier
+                onClick = onAddExpense,
+                modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(bottom = AppSpace.s6)
             )
@@ -314,6 +352,19 @@ private fun TransactionsHeader(count: Int) {
     }
 }
 
+/** Yan eylemi olmayan bolum basligi (B3'teki "ELLE GIRILENLER" gibi). */
+@Composable
+private fun SectionHeader(text: String) {
+    Text(
+        text,
+        style = AppText.kicker,
+        color = AppTheme.colors.onBackgroundMuted,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = AppSpace.s6, vertical = AppSpace.s3)
+    )
+}
+
 @Composable
 private fun ExpenseRow(expense: ExpenseEntity, onClick: () -> Unit) {
     val category = Category.from(expense.category)
@@ -370,13 +421,12 @@ private fun metaLine(expense: ExpenseEntity, category: Category, isUnknown: Bool
 }
 
 @Composable
-private fun FloatingAddButton(modifier: Modifier = Modifier) {
-    // Elle harcama girisi (D2) bu asamada yok - yalnizca gorsel, EKSIKLER.md'de not var.
+private fun FloatingAddButton(onClick: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         modifier
             .clip(RoundedCornerShape(AppRadius.md))
             .background(MaterialTheme.colorScheme.onBackground)
-            .clickable(onClick = {})
+            .clickable(onClick = onClick)
             .padding(horizontal = AppSpace.s4, vertical = AppSpace.s3),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(AppSpace.s2)
@@ -431,13 +481,13 @@ private fun PermissionWarningCard(onGrant: () -> Unit, onRecheck: () -> Unit) {
 }
 
 @Composable
-private fun ReadinessCard(context: android.content.Context, permissionGranted: Boolean) {
+private fun ReadinessCard(context: android.content.Context, permissionGranted: Boolean, onAdd: () -> Unit) {
     val patternCount by produceState(initialValue = 0, context) {
         value = withContext(Dispatchers.IO) { PatternProvider.patternCount(context) }
     }
 
     Column(Modifier.padding(horizontal = AppSpace.s6, vertical = AppSpace.s4)) {
-        EmptyStateCard()
+        EmptyStateCard(onAdd = onAdd)
         Spacer(Modifier.height(AppSpace.s5))
         Column(
             Modifier
@@ -480,7 +530,7 @@ private fun ReadinessRow(label: String, value: String, ok: Boolean) {
 }
 
 @Composable
-private fun EmptyStateCard() {
+private fun EmptyStateCard(onAdd: () -> Unit) {
     Column(
         Modifier
             .fillMaxWidth()
@@ -509,16 +559,21 @@ private fun EmptyStateCard() {
             modifier = Modifier.widthIn(max = 260.dp)
         )
         Spacer(Modifier.height(AppSpace.s4))
-        // Elle harcama girisi (D2) bu asamada yok - yalnizca gorsel, EKSIKLER.md'de not var.
-        Box(
-            Modifier
-                .clip(RoundedCornerShape(AppRadius.md))
-                .background(MaterialTheme.colorScheme.onBackground)
-                .clickable(onClick = {})
-                .padding(horizontal = AppSpace.s4, vertical = AppSpace.s3)
-        ) {
-            Text("+ Elle harcama ekle", style = AppText.labelChip, color = MaterialTheme.colorScheme.background)
-        }
+        AddManuallyButton(onAdd)
+    }
+}
+
+/** "+ Elle harcama ekle" - hem bos durum kartinda hem B3 ekraninda ayni dugme. */
+@Composable
+private fun AddManuallyButton(onClick: () -> Unit) {
+    Box(
+        Modifier
+            .clip(RoundedCornerShape(AppRadius.md))
+            .background(MaterialTheme.colorScheme.onBackground)
+            .clickable(onClick = onClick)
+            .padding(horizontal = AppSpace.s4, vertical = AppSpace.s3)
+    ) {
+        Text("+ Elle harcama ekle", style = AppText.labelChip, color = MaterialTheme.colorScheme.background)
     }
 }
 

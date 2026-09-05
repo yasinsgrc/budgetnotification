@@ -11,6 +11,7 @@ import com.bildirimbutce.parser.ParsedTransaction
 import com.bildirimbutce.parser.TxKind
 import kotlinx.coroutines.flow.Flow
 import java.util.Locale
+import java.util.UUID
 
 class ExpenseRepository internal constructor(db: AppDatabase) {
 
@@ -56,6 +57,54 @@ class ExpenseRepository internal constructor(db: AppDatabase) {
             sourceKey = entry.sourceKey
         )
         return expenses.insert(entity) != -1L
+    }
+
+    /**
+     * Elle girilen harcamayi kaydeder.
+     *
+     * Bildirim erisimi reddedilirse elde calisan bir butce defteri kalmasi
+     * gerekiyor; bu yol o yuzden var. Tekrar korumasi bilerek devre disi:
+     * [ExpenseEntity.sourceKey] rastgele uretiliyor, cunku kullanici ayni
+     * tutari gercekten iki kez girebilir ve ikisini de gormeli.
+     *
+     * [category] null ise magazadan cozuluyor (once ogrenilmis kural, sonra
+     * anahtar kelime) ve kayit `userEdited = false` kaliyor - boylece kullanici
+     * ileride bu magazayi duzeltirse gecmise donuk duzeltme bunu da yakalar.
+     * Kullanici kategoriyi ekranda kendi sectiyse karar onundur, ezilmemeli.
+     *
+     * @return eklenen kaydin id'si
+     */
+    suspend fun addManual(
+        amountMinor: Long,
+        merchant: String?,
+        category: Category?,
+        occurredAt: Long
+    ): Long {
+        val cleaned = merchant?.trim()?.ifBlank { null }
+        // Is mantigi saf cekirdekte (:parser) - burada yalnizca Room'a cevriliyor.
+        val entry = Ledger.manualEntry(
+            amountMinor = amountMinor,
+            merchant = cleaned,
+            category = category ?: resolveCategory(cleaned),
+            occurredAt = occurredAt,
+            sourceKey = "${Ledger.MANUAL_SOURCE}:${UUID.randomUUID()}"
+        )
+        return expenses.insert(
+            ExpenseEntity(
+                amountMinor = entry.amountMinor,
+                currency = entry.currency,
+                merchant = entry.merchant,
+                category = entry.category.name,
+                kind = entry.kind.name,
+                occurredAt = entry.occurredAt,
+                sourceApp = entry.sourceApp,
+                patternId = entry.patternId,
+                confidence = entry.confidence,
+                rawText = entry.rawText,
+                sourceKey = entry.sourceKey,
+                userEdited = category != null
+            )
+        )
     }
 
     suspend fun update(expense: ExpenseEntity) = expenses.update(expense)

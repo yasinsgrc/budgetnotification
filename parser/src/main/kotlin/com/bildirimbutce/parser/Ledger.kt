@@ -28,6 +28,18 @@ object Ledger {
     const val HOUR_MILLIS = 3_600_000L
 
     /**
+     * Elle girilen kayitlarin kaynak damgasi.
+     *
+     * Bildirimden gelenler paket adiyla (`com.garanti.cepsubesi` gibi)
+     * damgalanir; elle girilenin paketi yok. Ekranlar "elle girilenler"
+     * listesini bu damgayla ayirir - yeni bir sutun ve sema surumu gerekmiyor.
+     */
+    const val MANUAL_SOURCE = "manual"
+
+    /** Elle girilenlerin desen kimligi: ayristirma yapilmadi, kullanici yazdi. */
+    const val MANUAL_PATTERN = "manual"
+
+    /**
      * Bildirim kimligi.
      *
      * Saat kovasi kullaniliyor: Android ayni bildirimi guncellendiginde
@@ -59,6 +71,39 @@ object Ledger {
         confidence = tx.confidence,
         rawText = tx.rawText,
         sourceKey = sourceKey(sourceApp, tx.rawText, postedAt)
+    )
+
+    /**
+     * Elle girilen kayit.
+     *
+     * Bildirimden gelenin aksine tekrar korumasi YOK: kullanici ayni saat
+     * icinde ayni tutari gercekten iki kez harcamis olabilir ve ikisini de
+     * gormeli. Bu yuzden [sourceKey] metinden turetilmiyor, disaridan
+     * benzersiz veriliyor - unique index iki gercek girisi birbirine yemesin.
+     *
+     * [rawText] bos: ayristirilacak bir bildirim metni yok. Duzeltme sayfasi
+     * "kaynak/desen/guven" satirlarini bu alanlardan okuyor, bu yuzden hepsi
+     * doldurulmali; guven 1.0 cunku tahmin degil, kullanicinin beyani.
+     */
+    fun manualEntry(
+        amountMinor: Long,
+        merchant: String?,
+        category: Category,
+        occurredAt: Long,
+        sourceKey: String,
+        currency: String = "TL"
+    ): LedgerEntry = LedgerEntry(
+        amountMinor = amountMinor,
+        currency = currency,
+        merchant = merchant,
+        category = category,
+        kind = TxKind.EXPENSE,
+        occurredAt = occurredAt,
+        sourceApp = MANUAL_SOURCE,
+        patternId = MANUAL_PATTERN,
+        confidence = 1f,
+        rawText = "",
+        sourceKey = sourceKey
     )
 
     /** Iade negatif sayilir. */

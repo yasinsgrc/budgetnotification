@@ -5,9 +5,9 @@ görünen ama bu kapsamda **görsel olarak konup işlevsiz bırakılan** öğele
 
 - **"RAPOR →"** (HomeScreen, B1/B2 işlemler başlığı) — C bölümü (rapor
   ekranları) bu aşamada yok. Tıklanınca hiçbir şey yapmıyor.
-- **"+ Elle ekle"** (HomeScreen, kayan buton) ve **"+ Elle harcama ekle"**
-  (B4 boş durum kartı) — D2 (manuel harcama girişi) bu aşamada yok.
-  Tıklanınca hiçbir şey yapmıyor.
+- ~~**"+ Elle ekle"** (HomeScreen, kayan buton) ve **"+ Elle harcama ekle"**
+  (B4 boş durum kartı)~~ — **bağlandı.** D2 yapıldı (`ui/AddExpenseScreen.kt`);
+  ikisi de `Route.ADD_EXPENSE` hedefini açıyor. Ayrıntı: `roadmap.md` madde 5.
 - **PRO rozeti** (MonthTopBar) — E bölümü (Pro/paywall) bu aşamada yok.
   Sadece görsel; hiçbir tıklama davranışı yok.
 - **Ayarlar dişlisi** (MonthTopBar, ⚙) — F bölümü (ayarlar ekranı) bu
@@ -15,9 +15,11 @@ görünen ama bu kapsamda **görsel olarak konup işlevsiz bırakılan** öğele
 
 ## Bilinçli kapsam dışı bırakılanlar (talimatta belirtildiği gibi)
 
-- B3 (izin kapalı) ekranında "elle girilenler" listesi ve altındaki soluk
+- ~~B3 (izin kapalı) ekranında "elle girilenler" listesi ve altındaki soluk
   toplam yapılmadı — talimat açıkça bunu manuel girişe bağlı olduğu için
-  hariç tuttu. B3 yalnızca izin uyarısı kartı + boş durum içeriyor.
+  hariç tuttu.~~ — **yapıldı** (D2 ile birlikte, `roadmap.md` madde 5). B3
+  artık: izin uyarısı kartı + elle girilenler listesi ve soluk toplamı; elle
+  giriş yoksa boş durum + "+ Elle harcama ekle" düğmesi.
 
 ## Veriye bağlı olduğu için bu pasta eklenmeyen tasarım öğesi
 

@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.bildirimbutce.app.data.ExpenseRepository
 import com.bildirimbutce.app.data.db.ExpenseEntity
 import com.bildirimbutce.parser.Category
+import com.bildirimbutce.parser.Ledger
 import com.bildirimbutce.parser.TxKind
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -44,7 +45,10 @@ data class MonthCursor(val year: Int, val month: Int) {
 data class HomeUiState(
     val expenses: List<ExpenseEntity> = emptyList(),
     val totalMinor: Long = 0,
-    val byCategory: List<Pair<Category, Long>> = emptyList()
+    val byCategory: List<Pair<Category, Long>> = emptyList(),
+    /** Yalnizca elle girilenler: izin kapaliyken (B3) gosterilen liste. */
+    val manualExpenses: List<ExpenseEntity> = emptyList(),
+    val manualTotalMinor: Long = 0
 )
 
 /**
@@ -54,17 +58,22 @@ data class HomeUiState(
  * ViewModel'in disinda duruyor ki Android baglami olmadan test edilebilsin.
  */
 internal fun List<ExpenseEntity>.toUiState(): HomeUiState {
-    val total = sumOf { if (it.kind == TxKind.REFUND.name) -it.amountMinor else it.amountMinor }
     val grouped = groupBy { Category.from(it.category) }
-        .map { (category, items) ->
-            category to items.sumOf {
-                if (it.kind == TxKind.REFUND.name) -it.amountMinor else it.amountMinor
-            }
-        }
+        .map { (category, items) -> category to items.sumOf { it.signedMinor() } }
         .filter { it.second > 0 }
         .sortedByDescending { it.second }
-    return HomeUiState(expenses = this, totalMinor = total, byCategory = grouped)
+    val manual = filter { it.sourceApp == Ledger.MANUAL_SOURCE }
+    return HomeUiState(
+        expenses = this,
+        totalMinor = sumOf { it.signedMinor() },
+        byCategory = grouped,
+        manualExpenses = manual,
+        manualTotalMinor = manual.sumOf { it.signedMinor() }
+    )
 }
+
+private fun ExpenseEntity.signedMinor(): Long =
+    if (kind == TxKind.REFUND.name) -amountMinor else amountMinor
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class HomeViewModel(app: Application) : AndroidViewModel(app) {
