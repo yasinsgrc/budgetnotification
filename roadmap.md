@@ -150,12 +150,12 @@ artık her biri bir `composable(...)` satırıyla bağlanabilir.**
 
 **Hâlâ açık:** Grafın kendisi otomatik test edilmiyor — `TestNavHostController`
 için `compose-ui-test` + `navigation-testing` bağımlılıkları gerekiyor, tek
-hedefli bir graf için maliyeti kazancından büyük. Graf artık dört hedefli (5,
-6, 8 ve 9. maddeler), ama hâlâ test edilmiyor; grafın *hangi hedefle açıldığı*
+hedefli bir graf için maliyeti kazancından büyük. Graf artık beş hedefli (5, 6,
+8, 9 ve 11. maddeler), ama hâlâ test edilmiyor; grafın *hangi hedefle açıldığı*
 kararı `startDestination` olarak ayrıldığı için o kadarı test ediliyor (madde
-6). Ekranlardaki ölü `onClick = {}` çağrılarından "elle ekle" (madde 5),
-"RAPOR →" (madde 8) ve ayarlar dişlisi (madde 9) bağlandı; geriye yalnızca PRO
-rozeti kaldı (madde 11).
+6). Ekranlardaki ölü `onClick = {}` çağrılarının **hepsi** bağlandı: "elle ekle"
+(madde 5), "RAPOR →" (madde 8), ayarlar dişlisi (madde 9) ve PRO rozeti
+(madde 11).
 
 ### 5. D2 — Manuel harcama girişi
 
@@ -407,9 +407,9 @@ bildirimleri okuyan bir uygulamanın neyi okuduğunu, neyi okumadığını ve ne
 - [x] Ayarlar ekranı — F1 `SettingsScreen.kt` (izin durumu + iki grup), F2
       `SourcesScreen.kt` (dinlenen kaynaklar), F3 `RulesScreen.kt` (öğrenilen
       kurallar), F4 `PrivacyScreen.kt` (izin kanıtı, tüm veriyi sil)
-- [x] `SettingsGearButton` → ekrana bağlandı (`HomeScreen.kt:235`, artık ölü
-      değil); ekranlardaki ölü `onClick = {}` çağrılarından geriye yalnızca PRO
-      rozeti kaldı (11. madde)
+- [x] `SettingsGearButton` → ekrana bağlandı (`HomeScreen.kt`, artık ölü
+      değil); o gün geriye yalnızca PRO rozeti kalmıştı, o da 11. maddede
+      bağlandı
 
 **`Prefs.enabledSources` artık üç durumlu.** Eskiden `Set<String>` idi ve boş
 küme "hepsi" demekti; hiçbir yer yazmadığı için sorun çıkmamıştı. Ekran yazmaya
@@ -546,13 +546,98 @@ bir çizim yolu istiyor, widget işiyle (12. madde) birlikte ele alınmalı.
 
 ### 11. E — Pro / paywall
 
-`HomeScreen.kt:209` `ProChip` şu an yalnızca görsel rozet. Altyapının hiçbiri
-yok: billing bağımlılığı yok, Pro durumunu tutacak yer yok (`Prefs.kt` 26 satır).
+Yapıldı — E1, bir kutusu bilerek açık. `ui/pro/` altında üç dosya,
+`Route.PAYWALL` hedefi. Bu maddenin işi para toplamak değildi; **Pro'nun ne
+olduğunu tanımlamak**tı: ücretsiz sürümün nerede bittiği kod olarak
+yazılmadan satılacak bir şey yoktu.
 
-- [ ] Pro durumu kalıcılığı
-- [ ] Billing entegrasyonu
-- [ ] Paywall ekranı
-- [ ] `ProChip` → paywall'a bağla
+- [x] Pro durumu kalıcılığı — `Prefs.isPro` (`pro_entitlement`) ve önündeki
+      `data/ProAccess.kt`. Ekranlar bayrağı değil arayüzü görüyor
+- [ ] Billing entegrasyonu — **bilerek yapılmadı**, gerekçe aşağıda
+- [x] Paywall ekranı — E1 `ui/pro/PaywallScreen.kt`
+- [x] `ProChip` → paywall'a bağlandı (`HomeScreen.kt`); ekranlardaki ölü
+      `onClick = {}` çağrılarından geriye **hiçbiri kalmadı**
+
+**Billing bağımlılığı eklenmedi ve bu bir eksiklik değil, sıra.** Play
+Console'da ne uygulama ne ürün tanımlı; imzalı bir APK hiç üretilmedi (1. ve 7.
+madde). Bu koşullarda yazılacak `BillingClient` kodu derlenir ama bir kez bile
+çalıştırılamazdı — 7. maddenin R8 kuralları için eleştirdiği "yazıldı ama
+denenmedi" durumunun aynısı, üstelik para akışında. Yerine dikiş atıldı:
+`ProAccess` arayüzü + `StoredProAccess` uygulaması. Billing geldiğinde eklenecek
+dosya bir tane (`PlayBillingProAccess`); ekranlar ve ViewModel'ler kalıcılık
+ayrıntısını hiç görmüyor.
+
+**Satın alma düğmesi sessizce hiçbir şey yapmıyor.** `purchase()` her zaman
+`PurchaseOutcome.Unavailable` dönüyor ve **sebebini taşıyor**; ekran onu olduğu
+gibi basıyor ("Play Console kurulumu tamamlanmadı ve uygulama hiç imzalanıp
+yayınlanmadı"). Düğme tıklanamaz yapılsaydı kullanıcı *neden* olmadığını hiç
+öğrenemezdi; parlak altın degradeyle çizilseydi çalıştığını sanırdı. İkisinin
+arası: soluk ama tıklanabilir.
+
+**Paywall dört özellik değil bir tane satıyor.** Tasarım E1 sınırsız geçmiş,
+4×2 widget, CSV dışa aktarma ve kendi desenini yazma sayıyor; **son üçü kodda
+yok** (4×2 widget 12. madde, diğerleri hiç başlanmadı). Olmayanların da
+listelenmesi, 9. maddede kaldırdığımız "hiçbir yere gitmeyen düğme"nin para
+karşılığı olurdu. Ekran bunu gizlemiyor, yazıyor: "olmayan bir şeyin parası
+istenmiyor."
+
+**Fiyat da yazmıyor.** Tasarımdaki 149,00 ₺ bir yer tutucu; gerçek fiyat Play
+Console'daki üründen okunur ve ürün yok. Ekrana sabit bir sayı yazmak, ilk fiyat
+değişikliğinde sessizce yalan söyleyen bir satır bırakırdı — 6. maddedeki "17
+banka" sayısının `patterns.json`'dan okunmasıyla aynı gerekçe.
+
+**Ücretsiz sürümün sınırı: son 3 ay** (`ProLimits.FREE_MONTH_COUNT`, tasarım
+E2'deki "3 ay geçmiş görünür" satırı). İçinde bulunulan ay **dahil**; üç "ek" ay
+olsaydı kullanıcı dört aylık defter görür ve ekranda yazan sayı yalan olurdu.
+Sınır tek yerde duruyor: ay gezinmesini kısıtlayan `previousMonth` ile
+kullanıcıya sınırı gösteren ok aynı cümleyi okumak zorunda — 8. maddedeki
+`signedMinor` ile aynı gerekçe.
+
+**Sınıra gelen ok susmuyor.** Soluyor ve dokunuş paywall'a gidiyor; ne yaptığını
+`contentDescription` söylüyor ("Daha eski aylar Pro sürümde"). Ok sessizce
+hiçbir şey yapsaydı 9. maddede kaldırdığımız ölü tıklamalardan birini geri
+koymuş olurduk. İleri gitmek kısıtlanmadı: sınır geçmişi satıyor, ileriyi değil.
+
+**Yetki dönüşte yeniden okunuyor.** Satın alma uygulamanın dışında (Play
+Store'da) tamamlanır, bu yüzden ana ekran `ON_RESUME`'da `refreshPro()`
+çağırıyor — izin durumunun onboarding'de yeniden okunmasıyla aynı gerekçe.
+
+**Hata ayıklama derlemesinde bir anahtar var.** Satın alma yolu olmadığı sürece
+üç aylık sınır cihazda başka türlü görülemezdi; `BuildConfig.DEBUG` altında
+"PRO'YU AÇ/KAPAT" — ana ekrandaki `TestNotificationSeeder` düğmesiyle aynı
+gerekçe. Release APK'da yok.
+
+**`MonthCursor.ordinal` ortak.** İki ayı karşılaştırmanın tek doğru yolu; `minus`
+zaten aynı aritmetiği satır içinde yapıyordu, o da buna taşındı.
+
+**Testler:** `ProLimitsTest` (7, saf JVM — pencere sınırları, yıl sınırı, Pro'da
+sınırsızlık), `HomeHistoryLimitTest` (7, saf JVM — imlecin sınırda durması, okun
+ne zaman solacağı), `ProAccessTest` (6, Robolectric — yetkinin yeni bir örnekte
+de okunması, `refresh` olmadan akışın değişmemesi, reddedilen satın almanın
+yetkiyi açmaması). `:app` toplamı 116 → 136. Testlerin ısırdığı doğrulandı:
+`steppedBack`'teki sınır kontrolü kaldırılıp `earliestMonth` bir ay kaydırılınca
+7 test kırmızı yandı, sonra geri alındı. Release derlemesi de koştu: imzasız APK
+1.41 MB (10. maddede 1.40 MB'tı).
+
+**Kapsam dışı bırakıldı:**
+
+- **E2 (ücretsiz sürümdeki promo yuvası)** — ana ekrana ikinci bir Pro girişi
+  koymak bu maddenin dört kutusunda yoktu; PRO rozeti ve solmuş ok zaten
+  paywall'a gidiyor. Kart, ekranın en üstündeki öğelerden birini aşağı itmek
+  demekti ve o kararın kendi gerekçesi olmalı.
+- **E3 (AdMob karşılaştırma paneli)** — ekran değil, tasarımın kendi karar notu:
+  reklam SDK'sı `INTERNET` ve `AD_ID` ister, o satır eklendiği an ürünün tüm
+  iddiası (F4, `PLAY_CONSOLE.md`) çöker. Karar zaten Pro'dan yana verildiği için
+  uygulanacak bir şey yok.
+
+**Hâlâ açık:** Ekranın kendisi (Compose) otomatik test edilmiyor — 4, 5, 6, 8, 9
+ve 10. maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ
+yok. Test edilen kısım sınırın aritmetiği ve yetkinin kalıcılığı; kapsam dışı
+kalan yalnızca çizim. Gerçek cihazda denenmedi (1. maddedeki açık kutu) ve `₺`
+font hatası (1. madde) bu ekranı da etkiliyor. Billing kutusu açık kaldığı
+sürece **Pro satılamaz**: ekran görünür ama satın alma yolu yok.
+`PLAY_CONSOLE.md`'ye uygulama içi satın alma beyanı da bu yüzden eklenmedi —
+7. maddede "olmayan özelliği beyana yazma" diye kurulan kuralın aynısı.
 
 ### 12. 4×2 Pro widget
 

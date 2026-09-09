@@ -4,7 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.bildirimbutce.app.data.ExpenseRepository
+import com.bildirimbutce.app.data.StoredProAccess
 import com.bildirimbutce.app.data.db.ExpenseEntity
+import com.bildirimbutce.app.ui.pro.ProLimits
+import com.bildirimbutce.app.util.Prefs
 import com.bildirimbutce.parser.Category
 import com.bildirimbutce.parser.Ledger
 import com.bildirimbutce.parser.TxKind
@@ -13,6 +16,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -42,6 +46,17 @@ data class MonthCursor(val year: Int, val month: Int) {
         if (month == 11) MonthCursor(year + 1, 0) else MonthCursor(year, month + 1)
 
     /**
+     * Aylarin dogru dizildigi tek sayi: yil * 12 + ay.
+     *
+     * Iki ayi karsilastirmanin baska yolu yok - `year`/`month` ciftini elle
+     * karsilastirmak yil sinirini her seferinde ayri bir durum yapardi.
+     * Ucretsiz surumun ay siniri ([com.bildirimbutce.app.ui.pro.ProLimits])
+     * bu sirayi kullaniyor.
+     */
+    val ordinal: Int
+        get() = year * 12 + month
+
+    /**
      * [months] ay geri. Rapor penceresi ("son 6 ay") bunu kullaniyor.
      *
      * `previous()`'i tekrar tekrar cagirmak yerine 12 tabaninda hesaplaniyor:
@@ -49,7 +64,7 @@ data class MonthCursor(val year: Int, val month: Int) {
      * durum olmaktan cikiyor.
      */
     fun minus(months: Int): MonthCursor {
-        val total = year * 12 + month - months
+        val total = ordinal - months
         return MonthCursor(Math.floorDiv(total, 12), Math.floorMod(total, 12))
     }
 
@@ -216,6 +231,26 @@ private fun monthChange(
 }
 
 /**
+ * Bir onceki aya gecisin ucretsiz surumde kapali oldugu durum.
+ *
+ * [now] disaridan geliyor: ViewModel'in disinda durmasinin sebebi de bu -
+ * sabit bir "simdi" verilmeden ay sinirini test etmenin yolu yok
+ * ([toUiState] ile ayni gerekce). Uretimde her cagrida yeniden okunuyor, boylece
+ * uygulama ay doneminde acik kalirsa pencere kendiliginden kayiyor.
+ */
+internal fun MonthCursor.atHistoryLimit(now: MonthCursor, isPro: Boolean): Boolean =
+    !ProLimits.canOpen(previous(), now, isPro)
+
+/**
+ * Bir onceki aya gecis denemesi. Sinir asiliyorsa imlec **yerinde kaliyor**;
+ * ekran o durumda oku soluk cizip dokunusu paywall'a gonderiyor.
+ */
+internal fun MonthCursor.steppedBack(now: MonthCursor, isPro: Boolean): MonthCursor {
+    val target = previous()
+    return if (ProLimits.canOpen(target, now, isPro)) target else this
+}
+
+/**
  * Iade negatif sayilir. `internal`: rapor ekrani da ayni kurali kullaniyor ve
  * kuralin iki kopyasi olsaydi biri degisip digeri kalabilirdi.
  */
@@ -227,8 +262,31 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
 
     private val repository = ExpenseRepository(app)
 
+    /**
+     * Yetki bayrak olarak degil arayuz olarak okunuyor: satin alma yolu
+     * baglandiginda degisecek olan `StoredProAccess`, burasi degil.
+     */
+    private val proAccess = StoredProAccess(Prefs(app))
+
+    val isPro: StateFlow<Boolean> = proAccess.isPro
+
     private val _cursor = MutableStateFlow(MonthCursor.now())
     val cursor: StateFlow<MonthCursor> = _cursor.asStateFlow()
+
+    /**
+     * Ucretsiz surumde bir onceki aya artik gecilemedigi an.
+     *
+     * Baslangic degeri akistan beklenmiyor, ayni fonksiyonla pesin
+     * hesaplaniyor: `false` ile baslasaydi ok ilk karede acik gorunur, bir
+     * kare sonra solardi.
+     */
+    val atHistoryLimit: StateFlow<Boolean> =
+        combine(_cursor, isPro) { cursor, pro -> cursor.atHistoryLimit(MonthCursor.now(), pro) }
+            .stateIn(
+                viewModelScope,
+                SharingStarted.WhileSubscribed(5_000),
+                _cursor.value.atHistoryLimit(MonthCursor.now(), proAccess.isPro.value)
+            )
 
     val state: StateFlow<HomeUiState> = _cursor
         .flatMapLatest { cursor ->
@@ -237,9 +295,28 @@ class HomeViewModel(app: Application) : AndroidViewModel(app) {
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), HomeUiState())
 
-    fun previousMonth() { _cursor.value = _cursor.value.previous() }
+    /**
+     * Ucretsiz surumde sinirin otesine gecmiyor.
+     *
+     * Sessizce durmasi yeterli degildi: ekran ayni kurali [atHistoryLimit]
+     * uzerinden okuyup oku soluk ciziyor ve dokunusu paywall'a gonderiyor.
+     * Aksi halde 9. maddede kaldirilan olu tiklamalardan birini geri koymus
+     * olurduk - dokunulan ama hicbir sey olmayan bir ok.
+     */
+    fun previousMonth() {
+        _cursor.value = _cursor.value.steppedBack(MonthCursor.now(), isPro.value)
+    }
 
     fun nextMonth() { _cursor.value = _cursor.value.next() }
+
+    /**
+     * Yetkiyi kaynagindan tekrar okur; ekran her one ciktiginda cagriliyor.
+     *
+     * Satin alma uygulamanin disinda (Play Store'da) tamamlanir, bu yuzden
+     * donuste sorulmasi gerekiyor - izin durumunun `ON_RESUME`'da yeniden
+     * okunmasiyla ayni gerekce.
+     */
+    fun refreshPro() = proAccess.refresh()
 
     fun setCategory(expense: ExpenseEntity, category: Category) = viewModelScope.launch {
         repository.correctCategory(expense, category)

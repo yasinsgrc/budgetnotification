@@ -32,9 +32,23 @@ class Prefs(context: Context) {
         get() = sp.getInt(KEY_PATTERN_VERSION, 0)
         set(v) = sp.edit().putInt(KEY_PATTERN_VERSION, v).apply()
 
+    /**
+     * Pro yetkisi (E bolumu). Tek dogruluk kaynagi degil, **onbellek**: satin
+     * almanin kendisi Play Store'da durur, bu bayrak yalnizca uygulamanin onu
+     * her acilista yeniden sormadan bilebilmesi icin var.
+     *
+     * Bu yuzden ekranlar bayragi dogrudan okumuyor,
+     * [com.bildirimbutce.app.data.ProAccess] uzerinden geciliyor: Play'den
+     * gelen cevabi karsilayacak tek bir yer olmasi gerekiyor.
+     */
+    var isPro: Boolean
+        get() = sp.getBoolean(KEY_PRO, false)
+        set(v) = sp.edit().putBoolean(KEY_PRO, v).apply()
+
     private companion object {
         const val KEY_ONBOARDING = "onboarding_done"
         const val KEY_SOURCES = "enabled_sources"
         const val KEY_PATTERN_VERSION = "pattern_version"
+        const val KEY_PRO = "pro_entitlement"
     }
 }

@@ -17,6 +17,7 @@ import com.bildirimbutce.app.ui.AddExpenseScreen
 import com.bildirimbutce.app.ui.HomeScreen
 import com.bildirimbutce.app.ui.MonthCursor
 import com.bildirimbutce.app.ui.onboarding.OnboardingScreen
+import com.bildirimbutce.app.ui.pro.PaywallScreen
 import com.bildirimbutce.app.ui.report.ReportScreen
 import com.bildirimbutce.app.ui.settings.PrivacyScreen
 import com.bildirimbutce.app.ui.settings.RulesScreen
@@ -33,6 +34,9 @@ object Route {
     const val ONBOARDING = "onboarding"
     const val HOME = "home"
     const val ADD_EXPENSE = "add-expense"
+
+    /** E1 - Pro / paywall. */
+    const val PAYWALL = "paywall"
 
     /**
      * Ayarlar bolumu (F1-F4). Dort hedef ic ice bir grafta duruyor; sebebi
@@ -75,7 +79,8 @@ fun startDestination(onboardingDone: Boolean): String =
  *
  * Hedefler: onboarding akisi [OnboardingScreen] (A1-A3), B1-B4 ekranlarini
  * barindiran [HomeScreen], elle harcama girisi [AddExpenseScreen], aylik rapor
- * [ReportScreen] (C1) ve ayarlar bolumu (F1-F4) - sonuncusu ic ice bir graf.
+ * [ReportScreen] (C1), paywall [PaywallScreen] (E1) ve ayarlar bolumu (F1-F4) -
+ * sonuncusu ic ice bir graf.
  *
  * `EditExpenseSheet` bilerek rota degil: modal alt sayfa olarak kendi geri
  * tusunu zaten yonetiyor ve yalnizca listedeki bir kayittan aciliyor. Rotaya
@@ -117,8 +122,15 @@ fun AppNavHost(
             HomeScreen(
                 onAddExpense = { navController.navigate(Route.ADD_EXPENSE) },
                 onReport = { navController.navigate(Route.report(it)) },
-                onSettings = { navController.navigate(Route.SETTINGS_GRAPH) }
+                onSettings = { navController.navigate(Route.SETTINGS_GRAPH) },
+                onPro = { navController.navigate(Route.PAYWALL) }
             )
+        }
+        composable(Route.PAYWALL) {
+            // Yetki satin alma ekraninda degisebilir; ana ekran donuste onu
+            // `ON_RESUME`'da yeniden okuyor (`HomeScreen`). Sonucu geri yiginda
+            // tasimak gerekmedi - kaynak zaten diskteki bayrak.
+            PaywallScreen(onClose = { navController.popBackStack() })
         }
         composable(Route.ADD_EXPENSE) {
             // Kaydettikten sonra da vazgectikten sonra da ayni sey olur: geri

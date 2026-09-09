@@ -10,8 +10,10 @@ görünen ama bu kapsamda **görsel olarak konup işlevsiz bırakılan** öğele
 - ~~**"+ Elle ekle"** (HomeScreen, kayan buton) ve **"+ Elle harcama ekle"**
   (B4 boş durum kartı)~~ — **bağlandı.** D2 yapıldı (`ui/AddExpenseScreen.kt`);
   ikisi de `Route.ADD_EXPENSE` hedefini açıyor. Ayrıntı: `roadmap.md` madde 5.
-- **PRO rozeti** (MonthTopBar) — E bölümü (Pro/paywall) bu aşamada yok.
-  Sadece görsel; hiçbir tıklama davranışı yok.
+- ~~**PRO rozeti** (MonthTopBar)~~ — **bağlandı.** E1 yapıldı
+  (`ui/pro/PaywallScreen.kt`); rozet `Route.PAYWALL`'ı açıyor. Yetki açıkken
+  rozet, kapalıyken teklif — ayrımı solukluk taşıyor. Satın alma yolu (Play
+  Billing) bilerek eklenmedi; gerekçesi `roadmap.md` madde 11'de.
 - ~~**Ayarlar dişlisi** (MonthTopBar, ⚙)~~ — **bağlandı.** F bölümü yapıldı
   (`ui/settings/`, F1-F4); dişli `Route.SETTINGS_GRAPH`'ı açıyor. Ayrıntı:
   `roadmap.md` madde 9.

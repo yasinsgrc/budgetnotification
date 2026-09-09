@@ -28,6 +28,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -38,9 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.bildirimbutce.app.BuildConfig
@@ -67,15 +71,30 @@ fun HomeScreen(
     onAddExpense: () -> Unit,
     onReport: (MonthCursor) -> Unit,
     onSettings: () -> Unit,
+    onPro: () -> Unit,
     viewModel: HomeViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val cursor by viewModel.cursor.collectAsStateWithLifecycle()
+    val isPro by viewModel.isPro.collectAsStateWithLifecycle()
+    val atHistoryLimit by viewModel.atHistoryLimit.collectAsStateWithLifecycle()
     val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
 
     var permissionGranted by remember { mutableStateOf(NotificationAccess.isGranted(context)) }
     var editing by remember { mutableStateOf<ExpenseEntity?>(null) }
     val scope = rememberCoroutineScope()
+
+    // Yetki uygulamanin disinda (Play Store'da) degisebilir; paywall'dan
+    // donuste ekranin eski cevabi gostermemesi icin one cikista yeniden
+    // okunuyor - izin durumunun onboarding'de yeniden okunmasiyla ayni gerekce.
+    DisposableEffect(lifecycleOwner) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_RESUME) viewModel.refreshPro()
+        }
+        lifecycleOwner.lifecycle.addObserver(observer)
+        onDispose { lifecycleOwner.lifecycle.removeObserver(observer) }
+    }
 
     val showEmptyState = permissionGranted && state.expenses.isEmpty()
     val showTransactions = permissionGranted && state.expenses.isNotEmpty()
@@ -96,10 +115,17 @@ fun HomeScreen(
             item {
                 MonthTopBar(
                     label = cursor.label,
-                    showPro = showTransactions,
+                    isPro = isPro,
+                    // Ucretsiz surumde rozet bir odul degil bir teklif; defter
+                    // bosken teklif edilecek bir gecmis de yok. Pro'da rozet her
+                    // zaman duruyor: satin alinmis bir seyin gorunurlugu listenin
+                    // doluluguna bagli olmamali.
+                    showPro = showTransactions || isPro,
+                    atHistoryLimit = atHistoryLimit,
                     onPrevious = viewModel::previousMonth,
                     onNext = viewModel::nextMonth,
-                    onSettings = onSettings
+                    onSettings = onSettings,
+                    onPro = onPro
                 )
             }
 
@@ -224,10 +250,13 @@ private fun DebugSeedButton(onSeed: () -> Unit) {
 @Composable
 private fun MonthTopBar(
     label: String,
+    isPro: Boolean,
     showPro: Boolean,
+    atHistoryLimit: Boolean,
     onPrevious: () -> Unit,
     onNext: () -> Unit,
-    onSettings: () -> Unit
+    onSettings: () -> Unit,
+    onPro: () -> Unit
 ) {
     Row(
         Modifier
@@ -237,42 +266,77 @@ private fun MonthTopBar(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppSpace.s3)) {
-            NavChevron("‹", onPrevious)
+            // Ucretsiz surumun siniri: ok solar ve dokunus paywall'a gider.
+            // Sessizce hicbir sey yapan bir ok, 9. maddede kaldirilan olu
+            // tiklamalardan biri olurdu.
+            NavChevron(
+                symbol = "‹",
+                muted = atHistoryLimit,
+                description = if (atHistoryLimit) {
+                    "Daha eski aylar Pro sürümde; Pro ekranını açar"
+                } else {
+                    "Önceki ay"
+                },
+                onClick = if (atHistoryLimit) onPro else onPrevious
+            )
             Text(label.uppercase(Locale("tr", "TR")), style = AppText.kicker, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.78f))
-            NavChevron("›", onNext)
+            NavChevron(symbol = "›", description = "Sonraki ay", onClick = onNext)
         }
         Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(AppSpace.s2)) {
-            if (showPro) ProChip()
+            if (showPro) ProChip(isPro = isPro, onClick = onPro)
             SettingsGearButton(onSettings)
         }
     }
 }
 
 @Composable
-private fun NavChevron(symbol: String, onClick: () -> Unit) {
+private fun NavChevron(
+    symbol: String,
+    description: String,
+    muted: Boolean = false,
+    onClick: () -> Unit
+) {
     Box(
         Modifier
             .size(AppSpace.s6)
             .clip(RoundedCornerShape(AppRadius.sm))
             .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(AppRadius.sm))
-            .clickable(onClick = onClick),
+            .clickable(onClick = onClick)
+            .semantics { contentDescription = description },
         contentAlignment = Alignment.Center
     ) {
-        Text(symbol, style = AppText.bodyLarge, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.66f))
+        Text(
+            symbol,
+            style = AppText.bodyLarge,
+            color = MaterialTheme.colorScheme.onBackground.copy(alpha = if (muted) 0.24f else 0.66f)
+        )
     }
 }
 
-/** Pro paketi bu asamada yok - yalnizca gorsel yer tutucu, EKSIKLER.md'de not var. */
+/**
+ * Pro rozeti (E bolumu).
+ *
+ * Iki isi var ve ikisi ayni gorunemez: yetki acikken **rozet** (satin alinmis
+ * bir sey), kapaliyken **teklif**. Ayrimi solukluk tasiyor; ikisi de ayni
+ * parlaklikta cizilseydi ucretsiz kullanici Pro'ya sahip oldugunu sanirdi.
+ * Rozet halinde tiklanabilir olmasinin sebebi ekranin Pro durumunu da
+ * gosterebilmesi (`PaywallScreen`'deki "Pro etkin" karti).
+ */
 @Composable
-private fun ProChip() {
+private fun ProChip(isPro: Boolean, onClick: () -> Unit) {
+    val accent = AppTheme.colors.proAccent
     Box(
         Modifier
             .clip(RoundedCornerShape(AppRadius.sm))
-            .background(AppTheme.colors.proAccent.copy(alpha = 0.14f))
-            .border(1.dp, AppTheme.colors.proAccent.copy(alpha = 0.3f), RoundedCornerShape(AppRadius.sm))
+            .background(accent.copy(alpha = if (isPro) 0.16f else 0.08f))
+            .border(1.dp, accent.copy(alpha = if (isPro) 0.4f else 0.2f), RoundedCornerShape(AppRadius.sm))
+            .clickable(onClick = onClick)
             .padding(horizontal = AppSpace.s3, vertical = AppSpace.s2)
+            .semantics {
+                contentDescription = if (isPro) "Pro sürüm etkin" else "Pro sürüme geç"
+            }
     ) {
-        Text("PRO", style = AppText.kicker, color = AppTheme.colors.proAccent)
+        Text("PRO", style = AppText.kicker, color = accent.copy(alpha = if (isPro) 1f else 0.6f))
     }
 }
 
