@@ -136,7 +136,7 @@ internal fun List<ExpenseEntity>.toReportState(cursor: MonthCursor, now: Long): 
 
 /** Ayin en pahali gunu. Net sifir ya da negatif gunler aday degil. */
 private fun List<ExpenseEntity>.peakDay(): PeakDay? =
-    groupBy { dayOfMonth(it.occurredAt) }
+    groupBy { MonthCursor.dayOf(it.occurredAt) }
         .map { (day, items) -> PeakDay(day, items.sumOf { it.signedMinor() }) }
         .filter { it.totalMinor > 0 }
         .maxByOrNull { it.totalMinor }
@@ -193,11 +193,8 @@ private fun daysCounted(cursor: MonthCursor, now: Long): Int {
     val cal = Calendar.getInstance().apply { clear(); set(cursor.year, cursor.month, 1) }
     val daysInMonth = cal.getActualMaximum(Calendar.DAY_OF_MONTH)
     if (MonthCursor.of(now) != cursor) return daysInMonth
-    return dayOfMonth(now).coerceIn(1, daysInMonth)
+    return MonthCursor.dayOf(now).coerceIn(1, daysInMonth)
 }
-
-private fun dayOfMonth(millis: Long): Int =
-    Calendar.getInstance().apply { timeInMillis = millis }.get(Calendar.DAY_OF_MONTH)
 
 /** Pazartesi = 0. `Calendar` pazari 1, cumartesiyi 7 sayar. */
 private fun weekdayIndex(millis: Long): Int {

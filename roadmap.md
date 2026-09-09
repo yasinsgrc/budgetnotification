@@ -489,13 +489,56 @@ yalnızca çizim. Ekranlar gerçek cihazda denenmedi (1. maddedeki açık kutu) 
 
 ### 10. Aylık değişim rozeti ("↓ %12 TEMMUZ")
 
-Tasarımda var, kodda hiç render edilmiyor. Önceki ayla karşılaştırma gerekiyor;
-`HomeViewModel.kt:74` `HomeUiState` yalnızca tek ayın verisini taşıyor. (Rapor
-ekranı — madde 8 — önceki ayları zaten okuyor: `ExpenseRepository.observeMonths`
-burada da kullanılabilir.)
+Yapıldı. Rozetin işi yeni bir sayı üretmek değil, ekrandaki sayıyı
+**karşılaştırılabilir kılmak**: "1.821,80 ₺" tek başına iyi mi kötü mü
+söylemiyor.
 
-- [ ] `HomeUiState`'e önceki ay toplamını ekle
-- [ ] `TotalHeader` altında rozeti render et
+- [x] `HomeUiState`'e önceki ay toplamını ekle — `previousTotalMinor` ve rozetin
+      kendisi (`change: MonthChange?`). Ana ekran artık iki aylık pencere
+      okuyor (`HOME_MONTH_COUNT = 2`, `ExpenseRepository.observeMonths` —
+      madde 8'de rapor için yazılan yol)
+- [x] `TotalHeader` altında rozeti render et — `HomeScreen.kt`,
+      `MonthChangeBadge`; "bu ay harcadın" satırının yanında
+
+**Bölen ayın tamamı değil, aynı güne kadarı.** Ayın 9'unda kapanmış bir ayın
+tamamıyla karşılaştırma yapılsaydı rozet her ayın başında "↓ %70" gösterir,
+kullanıcı ay ilerledikçe sayının tersine döndüğünü görürdü. Açık ayda önceki
+aydan yalnızca aynı güne kadarki kayıtlar sayılıyor; ay kapandıysa iki ayın
+tamamı karşılaştırılıyor. Testlerin ısırdığı doğrulandı: kısıtlama kaldırılınca
+`MonthChangeTest` kırmızı yandı, sonra geri alındı.
+
+**Rozet üç durumda susuyor**, üçü de yüzdenin anlamsız olduğu yerler: önceki ay
+net sıfır ya da negatifse (bölen yok — "%sonsuz arttın" denemez), açık ay
+iadeyle negatife düştüyse (yüzde artık harcamayı anlatmıyor), fark yüzde yarımın
+altındaysa (rozet "↓ %0" yazardı). Karşılaştırmanın *yapılmış* olmasıyla
+rozetin *çizilmesi* ayrı şeyler: `previousTotalMinor` bu durumlarda da dolu.
+
+**Rozet yalnızca dolu ayda çiziliyor.** Boş ayda karşılaştırılacak harcama yok;
+izin kapalıyken (B3) gösterilen sayı ayın toplamı değil, yalnızca elle
+girilenlerin toplamı — ikisinde de yüzde yanıltıcı olurdu.
+
+**Kısıtlama rozete sığmıyor, `contentDescription`'a sığıyor.** Ekranda yalnızca
+"↓ %12 TEMMUZ" yazıyor; ekran okuyucu "geçen ayın ilk 9 gününe göre %12 daha az
+harcadın" diyor. Yüzdenin neye göre hesaplandığını hiç söylememektense bir yerde
+söylemek daha doğruydu.
+
+**`MonthCursor.dayOf` ortak.** Rapor ekranındaki `dayOfMonth` kopyası silinip
+buraya taşındı; aynı takvim yorumunun iki kopyası olsaydı biri değişip diğeri
+kalabilirdi — madde 8'deki `signedMinor` ile aynı gerekçe. Ay adı (`upperLabel`)
+Türkçe yerel ayarla büyütülüyor: yerel ayar verilmeseydi "NİSAN" yerine "NISAN"
+çıkardı.
+
+**Testler:** `MonthChangeTest` (10, saf JVM — yön, bölen seçimi, susma
+koşulları, ay adı ve önceki ayın listeye sızmaması). `HomeUiStateTest`'in 11
+çağrısı yeni imzaya (`toUiState(cursor, now)`) taşındı. `:app` toplamı
+106 → 116. Release derlemesi de koştu: imzasız APK 1.40 MB (9. maddeyle aynı).
+
+**Hâlâ açık:** Ekran (Compose) otomatik test edilmiyor — 4, 5, 6, 8 ve 9.
+maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ yok.
+Test edilen kısım rozetin aritmetiği ve ne zaman susacağı; kapsam dışı kalan
+yalnızca çizim. Gerçek cihazda denenmedi (1. maddedeki açık kutu). Tasarımda
+widget başlığında da bir "↓ %12" var; o yapılmadı — `RemoteViews` üzerinde ayrı
+bir çizim yolu istiyor, widget işiyle (12. madde) birlikte ele alınmalı.
 
 ---
 

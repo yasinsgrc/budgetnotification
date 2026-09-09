@@ -2,12 +2,17 @@ package com.bildirimbutce.app.ui
 
 import com.bildirimbutce.app.data.db.ExpenseEntity
 import com.bildirimbutce.app.expenseEntity
+import com.bildirimbutce.app.millisAt
 import com.bildirimbutce.parser.Category
 import com.bildirimbutce.parser.Ledger
 import com.bildirimbutce.parser.TxKind
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
+
+/** Ornek kayitlar epoch'ta duruyor (1 Ocak 1970); imlec ve "simdi" ona gore. */
+private val OCAK_1970 = MonthCursor(1970, 0)
+private val SIMDI = millisAt(1970, 0, 15)
 
 /**
  * Ana ekranin toplami ve kategori dagilimi.
@@ -22,7 +27,7 @@ class HomeUiStateTest {
 
     @Test
     fun `bos liste sifir toplam uretiyor`() {
-        val state = emptyList<ExpenseEntity>().toUiState()
+        val state = emptyList<ExpenseEntity>().toUiState(OCAK_1970, SIMDI)
 
         assertEquals(0L, state.totalMinor)
         assertTrue(state.byCategory.isEmpty())
@@ -34,7 +39,7 @@ class HomeUiStateTest {
             expenseEntity(amountMinor = 24_590, kind = TxKind.EXPENSE),
             expenseEntity(amountMinor = 120_000, kind = TxKind.EXPENSE, occurredAt = 1),
             expenseEntity(amountMinor = 4_500, kind = TxKind.REFUND, occurredAt = 2)
-        ).toUiState()
+        ).toUiState(OCAK_1970, SIMDI)
 
         assertEquals(24_590L + 120_000L - 4_500L, state.totalMinor)
     }
@@ -56,7 +61,7 @@ class HomeUiStateTest {
                 category = Category.ULASIM,
                 occurredAt = 2
             )
-        ).toUiState()
+        ).toUiState(OCAK_1970, SIMDI)
 
         val market = state.byCategory.first { it.first == Category.MARKET }
         assertEquals(24_590L - 4_500L, market.second)
@@ -68,7 +73,7 @@ class HomeUiStateTest {
             expenseEntity(amountMinor = 10_000, category = Category.MARKET),
             expenseEntity(amountMinor = 90_000, category = Category.ULASIM, occurredAt = 1),
             expenseEntity(amountMinor = 50_000, category = Category.FATURA, occurredAt = 2)
-        ).toUiState()
+        ).toUiState(OCAK_1970, SIMDI)
 
         assertEquals(
             listOf(Category.ULASIM, Category.FATURA, Category.MARKET),
@@ -91,7 +96,7 @@ class HomeUiStateTest {
                 occurredAt = 1
             ),
             expenseEntity(amountMinor = 90_000, category = Category.ULASIM, occurredAt = 2)
-        ).toUiState()
+        ).toUiState(OCAK_1970, SIMDI)
 
         assertTrue(state.byCategory.none { it.first == Category.MARKET })
         assertEquals(4_500L - 24_590L + 90_000L, state.totalMinor)
@@ -101,7 +106,7 @@ class HomeUiStateTest {
     fun `taninmayan kategori adi DIGER olarak gruplaniyor`() {
         val bozuk = expenseEntity(amountMinor = 1_000).copy(category = "ARTIK_YOK")
 
-        val state = listOf(bozuk).toUiState()
+        val state = listOf(bozuk).toUiState(OCAK_1970, SIMDI)
 
         assertEquals(Category.DIGER, state.byCategory.single().first)
     }
@@ -113,7 +118,7 @@ class HomeUiStateTest {
             expenseEntity(amountMinor = 2_000, occurredAt = 1)
         )
 
-        assertEquals(rows, rows.toUiState().expenses)
+        assertEquals(rows, rows.toUiState(OCAK_1970, SIMDI).expenses)
     }
 
     /**
@@ -126,7 +131,7 @@ class HomeUiStateTest {
         val elle = expenseEntity(amountMinor = 8_990, sourceApp = Ledger.MANUAL_SOURCE)
         val bildirimden = expenseEntity(amountMinor = 24_590, occurredAt = 1)
 
-        val state = listOf(elle, bildirimden).toUiState()
+        val state = listOf(elle, bildirimden).toUiState(OCAK_1970, SIMDI)
 
         assertEquals(listOf(elle), state.manualExpenses)
     }
@@ -137,7 +142,7 @@ class HomeUiStateTest {
             expenseEntity(amountMinor = 8_990, sourceApp = Ledger.MANUAL_SOURCE),
             expenseEntity(amountMinor = 1_000, occurredAt = 1, sourceApp = Ledger.MANUAL_SOURCE),
             expenseEntity(amountMinor = 24_590, occurredAt = 2)
-        ).toUiState()
+        ).toUiState(OCAK_1970, SIMDI)
 
         assertEquals(8_990L + 1_000L, state.manualTotalMinor)
         assertEquals(
@@ -157,14 +162,14 @@ class HomeUiStateTest {
                 occurredAt = 1,
                 sourceApp = Ledger.MANUAL_SOURCE
             )
-        ).toUiState()
+        ).toUiState(OCAK_1970, SIMDI)
 
         assertEquals(8_990L - 1_000L, state.manualTotalMinor)
     }
 
     @Test
     fun `elle giris yoksa liste bos`() {
-        val state = listOf(expenseEntity(amountMinor = 24_590)).toUiState()
+        val state = listOf(expenseEntity(amountMinor = 24_590)).toUiState(OCAK_1970, SIMDI)
 
         assertTrue(state.manualExpenses.isEmpty())
         assertEquals(0L, state.manualTotalMinor)

@@ -38,6 +38,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -155,8 +157,17 @@ fun HomeScreen(
                     item { ReadinessCard(context = context, permissionGranted = true, onAdd = onAddExpense) }
                 }
 
+                // Rozet yalnizca burada ciziliyor: bos ayda karsilastirilacak
+                // bir harcama yok, izin kapaliyken (B3) gosterilen sayi ayin
+                // toplami degil - ikisinde de yuzde yaniltici olurdu.
                 else -> {
-                    item { TotalHeader(totalMinor = state.totalMinor, subtitle = "bu ay harcadın") }
+                    item {
+                        TotalHeader(
+                            totalMinor = state.totalMinor,
+                            subtitle = "bu ay harcadın",
+                            change = state.change
+                        )
+                    }
                     if (state.byCategory.isNotEmpty()) {
                         item { CategoryRibbon(state.byCategory, state.totalMinor) }
                     }
@@ -281,7 +292,12 @@ private fun SettingsGearButton(onClick: () -> Unit) {
 }
 
 @Composable
-private fun TotalHeader(totalMinor: Long, subtitle: String, muted: Boolean = false) {
+private fun TotalHeader(
+    totalMinor: Long,
+    subtitle: String,
+    muted: Boolean = false,
+    change: MonthChange? = null
+) {
     Column(Modifier.padding(horizontal = AppSpace.s6, vertical = AppSpace.s4)) {
         Row(verticalAlignment = Alignment.Top, horizontalArrangement = Arrangement.spacedBy(AppSpace.s1)) {
             Text(
@@ -297,7 +313,49 @@ private fun TotalHeader(totalMinor: Long, subtitle: String, muted: Boolean = fal
             )
         }
         Spacer(Modifier.height(AppSpace.s2))
-        Text(subtitle, style = AppText.body, color = AppTheme.colors.onBackgroundMuted)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(AppSpace.s3)
+        ) {
+            Text(subtitle, style = AppText.body, color = AppTheme.colors.onBackgroundMuted)
+            change?.let { MonthChangeBadge(it) }
+        }
+    }
+}
+
+/**
+ * "↓ %12 TEMMUZ" - onceki aya gore degisim.
+ *
+ * Rozette yalnizca ay adi var; karsilastirmanin, ay bitmemisken onceki ayin
+ * ayni gunune kadar kisildigi bilgisi oraya sigmiyor - bu yuzden tam cumleyi
+ * `contentDescription` soyluyor. Ekran okuyucu kullanan biri yuzdenin neye
+ * gore hesaplandigini bilmeden kalmamali.
+ */
+@Composable
+private fun MonthChangeBadge(change: MonthChange) {
+    val color = if (change.increased) AppTheme.colors.danger else AppTheme.colors.refund
+    val direction = if (change.increased) "daha fazla" else "daha az"
+    val reference = change.comparedDays
+        ?.let { "geçen ayın ilk $it gününe" }
+        ?: "geçen aya"
+
+    Row(
+        Modifier
+            .clip(RoundedCornerShape(AppRadius.xs))
+            .background(color.copy(alpha = 0.13f))
+            .padding(horizontal = AppSpace.s2, vertical = 5.dp)
+            .semantics {
+                contentDescription = "$reference göre %${change.percent} $direction harcadın"
+            },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(AppSpace.s1)
+    ) {
+        Text(
+            (if (change.increased) "↑" else "↓") + " %${change.percent}",
+            style = AppText.metaMono,
+            color = color
+        )
+        Text(change.previousLabel, style = AppText.metaMono, color = color.copy(alpha = 0.55f))
     }
 }
 

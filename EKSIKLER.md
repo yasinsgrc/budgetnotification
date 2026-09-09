@@ -26,11 +26,15 @@ görünen ama bu kapsamda **görsel olarak konup işlevsiz bırakılan** öğele
 
 ## Veriye bağlı olduğu için bu pasta eklenmeyen tasarım öğesi
 
-- **"↓ %12 TEMMUZ" değişim rozeti** (B1/B2 toplam başlığı altında) —
+- ~~**"↓ %12 TEMMUZ" değişim rozeti** (B1/B2 toplam başlığı altında) —
   önceki ayla karşılaştırma gerektiriyor. `HomeViewModel`'in state akışını
   değiştirmeden hesaplanamaz ve talimat state akışına dokunmamamı
   söylüyor ("davranış değişikliği gerekiyorsa önce sor"). Bu pas atlandı;
-  rozet hiç render edilmiyor (yanıltıcı sabit bir değer koymak yerine).
+  rozet hiç render edilmiyor (yanıltıcı sabit bir değer koymak yerine).~~ —
+  **yapıldı.** State akışı iki aylık pencereye geçti (`HOME_MONTH_COUNT`);
+  rozet `HomeUiState.change` üzerinden çiziliyor. Ayrıntı: `roadmap.md`
+  madde 10. Widget'taki karşılığı (tasarım v2'de widget başlığındaki `↓ %12`)
+  hâlâ yok — o, 12. maddedeki widget işiyle birlikte ele alınmalı.
 
 ## Widget
 
