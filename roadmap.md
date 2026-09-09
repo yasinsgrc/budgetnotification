@@ -537,8 +537,8 @@ koşulları, ay adı ve önceki ayın listeye sızmaması). `HomeUiStateTest`'in
 maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ yok.
 Test edilen kısım rozetin aritmetiği ve ne zaman susacağı; kapsam dışı kalan
 yalnızca çizim. Gerçek cihazda denenmedi (1. maddedeki açık kutu). Tasarımda
-widget başlığında da bir "↓ %12" var; o yapılmadı — `RemoteViews` üzerinde ayrı
-bir çizim yolu istiyor, widget işiyle (12. madde) birlikte ele alınmalı.
+widget başlığında da bir "↓ %12" var; **12. maddede 4×2 widget'a kondu**, 2×1'de
+hâlâ yok (gerekçe orada).
 
 ---
 
@@ -575,11 +575,12 @@ yayınlanmadı"). Düğme tıklanamaz yapılsaydı kullanıcı *neden* olmadığ
 arası: soluk ama tıklanabilir.
 
 **Paywall dört özellik değil bir tane satıyor.** Tasarım E1 sınırsız geçmiş,
-4×2 widget, CSV dışa aktarma ve kendi desenini yazma sayıyor; **son üçü kodda
-yok** (4×2 widget 12. madde, diğerleri hiç başlanmadı). Olmayanların da
+4×2 widget, CSV dışa aktarma ve kendi desenini yazma sayıyor; **son üçü o gün
+kodda yoktu** (4×2 widget 12. madde, diğerleri hiç başlanmadı). Olmayanların da
 listelenmesi, 9. maddede kaldırdığımız "hiçbir yere gitmeyen düğme"nin para
 karşılığı olurdu. Ekran bunu gizlemiyor, yazıyor: "olmayan bir şeyin parası
-istenmiyor."
+istenmiyor." **12. maddeden sonra liste ikiye çıktı**: 4×2 widget yazıldı ve
+aynı gün paywall'a eklendi; CSV ve kendi deseni hâlâ yok.
 
 **Fiyat da yazmıyor.** Tasarımdaki 149,00 ₺ bir yer tutucu; gerçek fiyat Play
 Console'daki üründen okunur ve ürün yok. Ekrana sabit bir sayı yazmak, ilk fiyat
@@ -641,7 +642,98 @@ sürece **Pro satılamaz**: ekran görünür ama satın alma yolu yok.
 
 ### 12. 4×2 Pro widget
 
-- [ ] 2×1 widget'ın yanına 4×2 sürümü
+Yapıldı. `widget/` altında üç yeni dosya, iki düzen ve yeni bir provider. Bu
+maddenin işi ikinci bir widget çizmek değildi; **11. maddede tanımlanan Pro'ya
+satılabilir ikinci bir şey koymak**tı: paywall o güne kadar tek özellik
+sayıyordu ve "olmayan bir şeyin parası istenmiyor" diye yazıyordu.
+
+- [x] 2×1 widget'ın yanına 4×2 sürümü — `widget/WideBudgetWidget.kt`,
+      `res/layout/widget_budget_wide.xml` (veri) ve
+      `res/layout/widget_budget_wide_locked.xml` (ücretsiz sürüm)
+
+**Widget kendi aritmetiğini yapmıyor.** Toplam, kategori kırılımı ve değişim
+rozeti ana ekranın kullandığı `toUiState`'ten okunuyor
+(`widget/BudgetWidgets.kt`). Widget kendi sorgusunu ve kendi işaret kuralını
+yazsaydı iade (REFUND) düşme kuralının iki kopyası olurdu ve kullanıcı ana
+ekranda bir rakam, ev ekranında başkasını görürdü — 8. maddedeki `signedMinor`
+ile aynı gerekçe. Geriye kalan iş biçimleme; o da `wideSnapshot`'ta duruyor ve
+Android bağlamı olmadan test ediliyor.
+
+**Rozetin ne zaman susacağına widget karar vermiyor.** `HomeUiState.change`
+zaten null geliyorsa (önceki ay net sıfır/negatif, açık ay iadeyle negatife
+düştü, fark yüzde yarımın altında) rozet çizilmiyor. 10. maddede kurulan üç
+susma koşulu burada tekrar yazılsaydı ikisi zamanla ayrışırdı.
+
+**Kilit sessiz değil.** Ücretsiz sürümde widget ana ekrandan kaybolmuyor ya da
+boş durmuyor: ne olduğunu yazıyor ve dokunuş **doğrudan paywall'a** gidiyor.
+Provider'ı `PackageManager` ile kapatmak da düşünüldü — o zaman kullanıcı
+widget'ı seçiciden hiç göremez, dolayısıyla Pro'nun ne açtığını da öğrenemezdi.
+Kullanıcıyı ana ekrana bırakıp "Pro'da" demek ise 9. maddede kaldırdığımız ölü
+tıklamanın uzun yoldan yapılmış hâli olurdu.
+
+**Dokunuş rotayı adreste taşıyor.** `MainActivity.EXTRA_ROUTE` niyetle geliyor,
+`deepLinkTarget` (`ui/nav/AppNavHost.kt`) onu iki kez süzüyor: yalnızca
+`Route.PAYWALL` açılıyor (uygulama dışından gelen bir dizgi doğrudan
+`navigate`'e verilseydi grafta karşılığı olmayan bir adres çalışma anında
+patlardı) ve yalnızca onboarding bittiyse (kurulum sihirbazının üstüne satın
+alma ekranı itmek, kullanıcıyı izni hiç anlatmadan ödeme sayfasında bırakırdı).
+Hedef `startDestination` yerine üstüne itiliyor: geri tuşu kullanıcıyı deftere
+bırakmalı, uygulamadan atmamalı.
+
+**Üç satır, dört değil.** 4×2 hücrenin yüksekliği başlık, tutar ve üç satırdan
+sonra bitiyor (`WIDE_WIDGET_ROW_COUNT`). Dördüncü satır bazı launcher'larda
+sessizce kırpılır, kullanıcı listenin orada bittiğini sanırdı. Satır sayısı
+sabit çünkü `RemoteViews` çalışma anında görünüm üretemez; kullanılmayanlar
+`GONE` yapılıyor.
+
+**Yenileme tek kapıdan geçiyor.** `BudgetWidgets.refreshAll` iki widget'ı da
+çiziyor; üç eski çağrı yeri (`NotificationService`, `SettingsViewModel`,
+`TestNotificationSeeder`) buna taşındı ve dördüncüsü eklendi: `ProViewModel`.
+Yetki değiştikten sonra yenilenmeseydi Pro'ya geçen kullanıcı bir sonraki
+30 dakikalık güncellemeye kadar kilitli kartı görmeye devam ederdi. Çağrı
+yerleri tek tek provider'ları bilseydi üçüncü bir widget eklendiği gün biri
+unutulurdu.
+
+**2×1'de bir hata düzeldi.** Ay adı `MONTHS[month].uppercase()` ile
+büyütülüyordu — yerel ayar verilmediği için "NİSAN"/"EKİM" yerine
+"NISAN"/"EKIM" çıkıyordu. Artık `MonthCursor.upperLabel` kullanılıyor; kural
+zaten 10. maddede bir kez yazılmıştı, widget'ın kendi kopyası vardı ve o kopya
+yanlıştı.
+
+**Paywall listesi büyüdü.** E1 artık iki özellik sayıyor: sınırsız geçmiş ve
+4×2 widget. 11. maddede "olmayan bir şeyin parası istenmiyor" diye yazılan
+paragraf da güncellendi — CSV dışa aktarma ve kendi desenini yazma hâlâ yok.
+
+**Testler:** `WideWidgetSnapshotTest` (10, saf JVM — başlık, biçimleme,
+sıralama, satır kısma, iade düşme, rozet yönü ve susması, önceki ayın listeye
+sızmaması), `DeepLinkTest` (4, saf JVM — beyaz liste ve onboarding kısıtı).
+`:app` toplamı 136 → 150. Testlerin ısırdığı doğrulandı: `wideSnapshot`'tan
+`take(WIDE_WIDGET_ROW_COUNT)` kaldırılınca test kırmızı yandı, sonra geri
+alındı. Release derlemesi de koştu: imzasız APK 1.42 MB (11. maddede 1.41
+MB'tı) ve R8 kuralı yine elle yazılmadı — AGP üretti:
+`-keep class com.bildirimbutce.app.widget.WideBudgetWidget { <init>(); }`.
+
+**Kapsam dışı bırakıldı:**
+
+- **Kilit ekranı widget'ı** — tasarımın E1 listesinde "4×2 kategori kırılımı ve
+  kilit ekranı widget'ı" birlikte geçiyor, ama kilit ekranı widget'ları
+  Android 5.0'da kaldırıldı. Proje `minSdk 26`; yapılacak bir şey yok. (Yan
+  bulgu: 2×1'in `widget_budget_info.xml` dosyasındaki
+  `widgetCategory="home_screen|keyguard"` bayrağının `keyguard` kısmı bu yüzden
+  etkisiz. Dokunulmadı, ama bir gün temizlenmeli.)
+- **2×1'in başlığındaki "↓ %12"** — 10. maddede açık bırakılmıştı. Rozet 4×2'ye
+  kondu; 2×1'e sığdırmak tutarın yanına ikinci bir metin alanı sokmak demek ve
+  o widget'ın tek işi tek rakamı okunaklı göstermek.
+
+**Hâlâ açık:** `RemoteViews`'in kendisi otomatik test edilmiyor — 4, 5, 6, 8,
+9, 10 ve 11. maddedeki gerekçenin aynısı: `compose-ui-test` bağımlılığı yok ve
+`RemoteViews` için de bir koşum takımı yok. Test edilen kısım satırların
+aritmetiği ve rotanın süzgeci; kapsam dışı kalan yalnızca çizim. Gerçek cihazda
+denenmedi (1. maddedeki açık kutu) — özellikle 4×2 düzeninin dar launcher'larda
+alta taşıp taşmadığı orada görülür. Kilitli kart, Pro satılamadığı sürece
+kullanıcının **tek** göreceği hâl: 11. maddedeki billing kutusu açık kaldıkça
+satın alma yolu yok, hata ayıklama derlemesindeki anahtar dışında kilit
+açılmıyor.
 
 ---
 

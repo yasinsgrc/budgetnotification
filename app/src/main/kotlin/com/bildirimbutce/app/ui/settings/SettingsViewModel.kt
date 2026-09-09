@@ -9,7 +9,7 @@ import com.bildirimbutce.app.data.PatternProvider
 import com.bildirimbutce.app.data.SourceSelection
 import com.bildirimbutce.app.data.db.MerchantRuleEntity
 import com.bildirimbutce.app.util.Prefs
-import com.bildirimbutce.app.widget.BudgetWidget
+import com.bildirimbutce.app.widget.BudgetWidgets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -82,8 +82,8 @@ class SettingsViewModel(app: Application) : AndroidViewModel(app) {
 
     fun eraseAll() = viewModelScope.launch {
         repository.eraseAll()
-        // Widget kendi sorgusunu ayri yapiyor; yenilenmezse silinmis bir ayin
-        // toplamini ana ekranda gostermeye devam ederdi.
-        BudgetWidget.refresh(getApplication())
+        // Widget'lar kendi sorgusunu ayri yapiyor; yenilenmezse silinmis bir
+        // ayin toplamini ana ekranda gostermeye devam ederlerdi.
+        BudgetWidgets.refreshAll(getApplication())
     }
 }

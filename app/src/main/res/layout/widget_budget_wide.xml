@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 4x2 Pro widget. RemoteViews Compose token'larina erisemez; renkler
+     values/colors.xml + values-night/colors.xml icinde Theme.kt ile senkron
+     tutulur (bkz. o dosyalardaki yorumlar).
+
+     Kategori satirlari elle uc kez yazildi: RemoteViews <include> desteklemez ve
+     calisma aninda gorunum uretemez. Kullanilmayan satirlar WideBudgetWidget
+     tarafindan GONE yapiliyor. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget_wide_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="14dp"
+    android:background="@drawable/widget_bg">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/widget_wide_kicker"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/jetbrains_mono_medium"
+            android:textSize="9sp"
+            android:letterSpacing="0.18"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/widget_ink_muted"
+            android:text="@string/widget_wide_description" />
+
+        <TextView
+            android:id="@+id/widget_wide_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/jetbrains_mono_medium"
+            android:textSize="9sp"
+            android:maxLines="1"
+            android:textColor="@color/widget_positive"
+            android:visibility="gone" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/widget_wide_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/schibsted_grotesk_semibold"
+        android:textSize="26sp"
+        android:letterSpacing="-0.04"
+        android:maxLines="1"
+        android:textColor="@color/widget_ink"
+        android:text="0,00 ₺" />
+
+    <LinearLayout
+        android:id="@+id/widget_wide_row_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/widget_wide_dot_1"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:src="@drawable/widget_dot"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/widget_wide_label_1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="9dp"
+            android:fontFamily="@font/schibsted_grotesk_medium"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/widget_ink" />
+
+        <TextView
+            android:id="@+id/widget_wide_value_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/schibsted_grotesk_medium"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:textColor="@color/widget_ink_muted" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widget_wide_row_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/widget_wide_dot_2"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:src="@drawable/widget_dot"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/widget_wide_label_2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="9dp"
+            android:fontFamily="@font/schibsted_grotesk_medium"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/widget_ink" />
+
+        <TextView
+            android:id="@+id/widget_wide_value_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/schibsted_grotesk_medium"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:textColor="@color/widget_ink_muted" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/widget_wide_row_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="7dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/widget_wide_dot_3"
+            android:layout_width="6dp"
+            android:layout_height="6dp"
+            android:src="@drawable/widget_dot"
+            android:contentDescription="@null" />
+
+        <TextView
+            android:id="@+id/widget_wide_label_3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="9dp"
+            android:fontFamily="@font/schibsted_grotesk_medium"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:textColor="@color/widget_ink" />
+
+        <TextView
+            android:id="@+id/widget_wide_value_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="@font/schibsted_grotesk_medium"
+            android:textSize="12sp"
+            android:maxLines="1"
+            android:textColor="@color/widget_ink_muted" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -11,4 +11,9 @@
     <color name="widget_ink">#FF11151C</color>       <!-- OnBackgroundLight -->
     <color name="widget_ink_muted">#FF5C6470</color> <!-- OnBackgroundMutedLight -->
     <color name="widget_accent">#FF14B88F</color>    <!-- brandBright (iki temada da ayni) -->
+
+    <!-- 4x2 widget: degisim rozeti ve Pro kilidi. -->
+    <color name="widget_positive">#FF0E7C66</color>  <!-- refund (acik tema) -->
+    <color name="widget_warning">#FFB8730A</color>   <!-- warning (acik tema) -->
+    <color name="widget_pro">#FFD9A84E</color>       <!-- proAccent (iki temada da ayni) -->
 </resources>

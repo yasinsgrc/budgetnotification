@@ -1,6 +1,7 @@
 package com.bildirimbutce.app.ui.nav
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -75,6 +76,23 @@ fun startDestination(onboardingDone: Boolean): String =
     if (onboardingDone) Route.HOME else Route.ONBOARDING
 
 /**
+ * Widget'tan gelen hedefin acilip acilmayacagi.
+ *
+ * Iki kisit var, ikisi de gercek durumlardan:
+ *
+ *  - **Beyaz liste.** Yalnizca [Route.PAYWALL] aciliyor. Niyet uzerinden gelen
+ *    dizgi dogrudan `navigate`'e verilseydi, grafta karsiligi olmayan bir adres
+ *    calisma aninda patlardi.
+ *  - **Yalnizca kurulum bittiyse.** Onboarding acikken paywall'i onun ustune
+ *    itmek, kullaniciyi izni hic anlatmadan satin alma ekraninda birakirdi.
+ *
+ * Ayri bir fonksiyon oldugu icin - Compose'a girmeden - test edilebiliyor
+ * ([startDestination] ile ayni gerekce).
+ */
+internal fun deepLinkTarget(route: String?, start: String): String? =
+    if (route == Route.PAYWALL && start == Route.HOME) route else null
+
+/**
  * Uygulamanin tek NavHost'u.
  *
  * Hedefler: onboarding akisi [OnboardingScreen] (A1-A3), B1-B4 ekranlarini
@@ -90,7 +108,10 @@ fun startDestination(onboardingDone: Boolean): String =
 @Composable
 fun AppNavHost(
     modifier: Modifier = Modifier,
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    /** Widget'tan gelen hedef; bkz. [deepLinkTarget]. */
+    deepLinkRoute: String? = null,
+    onDeepLinkHandled: () -> Unit = {}
 ) {
     val context = LocalContext.current
     val prefs = remember { Prefs(context) }
@@ -98,6 +119,15 @@ fun AppNavHost(
     // her bestede yeniden okunsaydi NavHost grafi kendini yeniden kurar ve
     // gecis yigini kullanicinin altindan cekilirdi.
     val start = remember { startDestination(prefs.onboardingDone) }
+
+    // Hedef `startDestination` yerine ustune itiliyor: geri tusu kullaniciyi
+    // deftere birakmali, uygulamadan atmamali. Tuketildigi Activity'ye
+    // bildiriliyor, yoksa her yeniden bestede ikinci bir paywall yiginlanirdi.
+    LaunchedEffect(deepLinkRoute) {
+        val target = deepLinkTarget(deepLinkRoute, start) ?: return@LaunchedEffect
+        navController.navigate(target)
+        onDeepLinkHandled()
+    }
 
     NavHost(
         navController = navController,

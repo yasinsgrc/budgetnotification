@@ -7,6 +7,7 @@ import com.bildirimbutce.app.data.ProAccess
 import com.bildirimbutce.app.data.PurchaseOutcome
 import com.bildirimbutce.app.data.StoredProAccess
 import com.bildirimbutce.app.util.Prefs
+import com.bildirimbutce.app.widget.BudgetWidgets
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -37,10 +38,12 @@ class ProViewModel(app: Application) : AndroidViewModel(app) {
 
     fun purchase() = viewModelScope.launch {
         _message.value = access.purchase().describe()
+        refreshWidgets()
     }
 
     fun restore() = viewModelScope.launch {
         _message.value = access.restore().describe()
+        refreshWidgets()
     }
 
     /**
@@ -51,7 +54,21 @@ class ProViewModel(app: Application) : AndroidViewModel(app) {
     fun setEntitlementForDebug(value: Boolean) {
         access.setEntitlement(value)
         _message.value = null
+        refreshWidgets()
     }
+
+    /**
+     * 4x2 widget yetkiyi kendisi okuyor (bkz.
+     * [com.bildirimbutce.app.widget.WideBudgetWidget]) ve bunu ancak yeniden
+     * cizilirken yapiyor. Yetki degistikten sonra yenilenmezse kullanici Pro'ya
+     * gecmis olmasina ragmen ana ekraninda kilitli karti gormeye devam ederdi -
+     * bir sonraki 30 dakikalik guncellemeye kadar.
+     *
+     * Her ucunden de cagriliyor: satin alma, geri yukleme ve hata ayiklama
+     * anahtari. Yetkinin **degisip degismedigine** bakilmiyor; bakmak bu bilgiyi
+     * ViewModel'e tasimak demekti ve yeniden cizim zaten ucuz.
+     */
+    private fun refreshWidgets() = BudgetWidgets.refreshAll(getApplication())
 
     private fun PurchaseOutcome.describe(): String? = when (this) {
         is PurchaseOutcome.Granted -> null

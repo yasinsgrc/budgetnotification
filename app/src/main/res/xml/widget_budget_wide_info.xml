@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  4x2 Pro widget.
+
+  minWidth/minHeight, Android'in "70 * n - 30" hucre formulunden: 4 sutun =
+  250dp, 2 satir = 110dp. targetCell* Android 12+'da bunun yerine geciyor.
+
+  Onizleme veri duzeni: kullanici seciciden Pro'nun ne actigini gorebilmeli.
+  Kilitli duzen onizlemeye konsaydi widget hicbir zaman ise yaramiyormus gibi
+  gorunurdu.
+-->
+<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="250dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="180dp"
+    android:minResizeHeight="110dp"
+    android:targetCellWidth="4"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/widget_budget_wide"
+    android:description="@string/widget_wide_description"
+    android:previewLayout="@layout/widget_budget_wide"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen" />

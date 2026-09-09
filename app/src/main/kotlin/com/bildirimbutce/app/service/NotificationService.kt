@@ -8,7 +8,7 @@ import com.bildirimbutce.app.data.ExpenseRepository
 import com.bildirimbutce.app.data.PatternProvider
 import com.bildirimbutce.app.data.SourceSelection
 import com.bildirimbutce.app.util.Prefs
-import com.bildirimbutce.app.widget.BudgetWidget
+import com.bildirimbutce.app.widget.BudgetWidgets
 import com.bildirimbutce.parser.ParseResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +60,7 @@ class NotificationService : NotificationListenerService() {
             when (val result = parser.parse(text)) {
                 is ParseResult.Match -> {
                     val added = repository.record(result.transaction, pkg, postedAt)
-                    if (added) BudgetWidget.refresh(applicationContext)
+                    if (added) BudgetWidgets.refreshAll(applicationContext)
                 }
                 is ParseResult.Ignored -> Log.d(TAG, "Atlandi: ${result.reason}")
                 ParseResult.NoMatch -> Log.d(TAG, "Eslesme yok ($pkg)")

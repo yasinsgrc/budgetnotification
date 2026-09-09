@@ -52,5 +52,20 @@
                 android:resource="@xml/widget_budget_info" />
         </receiver>
 
+        <!-- 4x2 Pro widget (yol haritasi 12. madde). Ayri bir provider, cunku
+             bir AppWidgetProvider tek bir boyut/duzen tanimi tasir. Ucretsiz
+             surumdeki kilit kodda: WideBudgetWidget yetkiyi okuyup kilitli
+             duzeni ciziyor. -->
+        <receiver
+            android:name=".widget.WideBudgetWidget"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_budget_wide_info" />
+        </receiver>
+
     </application>
 </manifest>

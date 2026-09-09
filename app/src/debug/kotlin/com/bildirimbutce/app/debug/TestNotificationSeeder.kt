@@ -3,7 +3,7 @@ package com.bildirimbutce.app.debug
 import android.content.Context
 import com.bildirimbutce.app.data.ExpenseRepository
 import com.bildirimbutce.app.data.PatternProvider
-import com.bildirimbutce.app.widget.BudgetWidget
+import com.bildirimbutce.app.widget.BudgetWidgets
 import com.bildirimbutce.parser.ParseResult
 
 /**
@@ -31,7 +31,7 @@ object TestNotificationSeeder {
                 is ParseResult.Match -> {
                     if (repository.record(result.transaction, SOURCE_APP, postedAt)) {
                         added++
-                        BudgetWidget.refresh(context)
+                        BudgetWidgets.refreshAll(context)
                     }
                 }
                 is ParseResult.Ignored, ParseResult.NoMatch -> Unit

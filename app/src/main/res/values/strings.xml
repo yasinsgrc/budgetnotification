@@ -2,4 +2,12 @@
     <string name="app_name">Bildirim Bütçe</string>
     <string name="service_label">Harcama bildirimlerini oku</string>
     <string name="widget_description">Bu ayki toplam harcamanız</string>
+
+    <!-- 4x2 Pro widget. Kilitli metin "Pro'da var" demiyor, ne oldugunu
+         soyluyor: kullanicinin dokunmadan once ne satin alacagini bilmesi
+         gerekiyor. -->
+    <string name="widget_wide_description">Bu ayki toplam ve kategori kırılımı (Pro)</string>
+    <string name="widget_wide_locked_kicker">BİLDİRİM BÜTÇE PRO</string>
+    <string name="widget_wide_locked_title">Kategori kırılımı Pro\'da</string>
+    <string name="widget_wide_locked_body">Dokun, neyin açıldığını anlatan ekrana gidelim.</string>
 </resources>

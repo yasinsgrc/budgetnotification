@@ -34,6 +34,7 @@ import com.bildirimbutce.app.ui.theme.AppRadius
 import com.bildirimbutce.app.ui.theme.AppSpace
 import com.bildirimbutce.app.ui.theme.AppText
 import com.bildirimbutce.app.ui.theme.AppTheme
+import com.bildirimbutce.app.widget.WIDE_WIDGET_ROW_COUNT
 
 /**
  * E1 - Pro / paywall.
@@ -41,11 +42,11 @@ import com.bildirimbutce.app.ui.theme.AppTheme
  * Ekran tasarimdan iki yerde bilerek ayriliyor; ikisi de ayni sebeple: burada
  * yazan her seyin bugun dogru olmasi gerekiyor.
  *
- *  - **Dort ozellik yerine bir tane.** Tasarim sinirsiz gecmis, 4x2 widget, CSV
- *    disa aktarma ve kendi desenini yazma sayiyor; son ucu kodda yok (4x2
- *    widget yol haritasinda 12. madde, digerleri hic baslanmadi). Olmayan bir
- *    seyin parasini istemek, 9. maddede kaldirilan "hicbir yere gitmeyen
- *    dugme"nin para karsiligi olurdu.
+ *  - **Dort ozellik yerine iki tane.** Tasarim sinirsiz gecmis, 4x2 widget, CSV
+ *    disa aktarma ve kendi desenini yazma sayiyor; son ikisi kodda yok. 4x2
+ *    widget yol haritasinin 12. maddesiyle yazildi ve listeye o gun eklendi.
+ *    Olmayan bir seyin parasini istemek, 9. maddede kaldirilan "hicbir yere
+ *    gitmeyen dugme"nin para karsiligi olurdu.
  *  - **Fiyat yazmiyor.** Tasarimdaki 149,00 ₺ bir yer tutucu. Gercek fiyat
  *    Play Console'daki urunden okunur; urun tanimli olmadigi icin ekrana
  *    yazilacak dogru bir sayi da yok.
@@ -112,9 +113,20 @@ fun PaywallScreen(
 
         item {
             Spacer(Modifier.height(AppSpace.s4))
+            FeatureRow(
+                mark = "▦",
+                title = "4×2 widget",
+                body = "Ana ekranda ay toplamı, geçen aya göre değişim ve en çok " +
+                    "harcanan ${WIDE_WIDGET_ROW_COUNT} kategori. Ücretsiz sürümdeki " +
+                    "2×1 widget yalnızca toplamı gösterir."
+            )
+        }
+
+        item {
+            Spacer(Modifier.height(AppSpace.s4))
             Text(
-                "Pro'nun açtığı tek şey şu an bu. Tasarımda duran 4×2 widget, CSV dışa " +
-                    "aktarma ve kendi desenini yazma henüz yazılmadı — olmayan bir şeyin " +
+                "Pro'nun açtığı şeyler şu an bunlar. Tasarımda duran CSV dışa aktarma " +
+                    "ve kendi desenini yazma henüz yazılmadı — olmayan bir şeyin " +
                     "parası istenmiyor.",
                 style = AppText.bodySmall,
                 color = AppTheme.colors.onBackgroundMuted,
