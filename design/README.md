@@ -14,9 +14,16 @@ doğrudan açılır.
 | Parça | Durum |
 |---|---|
 | Renk token'ları (açık + koyu + kategori) | `ui/theme/Theme.kt` |
-| Tipografi ölçeği | `ui/theme/Type.kt` — font dosyaları eksik, `res/font/README.md`'ye bakın |
+| Tipografi ölçeği | `ui/theme/Type.kt` — 5 TTF `app/src/main/res/font/` içinde (Schibsted Grotesk ×3, JetBrains Mono ×2) |
 | Köşe yarıçapı + aralık ölçeği | `ui/theme/Theme.kt` (`AppRadius`, `AppSpace`) |
-| Ekran düzenleri | Aktarılmadı |
+| Ekran düzenleri | Aktarıldı — A, B1-B4, C1, D1-D2, E1, F1-F4 ve iki widget (2×1, 4×2) |
+
+**Fontlar duruyor ama `₺` (U+20BA) glifi sorunlu:** uygulama içi ekranlarda `£`
+olarak render ediliyor, kaynak metinler doğru. Widget sistem fontu kullandığı
+için etkilenmiyor. Yayın öncesi düzeltilmeli — `roadmap.md` 1. madde.
+
+Aktarılmayan tasarım ekranları (C2, C3, E2, E3) ve gerekçeleri kökteki
+`roadmap.md` ile `EKSIKLER.md`'de.
 
 ## v1 ↔ v2 farkı — dikkat
 

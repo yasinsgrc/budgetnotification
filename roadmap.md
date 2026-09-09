@@ -741,15 +741,48 @@ açılmıyor.
 
 ### 13. Bayat dokümantasyon (hızlı iş, ~5 dk)
 
-Bunlar okuyanı yanlış yönlendiriyor:
+Yapıldı. Dördü de okuyanı yanlış yönlendiriyordu; her iddia düzeltilmeden önce
+dosya sisteminden ve `git ls-files`'tan doğrulandı.
 
-- [ ] `design/README.md:17` "font dosyaları eksik" diyor — fontlar
+- [x] `design/README.md:17` "font dosyaları eksik" diyor — fontlar
       `app/src/main/res/font/` içinde mevcut (5 ttf)
-- [ ] `design/README.md:19` "Ekran düzenleri: Aktarılmadı" — B1-B4, D1 ve
+- [x] `design/README.md:19` "Ekran düzenleri: Aktarılmadı" — B1-B4, D1 ve
       widget aktarıldı
-- [ ] `README.md:119` "Gradle wrapper jar'ı repoda yok" —
+- [x] `README.md:119` "Gradle wrapper jar'ı repoda yok" —
       `gradle/wrapper/gradle-wrapper.jar` (42 KB) repoda var
-- [ ] `README.md` durum tablosu ve yol haritası bölümü bu dosyaya işaret etsin
+- [x] `README.md` durum tablosu ve yol haritası bölümü bu dosyaya işaret etsin
+
+**Satır 17'de iki hata vardı, biri listede yoktu.** "Font dosyaları eksik"
+cümlesi okuyucuyu `res/font/README.md`'ye yolluyordu — **o dosya da yok**. Bayat
+bir cümleyi düzeltip yanındaki kırık bağı bırakmak, maddenin işini yarım yapmak
+olurdu.
+
+**"Aktarıldı" yazmakla yetinilmedi.** Madde yazıldığında liste "B1-B4, D1 ve
+widget"tı; o gün bugün A, C1, D2, E1, F1-F4 ve 4×2 widget eklendi. Maddedeki
+eski listeyi kopyalasaydık bayat bir satırı daha taze bir bayat satırla
+değiştirmiş olurduk. Aktarılmayanlar (C2, C3, E2, E3) da yazıldı, yoksa
+"Aktarıldı" satırı bu kez fazlasını iddia ederdi.
+
+**Fontlar duruyor ama `₺` bozuk.** Satır 17'yi "fontlar mevcut" diye düzeltip
+1. maddedeki U+20BA hatasını yazmamak, tipografi satırını okuyan birine yine
+yanlış bilgi vermek demekti; not tabloya eklendi.
+
+**Durum tablosu iki yönden yanlıştı.** `:app` için "cihazda derlenmedi" diyordu
+(emülatörde derlendi, 150 test CI'da koşuyor); `:parser` için "167 örnekte %100"
+diyordu ama örneklerin **sentetik** olduğunu ve gerçek örnek sayısının **0**
+olduğunu söylemiyordu — README'nin kendi "%100 ne anlama gelmiyor" bölümüyle
+çelişiyordu. Yayın kararının hangi sayıya baktığı artık tablonun kendisinde
+yazıyor.
+
+**Kırmızı testler tabloya yazıldı.** Kurulum adımında okuyucuya
+`./gradlew :parser:test` koşturuluyordu; o görev 2c yüzünden kırmızı. Testi
+düzeltmek bu maddenin işi değil (2c açık kaldı), ama okuyucunun kırmızı bir
+görevi habersiz çalıştırmasına bu madde göz yumamazdı. Komut, CI'ın gerçekten
+koştuğu ikisiyle değiştirildi: `:parser:verify` ve `:app:testDebugUnitTest`.
+
+**Kapsam dışı:** 2c'deki üç kırmızı test, 2b'deki "OTOMATIK URETILDI" iddiası ve
+`₺` font hatasının kendisi. Üçü de kendi maddesinde duruyor; burada yalnızca
+**belgelendiler**.
 
 ### 14. Tasarım sapmaları
 

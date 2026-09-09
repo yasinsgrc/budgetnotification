@@ -11,8 +11,14 @@ bütçe uygulaması.
 
 | Katman | Durum |
 |---|---|
-| `:parser` (ayrıştırma, kategori, defter mantığı) | **Kotlin 1.9.24 ile derlendi ve çalıştırıldı.** 167 örnekte %100, uçtan uca akış 8/8 |
-| `:app` (Android UI, Room, servis, widget) | Yazıldı, **cihazda derlenmedi** — Android SDK gerektirir |
+| `:parser` (ayrıştırma, kategori, defter mantığı) | 167 **sentetik** örnekte %100, uçtan uca akış 8/8 (`gradle :parser:verify`). Gerçek örnek sayısı: **0** — yayın kararı buna bakıyor |
+| `:app` (Android UI, Room, servis, widget) | **Emülatörde derlendi ve çalıştı**, release (R8) derlemesi de geçiyor. 150 birim testi CI'da koşuyor. Gerçek cihazda denenmedi |
+
+Açık maddeler, öncelik sırası ve her kararın gerekçesi kökteki
+**`roadmap.md`** dosyasında; neyin neden yapılmadığı `EKSIKLER.md`'de.
+
+> **Not:** `gradle :parser:test` şu an 3 testte kırmızı ve CI yalnızca
+> `:parser:verify` koştuğu için bunu görmüyor — `roadmap.md` madde 2c.
 
 Doğrulamayı kendiniz çalıştırın:
 
@@ -116,11 +122,9 @@ JSON kütüphanesine gerek yok.
 git clone <repo-url>
 cd bildirim-butce
 
-# Gradle wrapper jar'ı repoda yok; bir kez üretin:
-gradle wrapper --gradle-version 8.7
-# (veya projeyi Android Studio ile açın, otomatik üretilir)
-
-./gradlew :parser:test          # ayrıştırıcı doğruluğu
+# Gradle wrapper repoda hazır (gradle/wrapper/gradle-wrapper.jar), üretmeye gerek yok
+./gradlew :parser:verify        # ayrıştırıcı doğruluğu + yayın kararı
+./gradlew :app:testDebugUnitTest # :app birim testleri (Robolectric)
 ./gradlew :app:assembleDebug    # APK
 ```
 
@@ -223,18 +227,21 @@ Bunlar teoride değil, geliştirme sırasında testlerde yakalandı:
 
 ## Yol haritası
 
-**v1 kapsamı — bunun dışına çıkmayın:**
+Tam liste, öncelik sırası ve her maddenin gerekçesi kökteki **`roadmap.md`**
+dosyasında. Aşağısı yalnızca v1 kapsamının özeti — bunun dışına çıkmayın:
 
 - [x] Ayrıştırıcı + veri odaklı test altyapısı
 - [x] Room deposu, tekrar koruması
 - [x] Ana ekran: aylık toplam, kategori dağılımı, işlem listesi
 - [x] Düzeltme sayfası + mağaza→kategori öğrenmesi
-- [x] Ana ekran widget'ı
+- [x] Ana ekran widget'ı (2×1) + Pro widget'ı (4×2) — madde 12
 - [x] Sentetik korpus (167 örnek) + uçtan uca simülasyon
-- [ ] **Gerçek fixture toplama (150+)** ← sıradaki iş
-- [ ] Android katmanını cihazda derleyip çalıştırma
-- [ ] Onboarding akışı (izin ekranına yönlendirme metni)
-- [ ] Manuel harcama girişi — izin verilmese de uygulama çalışmalı
+- [x] Onboarding akışı (izin ekranına yönlendirme metni) — madde 6
+- [x] Manuel harcama girişi — izin verilmese de uygulama çalışıyor, madde 5
+- [x] Rapor, ayarlar ve paywall ekranları — madde 8, 9, 11
+- [ ] **Gerçek fixture toplama (150+)** ← sıradaki iş, madde 2
+- [ ] Android katmanını **gerçek cihazda** derleyip çalıştırma — madde 1
+- [ ] Play Billing — Pro ekranı var ama satın alma yolu yok, madde 11
 
 **Bilerek dışarıda bırakılanlar:** bütçe hedefleri, çoklu para birimi, dışa
 aktarma, hesap eşleştirme, bulut senkronizasyonu.
