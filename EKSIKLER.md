@@ -50,7 +50,14 @@ görünen ama bu kapsamda **görsel olarak konup işlevsiz bırakılan** öğele
 - Tasarımdaki bazı px/font-weight değerleri (ör. 600 ağırlık) doğrudan
   karşılığı olmayan yerlerde en yakın `AppText`/`AppSpace`/`AppRadius`
   token'ına yuvarlandı (örn. buton metinleri `labelChip`, ikon kutuları
-  `AppSpace.s8`). Piksel-birebir değil, token-birebir.
-- Boş durum kartındaki kesikli (dashed) kenarlık, Compose'ta standart
+  `AppSpace.s8`). Piksel-birebir değil, token-birebir — **bu bir sapma değil,
+  karar**; gerekçesi `roadmap.md` madde 14'te. Ama "en yakın token" bir kuraldı
+  ve boş durum kartında dört yerde tutmuyordu; o dört değer düzeltildi. Diğer
+  ekranlar bu gözle taranmadı.
+- ~~Boş durum kartındaki kesikli (dashed) kenarlık, Compose'ta standart
   `border` modifier ile düz çizgiye indirgendi (dashed için özel `Canvas`
-  çizimi gerekirdi, kapsam dışı bırakıldı).
+  çizimi gerekirdi, kapsam dışı bırakıldı).~~ — **yapıldı.**
+  `Modifier.dashedBorder` (`ui/theme/Theme.kt`); ayrıntı `roadmap.md` madde 14.
+- Boş durum kartının ikonundaki `bbRing` (nabız gibi büyüyen halka) animasyonu
+  uygulanmadı — tasarımdaki diğer animasyonlarla (`bbRise`, `bbDrop`, `bbBar`)
+  aynı durumda.

@@ -55,6 +55,7 @@ import com.bildirimbutce.app.ui.theme.AppRadius
 import com.bildirimbutce.app.ui.theme.AppSpace
 import com.bildirimbutce.app.ui.theme.AppText
 import com.bildirimbutce.app.ui.theme.AppTheme
+import com.bildirimbutce.app.ui.theme.dashedBorder
 import com.bildirimbutce.app.util.NotificationAccess
 import com.bildirimbutce.parser.Category
 import com.bildirimbutce.parser.Money
@@ -668,6 +669,15 @@ private fun ReadinessRow(label: String, value: String, ok: Boolean) {
     }
 }
 
+/**
+ * B4 bos durum karti. Tasarimdaki TEK kesikli kenarlikli oge bu; kart "burada
+ * bir sey olacak ama henuz yok" diyor, kesikli cizgi de tam olarak bunu
+ * anlatiyor - duz cizgi onu dolu bir kartla ayni agirliga sokuyordu.
+ *
+ * Olculer tasarimin en yakin token'ina yuvarlanmis durumda (piksel-birebir
+ * degil, token-birebir). Yuvarlanmayan tek deger yaricap: tasarim 20px diyor,
+ * `AppRadius.lg` zaten 20dp.
+ */
 @Composable
 private fun EmptyStateCard(onAdd: () -> Unit) {
     Column(
@@ -675,8 +685,8 @@ private fun EmptyStateCard(onAdd: () -> Unit) {
             .fillMaxWidth()
             .clip(RoundedCornerShape(AppRadius.lg))
             .background(AppTheme.colors.surfaceMuted.copy(alpha = 0.5f))
-            .border(1.dp, MaterialTheme.colorScheme.outline, RoundedCornerShape(AppRadius.lg))
-            .padding(AppSpace.s5),
+            .dashedBorder(MaterialTheme.colorScheme.outline, AppRadius.lg)
+            .padding(horizontal = AppSpace.s5, vertical = AppSpace.s6),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
@@ -688,12 +698,12 @@ private fun EmptyStateCard(onAdd: () -> Unit) {
         ) {
             Text("📥", style = AppText.headline)
         }
-        Spacer(Modifier.height(AppSpace.s3))
+        Spacer(Modifier.height(AppSpace.s4))
         Text("İlk bildirim bekleniyor", style = AppText.titleCard, color = MaterialTheme.colorScheme.onBackground)
-        Spacer(Modifier.height(AppSpace.s1))
+        Spacer(Modifier.height(AppSpace.s2))
         Text(
             "Kartını bir yerde kullandığında harcama saniyeler içinde burada olacak. Beklemek istemezsen elle de ekleyebilirsin.",
-            style = AppText.body,
+            style = AppText.bodySmall,
             color = AppTheme.colors.onBackgroundMuted,
             modifier = Modifier.widthIn(max = 260.dp)
         )

@@ -10,7 +10,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bildirimbutce.parser.Category
 
@@ -184,6 +192,50 @@ object AppSpace {
     val s6 = 26.dp
     val s8 = 34.dp
 }
+
+/**
+ * Kesikli kenarlik. Compose'un `border` modifier'i yalnizca duz cizgi cizer;
+ * tasarimdaki tek `1px dashed` ogesi (bos durum karti) bu yuzden Canvas'a
+ * dusuyor.
+ *
+ * Cizgi ICERI yaslaniyor. `Stroke` yolun uzerine ORTALANIR: kaydirilmasaydi
+ * yarisi disarida kalirdi ve ustteki `clip` onu keserdi - kenarlik yer yer
+ * yariya inmis gibi gorunurdu. Yaricap da ayni miktarda kuculuyor, yoksa kose
+ * kaydirilmis dikdortgenle es merkezli olmaz, cizgi kosede kalinlasirdi.
+ *
+ * Cizgi/bosluk uzunlugu tasarimdan GELMIYOR: CSS'te `dashed` deseninin olcusu
+ * tanimsizdir, tarayiciya birakilmistir - aktarilacak bir sayi yok. Cizgi
+ * bosluktan uzun secildi; esit olsalardi 1dp kalinlikta noktali kenarliktan
+ * ayirt edilemezdi.
+ */
+fun Modifier.dashedBorder(
+    color: Color,
+    cornerRadius: Dp,
+    width: Dp = 1.dp,
+    dash: Dp = 6.dp,
+    gap: Dp = 4.dp
+): Modifier = drawBehind {
+    val stroke = width.toPx()
+    val radius = insetCornerRadius(cornerRadius.toPx(), stroke)
+    drawRoundRect(
+        color = color,
+        topLeft = Offset(stroke / 2f, stroke / 2f),
+        size = Size(size.width - stroke, size.height - stroke),
+        cornerRadius = CornerRadius(radius, radius),
+        style = Stroke(
+            width = stroke,
+            pathEffect = PathEffect.dashPathEffect(floatArrayOf(dash.toPx(), gap.toPx()))
+        )
+    )
+}
+
+/**
+ * Yaricap, cizgi iceri yaslandiginda ayni miktarda kuculur. Negatife dusemez:
+ * kalin cizgi + kucuk yaricap birlesiminde `drawRoundRect` negatif yaricapla
+ * cizim yapardi.
+ */
+internal fun insetCornerRadius(cornerRadiusPx: Float, strokePx: Float): Float =
+    (cornerRadiusPx - strokePx / 2f).coerceAtLeast(0f)
 
 private val AppShapes = Shapes(
     extraSmall = RoundedCornerShape(AppRadius.xs),

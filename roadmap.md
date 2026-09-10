@@ -786,11 +786,69 @@ koştuğu ikisiyle değiştirildi: `:parser:verify` ve `:app:testDebugUnitTest`.
 
 ### 14. Tasarım sapmaları
 
-Ayrıntı ve gerekçeler `EKSIKLER.md`'de:
+Yapıldı. İki kutu iki ayrı cinsten: birincisi eksik iş, ikincisi **karar**.
+Ayrıntı ve gerekçeler `EKSIKLER.md`'de.
 
-- [ ] Boş durum kartındaki kesikli (dashed) kenarlık — şu an düz çizgi, dashed
+- [x] Boş durum kartındaki kesikli (dashed) kenarlık — şu an düz çizgi, dashed
       için özel `Canvas` çizimi gerekiyor
-- [ ] Token yuvarlamaları — piksel-birebir değil, token-birebir
+- [x] Token yuvarlamaları — piksel-birebir değil, token-birebir
+
+**Kesikli kenarlık `Modifier.dashedBorder`'a çıktı** (`ui/theme/Theme.kt`), kart
+içine gömülmedi: tasarımın tek `1px dashed` ögesi bu kart, ama kural bir çizim
+ayrıntısı değil, token dosyasının işi — `border` modifier'ı yalnızca düz çizgi
+çizdiği için Canvas'a düşen bir *primitive* bu.
+
+**Çizgi içeri yaslanıyor.** `Stroke` yolun üzerine ortalanır; kaydırılmasaydı
+yarısı dışarıda kalır ve üstteki `clip` onu keserdi — kenarlık yer yer yarıya
+inmiş görünürdü. Yarıçap da aynı miktarda küçülüyor, yoksa köşe kaydırılmış
+dikdörtgenle eş merkezli olmaz ve çizgi köşede kalınlaşırdı.
+
+**Çizgi/boşluk uzunluğu tasarımdan gelmiyor, gelemezdi.** CSS'te `dashed`
+deseninin ölçüsü **tanımsızdır**, tarayıcıya bırakılmıştır; aktarılacak bir sayı
+yok. Seçim yapıldı ve gerekçesi yazıldı: çizgi (6dp) boşluktan (4dp) uzun,
+çünkü eşit olsalardı 1dp kalınlıkta noktalı kenarlıktan ayırt edilemezdi.
+
+**İkinci kutu "yapılmadı" değil, "böyle kalacak".** Piksel-birebirlik burada
+yanlış hedef: `Theme.kt` ölçeğe "tasarım token'ları birebir" diyor ve her
+ekranda ham `dp` kullanmak o ölçeği çözerdi — 8. maddedeki `signedMinor` ile
+aynı gerekçe, kural tek yerde durmalı. Kutu bu yüzden *karar* olarak
+kapatıldı, iş olarak değil.
+
+**Ama "en yakın token" bir kuraldı ve bu kartta tutmuyordu.** Tasarım değerleri
+dosyadan okundu (mock 390px genişlikte, yani px ≈ dp) ve dört değer en yakın
+token'a değil, daha uzağına yuvarlanmıştı:
+
+| Tasarım | Önce | Sonra |
+|---|---|---|
+| dikey iç boşluk 28px | `s5` (20dp) | `s6` (26dp) |
+| ikon altı boşluk 16px | `s3` (12dp) | `s4` (16dp) — birebir |
+| başlık altı boşluk 7px | `s1` (4dp) | `s2` (8dp) |
+| paragraf 13px/1.55 | `body` (14.5sp/23) | `bodySmall` (13sp/20) — birebir |
+
+`bodySmall`'un satır yüksekliği (20sp) tasarımın `13×1.55 = 20.15px` değerine
+birebir oturuyor; o token zaten bu metin için çizilmiş, yanlış olan seçimdi.
+
+**Dokunulmayanlar da bilinçli.** Yarıçap 20px zaten `AppRadius.lg` (20dp); ikon
+kutusunun 16px yarıçapı `md`'ye (13dp) yuvarlandı çünkü en yakını o — `lg` daha
+uzak. Başlık tasarımda `600 18px`: hiçbir token bunu karşılamıyor (`titleCard`
+boyutta yakın ama 500 ağırlıkta, `bodyLarge` 600 ağırlıkta ama 15.5sp). Boyut
+bir kart başlığında ağırlıktan baskın olduğu için `titleCard` kaldı —
+`EKSIKLER.md`'nin "600 ağırlık" örneği tam olarak bu.
+
+**Testler:** `DashedBorderTest` (4, saf JVM — yarıçapın çizgi yarısı kadar
+küçülmesi ve negatife düşmemesi). `:app` toplamı 150 → 154. Testlerin ısırdığı
+doğrulandı: `insetCornerRadius`'taki `/2f` ve `coerceAtLeast` kaldırılınca 4
+testin 3'ü kırmızı yandı, sonra geri alındı. Release derlemesi de koştu:
+imzasız APK 1.42 MB (12. maddeyle aynı).
+
+**Hâlâ açık:** Çizimin kendisi otomatik test edilmiyor — 4, 5, 6, 8, 9, 10, 11
+ve 12. maddedeki gerekçenin aynısı, `compose-ui-test` bağımlılığı yok. Test
+edilen kısım köşe aritmetiği; kapsam dışı kalan yalnızca çizim, ve bu maddede
+"çizim" işin büyük kısmı — **kesikli kenarlığın ekranda nasıl durduğu gerçek
+cihazda görülmeli** (1. maddedeki açık kutu). Token taraması yalnızca bu kartta
+yapıldı; diğer ekranlar aynı gözle taranmadı, orada da en yakın token'a
+yuvarlanmamış değerler olabilir. İkondaki `bbRing` halka animasyonu uygulanmadı
+(`bbRise`, `bbDrop`, `bbBar` ile aynı durumda).
 
 ---
 
