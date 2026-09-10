@@ -841,11 +841,26 @@ doğrulandı: `insetCornerRadius`'taki `/2f` ve `coerceAtLeast` kaldırılınca 
 testin 3'ü kırmızı yandı, sonra geri alındı. Release derlemesi de koştu:
 imzasız APK 1.42 MB (12. maddeyle aynı).
 
+**Emülatörde görüldü.** `Medium_Phone_API_36.1` (API 36, 1080×2400, 420 dpi)
+üzerine `:app:installDebug` ile kuruldu. Karta ulaşmak izin gerektirdi: kesikli
+kutu yalnızca bildirim erişimi **açıkken** ve ay boşken çiziliyor
+(`HomeScreen.kt:182`); izin kapalıyken gelen `EmptyState` düz bir metin bloğu,
+kesikli kenarlık orada hiç yok. Erişim
+`settings put secure enabled_notification_listeners` ile verildi. Dört kenar da
+kesiksiz çıktı: tire/boşluk deseni her kenarda eşit, köşe yayları pürüzsüz ve
+köşede kalınlaşma yok. Yani içeri yaslama ile yarıçap küçültmesi cihazda da
+tutuyor; çizginin hiçbir yeri `clip` tarafından kesilmiyor. Açık ve koyu temaya
+ayrı ayrı bakıldı, kenarlık rengi `outline` token'ından geldiği için ikisi de
+doğru.
+
+**Emülatör 1. maddeyi de doğruladı.** Aynı ekranda toplam başlığındaki simge
+`₺` yerine `£` çiziliyor — U+20BA hatası artık yalnızca iddia değil, görülmüş
+durumda. Düzeltmek bu maddenin işi değil; 1. maddede duruyor.
+
 **Hâlâ açık:** Çizimin kendisi otomatik test edilmiyor — 4, 5, 6, 8, 9, 10, 11
 ve 12. maddedeki gerekçenin aynısı, `compose-ui-test` bağımlılığı yok. Test
-edilen kısım köşe aritmetiği; kapsam dışı kalan yalnızca çizim, ve bu maddede
-"çizim" işin büyük kısmı — **kesikli kenarlığın ekranda nasıl durduğu gerçek
-cihazda görülmeli** (1. maddedeki açık kutu). Token taraması yalnızca bu kartta
+edilen kısım köşe aritmetiği; cihazdaki doğrulama **gözle** yapıldı, yani bir
+regresyonu yakalayacak otomatik test hâlâ yok. Token taraması yalnızca bu kartta
 yapıldı; diğer ekranlar aynı gözle taranmadı, orada da en yakın token'a
 yuvarlanmamış değerler olabilir. İkondaki `bbRing` halka animasyonu uygulanmadı
 (`bbRise`, `bbDrop`, `bbBar` ile aynı durumda).
