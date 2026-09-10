@@ -41,6 +41,8 @@ import com.bildirimbutce.app.ui.theme.AppRadius
 import com.bildirimbutce.app.ui.theme.AppSpace
 import com.bildirimbutce.app.ui.theme.AppText
 import com.bildirimbutce.app.ui.theme.AppTheme
+import com.bildirimbutce.app.ui.theme.LIRA
+import com.bildirimbutce.app.ui.theme.withLiraFallback
 import com.bildirimbutce.parser.Money
 import java.util.Locale
 
@@ -187,7 +189,7 @@ private fun StatTiles(state: ReportUiState) {
         StatTile(
             kicker = "GÜN ORTALAMASI",
             value = Money.format(state.dailyAverageMinor),
-            sub = "₺ / gün · ${state.daysCounted} gün"
+            sub = "$LIRA / gün · ${state.daysCounted} gün"
         )
         StatTile(
             kicker = "EN YÜKSEK GÜN",
@@ -228,7 +230,9 @@ private fun RowScope.StatTile(
             color = if (valueColor == Color.Unspecified) MaterialTheme.colorScheme.onBackground else valueColor
         )
         Spacer(Modifier.height(AppSpace.s1))
-        Text(sub, style = AppText.bodySmall, color = AppTheme.colors.onBackgroundMuted)
+        // Alt satirda ₺ gecebilir ("₺ / gun · 10 gun"); yedek burada uygulaniyor
+        // ki her cagiran ayri ayri hatirlamak zorunda kalmasin.
+        Text(withLiraFallback(sub), style = AppText.bodySmall, color = AppTheme.colors.onBackgroundMuted)
     }
 }
 
@@ -323,7 +327,7 @@ private fun MerchantRowItem(rank: Int, row: MerchantRow) {
             )
         }
         Text(
-            "${Money.format(row.totalMinor)} ₺",
+            withLiraFallback("${Money.format(row.totalMinor)} $LIRA"),
             style = AppText.amountRow,
             color = MaterialTheme.colorScheme.onBackground
         )

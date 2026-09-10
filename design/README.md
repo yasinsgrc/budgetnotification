@@ -18,9 +18,10 @@ doğrudan açılır.
 | Köşe yarıçapı + aralık ölçeği | `ui/theme/Theme.kt` (`AppRadius`, `AppSpace`) |
 | Ekran düzenleri | Aktarıldı — A, B1-B4, C1, D1-D2, E1, F1-F4 ve iki widget (2×1, 4×2) |
 
-**Fontlar duruyor ama `₺` (U+20BA) glifi sorunlu:** uygulama içi ekranlarda `£`
-olarak render ediliyor, kaynak metinler doğru. Widget sistem fontu kullandığı
-için etkilenmiyor. Yayın öncesi düzeltilmeli — `roadmap.md` 1. madde.
+**`₺` (U+20BA) simgesi bu fontlardan çizilmiyor:** Schibsted Grotesk 1.100'ün
+U+20BA glifi yanlış çizilmiş (çift çizgili pound) ve JetBrains Mono 2.211'de
+glif hiç yok. Simge sistem fontuna düşürülüyor, rakamlar Grotesk'te kalıyor —
+kural `ui/theme/Lira.kt`'de, gerekçesiyle. `roadmap.md` 15. madde.
 
 Aktarılmayan tasarım ekranları (C2, C3, E2, E3) ve gerekçeleri kökteki
 `roadmap.md` ile `EKSIKLER.md`'de.

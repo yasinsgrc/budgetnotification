@@ -35,10 +35,12 @@ hâlâ açık; aşağıdaki tek işaretsiz kutu o.
       `.github/workflows/ci.yml` push tetikleyicisine `tasarim-v2` eklendi
 
 **Doğrulamada çıkan hata:** Uygulama içi ekranlarda `₺` (U+20BA) karakteri `£`
-olarak render ediliyor. Kaynak doğru (`HomeScreen.kt:246,295,359` hepsi `₺`);
-widget sistem fontu kullandığı için `₺`'yi doğru çiziyor. Sorun
-`app/src/main/res/font/` altındaki TTF'lerde — U+20BA glifi eksik ya da yanlış
-eşlenmiş. Yayın öncesi düzeltilmeli.
+olarak render ediliyor. Kaynak doğru (`HomeScreen.kt` hepsi `₺`). **15. maddede
+çözüldü ve o maddede buradaki teşhisin iki yerde yanlış olduğu çıktı:** glif
+eksik ya da yanlış eşlenmiş değil (Schibsted Grotesk U+20BA'yı kendi `uni20BA`
+glifine gönderiyor, o glifin *şekli* yanlış çizilmiş), ve widget sistem fontu
+kullanmıyor — `widget_budget.xml` de `@font/schibsted_grotesk_semibold`
+kullandığı için aynı yanlış simgeyi çiziyordu. Ayrıntı 15. maddede.
 
 ### 2. Gerçek fixture topla (150+)
 
@@ -319,9 +321,8 @@ bulamayacağı bir özellik vaat etmiş olurduk. **9. madde ile beyana eklendi**
 hiç kurulmadı; imzasız APK da cihazda denenmedi (1. maddedeki açık kutu).
 Mağaza varlıkları (512×512 ikon, öne çıkan görsel, ekran görüntüleri,
 açıklama metinleri) ve gizlilik politikası URL'si depoya konamaz —
-`PLAY_CONSOLE.md`'nin 4. bölümünde liste hâlinde duruyor. Ayrıca 1. maddedeki
-`₺` font hatası yayın öncesi düzeltilmeli; ikon vektör olduğu için ondan
-etkilenmiyor, ama uygulama içi ekranlar etkileniyor.
+`PLAY_CONSOLE.md`'nin 4. bölümünde liste hâlinde duruyor. (1. maddedeki `₺` font
+hatası yayın engeliydi; 15. maddede çözüldü.)
 
 ---
 
@@ -394,8 +395,8 @@ karşılamıyor ve ayrı kararlar gerektiriyor:
 maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ yok.
 Test edilen kısım raporun aritmetiği; kapsam dışı kalan yalnızca çizim. Ekran
 gerçek cihazda denenmedi (1. maddedeki açık kutu) ve tasarımdaki `bbBar` çubuk
-büyüme animasyonu uygulanmadı; çubuklar animasyonsuz çiziliyor. `₺` font hatası
-(1. madde) bu ekranı da etkiliyor.
+büyüme animasyonu uygulanmadı; çubuklar animasyonsuz çiziliyor. (`₺` font hatası
+bu ekranı da etkiliyordu; 15. maddede çözüldü.)
 
 ### 9. F — Ayarlar ekranı
 
@@ -484,8 +485,8 @@ de koştu: imzasız APK 1.40 MB (7. maddede 1.33 MB'tı).
 **Hâlâ açık:** Ekranların kendisi (Compose) otomatik test edilmiyor — 4, 5, 6 ve
 8. maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ yok.
 Test edilen kısım kuralların ve veri yollarının davranışı; kapsam dışı kalan
-yalnızca çizim. Ekranlar gerçek cihazda denenmedi (1. maddedeki açık kutu) ve
-`₺` font hatası (1. madde) bu ekranları da etkiliyor.
+yalnızca çizim. Ekranlar gerçek cihazda denenmedi (1. maddedeki açık kutu).
+(`₺` font hatası bu ekranları da etkiliyordu; 15. maddede çözüldü.)
 
 ### 10. Aylık değişim rozeti ("↓ %12 TEMMUZ")
 
@@ -634,8 +635,8 @@ yetkiyi açmaması). `:app` toplamı 116 → 136. Testlerin ısırdığı doğru
 **Hâlâ açık:** Ekranın kendisi (Compose) otomatik test edilmiyor — 4, 5, 6, 8, 9
 ve 10. maddedeki gerekçe burada da geçerli, `compose-ui-test` bağımlılığı hâlâ
 yok. Test edilen kısım sınırın aritmetiği ve yetkinin kalıcılığı; kapsam dışı
-kalan yalnızca çizim. Gerçek cihazda denenmedi (1. maddedeki açık kutu) ve `₺`
-font hatası (1. madde) bu ekranı da etkiliyor. Billing kutusu açık kaldığı
+kalan yalnızca çizim. Gerçek cihazda denenmedi (1. maddedeki açık kutu). (`₺`
+font hatası bu ekranı da etkiliyordu; 15. maddede çözüldü.) Billing kutusu açık kaldığı
 sürece **Pro satılamaz**: ekran görünür ama satın alma yolu yok.
 `PLAY_CONSOLE.md`'ye uygulama içi satın alma beyanı da bu yüzden eklenmedi —
 7. maddede "olmayan özelliği beyana yazma" diye kurulan kuralın aynısı.
@@ -855,7 +856,7 @@ doğru.
 
 **Emülatör 1. maddeyi de doğruladı.** Aynı ekranda toplam başlığındaki simge
 `₺` yerine `£` çiziliyor — U+20BA hatası artık yalnızca iddia değil, görülmüş
-durumda. Düzeltmek bu maddenin işi değil; 1. maddede duruyor.
+durumda. Düzeltmek bu maddenin işi değildi; **15. maddede yapıldı.**
 
 **Hâlâ açık:** Çizimin kendisi otomatik test edilmiyor — 4, 5, 6, 8, 9, 10, 11
 ve 12. maddedeki gerekçenin aynısı, `compose-ui-test` bağımlılığı yok. Test
@@ -864,6 +865,96 @@ regresyonu yakalayacak otomatik test hâlâ yok. Token taraması yalnızca bu ka
 yapıldı; diğer ekranlar aynı gözle taranmadı, orada da en yakın token'a
 yuvarlanmamış değerler olabilir. İkondaki `bbRing` halka animasyonu uygulanmadı
 (`bbRise`, `bbDrop`, `bbBar` ile aynı durumda).
+
+---
+
+## P0'dan devir — yayını engelleyen tek hata
+
+### 15. `₺` (U+20BA) yanlış simge olarak çiziliyor
+
+Yapıldı. 1. maddede "yayın öncesi düzeltilmeli" diye bırakılan, 14. maddede
+emülatörde gözle görülen hata. Bu maddenin işi bir karakteri düzeltmek değildi;
+**hatanın nerede olduğunu bulmak**tı — 1. maddedeki teşhis iki yerde yanlıştı ve
+o teşhisle çalışılsaydı yanlış dosya değiştirilirdi.
+
+- [x] Uygulama içi ekranlarda ve widget'larda `₺` doğru çiziliyor
+
+**Teşhis yanlıştı: glif eksik değil, yanlış eşlenmiş de değil.** 1. madde
+"U+20BA glifi eksik ya da yanlış eşlenmiş" diyordu. Fontlar `fontTools` ile
+açıldı, üçü de aynısını söyledi: Schibsted Grotesk'in `cmap`'i U+20BA'yı
+`uni20BA` adında **kendine ait** bir glife gönderiyor (`sterling`'e değil —
+ikisinin kontur sayısı bile farklı, 50'ye 46). Yani eşleme doğru; **çizim**
+yanlış. Glif rasterize edilip bakıldı: alt ucu kıvrılan bir gövde ve üzerinde
+**iki** yatay çizgi — bu ₺ değil, çift çizgili bir pound (₤, U+20A4'ün klasik
+biçimi). Türk lirası işareti eğik gövde + iki yukarı kol + alt kancadır;
+karşılaştırma sistem fontuyla yapıldı.
+
+**"Fontu güncelle" bir seçenek değildi.** Depodaki sürüm 1.100; Google Fonts'un
+`ofl/schibstedgrotesk` altındaki **güncel** sürümü indirildi ve o da 1.100,
+`uni20BA` yine aynı 50 noktalı glif. Hata üst kaynakta, bizde bayat bir kopya
+yok. Denenmeden "yeni sürüm çeker geçeriz" denseydi 300 KB'lık üç ikili dosya
+değişir, hiçbir şey düzelmezdi.
+
+**Widget de etkileniyordu.** 1. madde "widget sistem fontu kullandığı için
+doğru çiziyor" diyordu; `widget_budget.xml` `@font/schibsted_grotesk_semibold`
+kullanıyor, yani aynı yanlış simgeyi çiziyordu. O cümle bir gözlem hatasıydı ve
+düzeltildi — yoksa bu madde widget'a hiç bakmazdı.
+
+**Çözüm: simgeyi o fonttan istememek.** Fontu elle yamamak da düşünüldü —
+`uni20BA` konturunu değiştirmek — ama üç ağırlık için glif çizmek yazı tipi
+tasarımıdır, OFL değiştirilmiş sürüm için ad değişikliği ister ve ortaya bir
+daha üretilemeyen bir ikili dosya çıkardı. Sistem fontunun (Roboto) ₺ glifi
+zaten doğru ve o da bir grotesk; yamanın vereceği görüntünün aynısı, ikili dosya
+olmadan. Emülatörün `/system/fonts/Roboto-Regular.ttf`'i **karar vermeden önce**
+çekilip glifin doğruluğuna bakıldı.
+
+**Rakamlar Grotesk'te kalıyor, yalnızca simge düşüyor.** Metnin tamamı sistem
+fontuna verilseydi `tnum` (tabular figürler) kaybolur, tutar değişirken sayı
+titrerdi — `Type.kt`'nin "para tutarlarında tabular ZORUNLU" kuralı tam olarak
+bunu engellemek için yazılmıştı.
+
+**Kural tek yerde: `ui/theme/Lira.kt`.** Compose tarafı `withLiraFallback`
+(`AnnotatedString` + `SpanStyle`), widget tarafı `liraSpanned`
+(`SpannableString` + `TypefaceSpan`; `RemoteViews` sınırından parcelable olarak
+geçiyor). İki uygulama var çünkü iki çizim motoru var, ama aralığı bulan tarama
+tek: `forEachLira`. Altı Compose çağrısı ve iki widget çağrısı buradan geçiyor.
+
+**Simgeyi widget düzeninde ayrı bir `TextView`'a almak denendi ve geri
+alındı.** Önce öyle yapıldı, emülatörde 2×1 widget'a bakıldı ve simge **hiç
+görünmedi**: dar hücrede tutar tüm genişliği kapıyor, `LinearLayout`'un son
+çocuğu olan simge kırpılıyor. Genişliği `layout_weight` ile bölmek de simgeyi
+widget'ın sağ kenarına itiyordu; tasarımda tutar ve simge bitişik tek bir öge.
+Span'a dönüldü: düzen hiç değişmiyor, dolayısıyla kırpılma davranışı da eskisiyle
+birebir aynı kalıyor.
+
+**Widget seçicisindeki önizleme simgesiz.** `android:text` font span'ı
+taşıyamaz ve `previewLayout` bu düzenin kendisi; yer tutucu artık `"0,00"`.
+Yanlış bir para birimi göstermektense hiç göstermemek doğruydu — çalışma anında
+simge zaten yerine geliyor.
+
+**Testler:** `LiraFallbackTest` (6, saf JVM — aralığın yalnızca simgeyi
+kapsaması, baştaki/sondaki/çoklu simge, simgesiz metnin işaretlenmemesi, gerçek
+`£`'ye dokunulmaması), `LiraSpannedTest` (2, Robolectric — span'ın ailesi ve
+konumu, simgesiz metnin `Spanned`'a çevrilmemesi). `:app` toplamı 154 → 162.
+Testlerin ısırdığı doğrulandı: aralık bir karakter geriye kaydırılınca 8 testin
+5'i kırmızı yandı, sonra geri alındı. Release derlemesi de koştu: imzasız APK
+1.42 MB (12. ve 14. maddeyle aynı).
+
+**Emülatörde görüldü** (`sdk_gphone64_x86_64`, API 36, 1080×2400). Önce hata
+üretildi: ana ekranın toplam başlığında `£`. Düzeltmeden sonra aynı ekran ve
+**her** `₺` geçen yüzey tek tek gezildi: toplam başlığı, kategori çipleri
+(`1.200,00 ₺`), işlem satırları (`+ 45,00 ₺`, `− 1.200,00 ₺`), rapor ekranının
+`₺ / gün · 10 gün` kutusu ve işyeri satırları, elle giriş ekranındaki simge,
+2×1 widget ve Pro açılarak 4×2 widget. Hepsinde doğru simge çiziliyor.
+
+**Hâlâ açık:** Çizimin kendisi otomatik test edilmiyor — 4-12. maddelerdeki
+gerekçenin aynısı; test edilen kısım span'ın nereye konduğu, cihazdaki doğrulama
+**gözle** yapıldı. Gerçek cihazda denenmedi (1. maddedeki açık kutu). Ayrıca
+2×1 widget dar hücrede (2 sütun) tutar uzunsa simgeyi hâlâ kırpıyor — bu font
+hatası değil, o widget'ın boyut sorunu ve bu maddeden önce de vardı; genişletince
+düzeliyor. JetBrains Mono 2.211'de U+20BA hiç yok; bugün hiçbir Mono stilinde ₺
+geçmiyor, ama geçerse tofu (boş kutu) çıkar — `Lira.kt` bunu yazıyor, kod olarak
+engellemiyor.
 
 ---
 

@@ -47,6 +47,7 @@
 
     </LinearLayout>
 
+    <!-- Yer tutucuda ₺ yok; gerekce widget_budget.xml'de ve ui/theme/Lira.kt'de. -->
     <TextView
         android:id="@+id/widget_wide_amount"
         android:layout_width="wrap_content"
@@ -57,7 +58,7 @@
         android:letterSpacing="-0.04"
         android:maxLines="1"
         android:textColor="@color/widget_ink"
-        android:text="0,00 ₺" />
+        android:text="0,00" />
 
     <LinearLayout
         android:id="@+id/widget_wide_row_1"

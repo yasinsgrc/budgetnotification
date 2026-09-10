@@ -22,6 +22,12 @@
         android:textColor="@color/widget_ink_muted"
         android:text="@string/widget_description" />
 
+    <!-- Yer tutucuda ₺ yok, bilerek. Simge calisma aninda sistem fontu span'iyla
+         yaziliyor (bkz. ui/theme/Lira.kt): Schibsted Grotesk 1.100 U+20BA'yi
+         yanlis ciziyor. `android:text` font span'i tasiyamadigi icin burada
+         yazilamaz; widget secicisindeki onizleme bu yuzden simgesiz. Simgeyi
+         ayri bir TextView'a almak denendi ve geri alindi: 2x1 hucrede tutar tum
+         genisligi kapiyor, son cocuk olan simge kirpiliyordu. -->
     <TextView
         android:id="@+id/widget_amount"
         android:layout_width="wrap_content"
@@ -31,7 +37,7 @@
         android:textSize="28sp"
         android:letterSpacing="-0.04"
         android:textColor="@color/widget_ink"
-        android:text="0,00 ₺" />
+        android:text="0,00" />
 
     <ImageView
         android:id="@+id/widget_ribbon"

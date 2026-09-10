@@ -55,7 +55,9 @@ import com.bildirimbutce.app.ui.theme.AppRadius
 import com.bildirimbutce.app.ui.theme.AppSpace
 import com.bildirimbutce.app.ui.theme.AppText
 import com.bildirimbutce.app.ui.theme.AppTheme
+import com.bildirimbutce.app.ui.theme.LIRA
 import com.bildirimbutce.app.ui.theme.dashedBorder
+import com.bildirimbutce.app.ui.theme.withLiraFallback
 import com.bildirimbutce.app.util.NotificationAccess
 import com.bildirimbutce.parser.Category
 import com.bildirimbutce.parser.Money
@@ -371,7 +373,7 @@ private fun TotalHeader(
                 color = if (muted) MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f) else MaterialTheme.colorScheme.onBackground
             )
             Text(
-                "₺",
+                withLiraFallback(LIRA),
                 style = AppText.titleCard,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
                 modifier = Modifier.padding(top = AppSpace.s2)
@@ -462,7 +464,7 @@ private fun CategoryRibbon(rows: List<Pair<Category, Long>>, totalMinor: Long) {
                             .background(AppTheme.colors.categoryColor(category))
                     )
                     Text(category.label, style = AppText.labelChip, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.8f))
-                    Text("${Money.format(amount)} ₺", style = AppText.labelChip, color = AppTheme.colors.onBackgroundMuted)
+                    Text(withLiraFallback("${Money.format(amount)} $LIRA"), style = AppText.labelChip, color = AppTheme.colors.onBackgroundMuted)
                 }
             }
         }
@@ -547,7 +549,7 @@ private fun ExpenseRow(expense: ExpenseEntity, onClick: () -> Unit) {
             )
         }
         Text(
-            (if (isRefund) "+" else "−") + " ${Money.format(expense.amountMinor)} ₺",
+            withLiraFallback((if (isRefund) "+" else "−") + " ${Money.format(expense.amountMinor)} $LIRA"),
             style = AppText.amountRow,
             color = if (isRefund) AppTheme.colors.refund else MaterialTheme.colorScheme.onBackground
         )

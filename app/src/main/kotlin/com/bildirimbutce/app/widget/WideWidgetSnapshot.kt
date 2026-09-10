@@ -2,6 +2,7 @@ package com.bildirimbutce.app.widget
 
 import com.bildirimbutce.app.ui.HomeUiState
 import com.bildirimbutce.app.ui.MonthCursor
+import com.bildirimbutce.app.ui.theme.LIRA
 import com.bildirimbutce.parser.Category
 import com.bildirimbutce.parser.Money
 
@@ -31,7 +32,12 @@ internal data class WidgetCategoryRow(
 internal data class WideWidgetSnapshot(
     /** "AĞUSTOS 2026" */
     val kicker: String,
-    /** "1.821,80 ₺" */
+    /**
+     * "1.821,80 ₺"
+     *
+     * Simge dizgede duruyor ama Grotesk'e cizdirilmiyor: `RemoteViews`'a
+     * yazilirken sistem fontu span'i ekleniyor (bkz. ui/theme/Lira.kt).
+     */
     val amount: String,
     /** "↓ %12" - rozet susuyorsa null. */
     val change: String?,
@@ -56,7 +62,7 @@ internal data class WideWidgetSnapshot(
 internal fun HomeUiState.wideSnapshot(cursor: MonthCursor): WideWidgetSnapshot =
     WideWidgetSnapshot(
         kicker = "${cursor.upperLabel} ${cursor.year}",
-        amount = "${Money.format(totalMinor)} ₺",
+        amount = "${Money.format(totalMinor)} $LIRA",
         change = change?.let { "${if (it.increased) "↑" else "↓"} %${it.percent}" },
         changeIncreased = change?.increased ?: false,
         rows = byCategory.take(WIDE_WIDGET_ROW_COUNT).map { (category, amountMinor) ->

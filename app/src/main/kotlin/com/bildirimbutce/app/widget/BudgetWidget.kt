@@ -8,6 +8,8 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.widget.RemoteViews
 import com.bildirimbutce.app.R
+import com.bildirimbutce.app.ui.theme.LIRA
+import com.bildirimbutce.app.ui.theme.liraSpanned
 import com.bildirimbutce.parser.Category
 import com.bildirimbutce.parser.Money
 import kotlinx.coroutines.launch
@@ -44,7 +46,10 @@ class BudgetWidget : AppWidgetProvider() {
 
                 val views = RemoteViews(context.packageName, R.layout.widget_budget).apply {
                     setTextViewText(R.id.widget_kicker, "${cursor.upperLabel} HARCAMASI")
-                    setTextViewText(R.id.widget_amount, "${Money.format(state.totalMinor)} ₺")
+                    setTextViewText(
+                        R.id.widget_amount,
+                        liraSpanned("${Money.format(state.totalMinor)} $LIRA")
+                    )
                     if (state.byCategory.isNotEmpty()) {
                         setImageViewBitmap(
                             R.id.widget_ribbon,

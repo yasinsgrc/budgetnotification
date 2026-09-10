@@ -39,6 +39,8 @@ import com.bildirimbutce.app.ui.theme.AppRadius
 import com.bildirimbutce.app.ui.theme.AppSpace
 import com.bildirimbutce.app.ui.theme.AppText
 import com.bildirimbutce.app.ui.theme.AppTheme
+import com.bildirimbutce.app.ui.theme.LIRA
+import com.bildirimbutce.app.ui.theme.withLiraFallback
 import com.bildirimbutce.parser.Category
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -122,7 +124,7 @@ fun AddExpenseScreen(
                     .focusRequester(amountFocus)
             )
             Text(
-                "₺",
+                withLiraFallback(LIRA),
                 style = AppText.titleCard,
                 color = AppTheme.colors.onBackgroundMuted,
                 modifier = Modifier.padding(start = AppSpace.s3)

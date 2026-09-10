@@ -9,6 +9,7 @@ import androidx.core.content.ContextCompat
 import com.bildirimbutce.app.R
 import com.bildirimbutce.app.data.StoredProAccess
 import com.bildirimbutce.app.ui.nav.Route
+import com.bildirimbutce.app.ui.theme.liraSpanned
 import com.bildirimbutce.app.util.Prefs
 import kotlinx.coroutines.launch
 
@@ -73,7 +74,9 @@ class WideBudgetWidget : AppWidgetProvider() {
         private fun dataViews(context: Context, snapshot: WideWidgetSnapshot) =
             RemoteViews(context.packageName, R.layout.widget_budget_wide).apply {
                 setTextViewText(R.id.widget_wide_kicker, snapshot.kicker)
-                setTextViewText(R.id.widget_wide_amount, snapshot.amount)
+                // ₺ Grotesk'te yanlis ciziliyor; simge sistem fontuna dusuyor
+                // (bkz. ui/theme/Lira.kt).
+                setTextViewText(R.id.widget_wide_amount, liraSpanned(snapshot.amount))
                 bindChange(context, snapshot)
                 bindRows(snapshot)
                 setOnClickPendingIntent(R.id.widget_wide_root, BudgetWidgets.openApp(context))
