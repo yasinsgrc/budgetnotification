@@ -958,6 +958,68 @@ engellemiyor.
 
 ---
 
+## Cihazda görülen ikinci düzen hatası
+
+### 16. Ekranların tepesi durum çubuğuyla üst üste biniyor
+
+Yapıldı. Uygulama açıldığında ana ekranın üst barı — ay gezinme okları, `PRO`
+rozeti ve ayar dişlisi — saatin ve şarj göstergesinin **üstüne** biniyordu.
+
+- [x] Sistem çubuklarının altına düşen içerik kendi alanına çekildi
+
+**Teşhis: eksik olan bir dolgu değil, insetlerin hiç okunmaması.**
+`MainActivity` `enableEdgeToEdge()` çağırıyor; bu çağrı pencereyi durum ve
+gezinme çubuklarının **altına** kadar uzatır ve karşılığında uygulamadan
+insetleri kendisinin uygulamasını bekler. O karşılık hiç verilmemişti: kaynak
+ağacında `WindowInsets`, `windowInsetsPadding` ya da insetleri kendiliğinden
+uygulayan bir `Scaffold` geçen tek yer yok. Ekranların kökü istisnasız
+`fillMaxSize()`'lı bir `Box`/`Column`, yani içerik pencerenin tepesinden
+başlıyordu. Listelerin `contentPadding`'i bunu ele veriyor: yalnızca
+`bottom = AppSpace.s8` yazılmış — alt için bir pay düşünülmüş, üst hiç
+düşünülmemiş.
+
+**Dolgu tek yerde, `NavHost`'un dışında.** Ekran başına eklenebilirdi; o zaman
+kural sekiz dosyaya kopyalanır ve dokuzuncu ekran eklendiğinde unutulacak bir
+adım hâline gelirdi — hata sessizce geri gelirdi. Tek sarmalayıcı, yeni bir
+hedefin hiçbir şey yapmadan doğru davranmasını sağlıyor.
+
+**Zemin bilerek dolgunun DIŞINDA.** Önce zemini içeride bırakmak akla geliyor
+ama o zaman çubukların arkası boyanmadan kalır ve XML'deki `windowBackground`
+görünür. O renk (`values/colors.xml`, `@color/background`) **yalnızca açık tema
+için** tanımlı; `values-night/colors.xml`'de karşılığı yok. Koyu temada ekranın
+tepesinde açık kum renginde bir şerit kalırdı. Zemin `Box`'a alınıp dolgu
+`AppNavHost`'a verildi; koyu tema emülatörde ayrıca doğrulandı.
+
+**Klavye (ime) kapsam dışı bırakıldı.** Hazır olan seçim
+`WindowInsets.safeDrawing` görünüyor, ama o küme `ime`'yi de içerir: klavye
+açıldığında grafın tamamı yeniden ölçülürdü. Bu maddenin işi çubuk örtüşmesi;
+elle giriş ekranının klavye davranışını yanına iliştirmek istenmemiş bir
+değişiklik olurdu. Bu yüzden küme elle kuruldu:
+`systemBars.union(displayCutout)`. `displayCutout` boşuna değil — `systemBars`
+çentiği kapsamaz, çentikli bir cihazda (ya da yatay çevrildiğinde) içerik
+kenardan kesilirdi.
+
+**Test yok, gerekçesi 4-12. maddelerdekinin aynısı.** Inset dolgusu saf JVM'de
+sınanamaz; ölçüm gerçek bir pencereye bağlı ve depoda `androidTest` kaynak
+kümesi yok. Doğrulama **gözle** yapıldı. Mevcut 162 testin hepsi yeşil kaldı —
+bu madde davranış değil yerleşim değiştirdiği için beklenen buydu.
+
+**Emülatörde görüldü** (`sdk_gphone64_x86_64`, API 36, 1080×2400). Önce hata
+üretildi: değişiklik `git stash` ile geri alınıp kurulan yapıda `PRO` rozeti ve
+dişli, wifi/pil simgeleriyle çakışıyor; ay okları saatin üstünde. Düzeltmeden
+sonra `NavHost`'un tuttuğu **her** hedef tek tek gezildi: ana ekran, ayarlar,
+elle harcama girişi, rapor ve işlem düzeltme sayfası — hepsinin tepesi durum
+çubuğunun altında, alttaki "Elle ekle" düğmesi de artık jest çubuğunu
+temizliyor. Koyu tema ayrıca açılıp bakıldı.
+
+**Hâlâ açık:** `EditExpenseSheet` kendi penceresinde çizildiği için bu dolgudan
+etkilenmiyor (bakıldı, doğru davranıyor); ancak içeriği uzun olduğunda alt
+kenarda jest çubuğunun altına iniyor — bu madde öncesinde de öyleydi, ayrı bir
+iş. Gerçek cihazda ve yatay/çentikli bir ekranda denenmedi (1. maddedeki açık
+kutu).
+
+---
+
 ## Bilerek dışarıda bırakılanlar
 
 Bunlar "eksik" değil, kapsam kararı: bütçe hedefleri, çoklu para birimi, dışa
