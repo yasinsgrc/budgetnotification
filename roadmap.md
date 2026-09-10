@@ -80,18 +80,73 @@ Sonuç: `fixtures.tsv` elle bakım gerektiren bir dosya, "üretilmiş" değil.
 - [ ] Ya üreteci korpusu yeniden üretecek hâle getir, ya da dosyanın
       başındaki "OTOMATIK URETILDI" iddiasını kaldır
 
-### 2c. `gradle :parser:test` kırmızı, CI bunu görmüyor
+### 2c. `gradle :parser:test` kırmızı
 
-CI yalnızca `:parser:verify` koşuyor (`.github/workflows/ci.yml:25`), bu yüzden
-üç başarısız JUnit testi fark edilmemiş. Üçü de bu maddeden önce vardı:
+Yapıldı. Üç test yeşile döndü; **üçü de bu maddeden önce vardı.** Maddenin
+kendi teşhisi iki yerde yanlış çıktı, ikisi de aşağıda düzeltildi.
 
-- [ ] `ParserAccuracyTest` — `UnknownFormatConversionException: '9'`. Sebebi
-      `%95` (satır 75); `%` biçim karakteri, kaçırılmamış. Assertion mesajı
-      koşuldan bağımsız değerlendiği için test **her zaman** patlıyor
-- [ ] `MerchantCleanerTest` — `Migros Ticaret A.S` yerine `A.s`; Türkçe locale
-      `uppercase()`/`lowercase()` farkı
-- [ ] `MerchantCleanerTest` — `A101` yerine `null`
-- [ ] CI'a `:parser:test` ekle, yoksa bu testler yine görünmez
+- [x] `ParserAccuracyTest` — `UnknownFormatConversionException: '9'`. Sebebi
+      `%95`; `%` biçim karakteri, kaçırılmamış. Assertion mesajı koşuldan
+      bağımsız değerlendiği için test **her zaman** patlıyordu
+- [x] `MerchantCleanerTest` — `Migros Ticaret A.S` yerine `A.s`
+- [x] `MerchantCleanerTest` — `A101` yerine `null`
+- [x] CI zaten `:parser:test` koşuyor — eklenecek bir şey yoktu
+
+**Başlıktaki "CI bunu görmüyor" iddiası yanlıştı.** `.github/workflows/ci.yml`
+`parser` job'ında `gradle :parser:test --no-daemon` adımı **ilk commit'ten beri**
+duruyor (`git log -S':parser:test' -- .github/workflows/ci.yml` tek sonuç veriyor:
+`774669f`, initial commit). Yani CI bu testleri koşuyordu ve `parser` job'ı bu
+maddeye kadar kırmızıydı; fark edilmemesinin sebebi CI yapılandırması değil,
+kırmızıya bakılmamasıydı. Dördüncü kutu bu yüzden "eklendi" diye değil,
+"gerekmiyordu" diye işaretli.
+
+**`%95` kaçırıldı, mesaj hâlâ erken üretiliyor.** `"...%95...".format()` için
+`%9` geçersiz bir dönüşüm; `%%95` yazıldı. Asıl tuzak burada değil: mesaj
+`assertTrue`'nun **ilk argümanı**, yani doğruluk %100 olsa bile her koşuda
+hesaplanıyor. Bu yüzden hata, eşiğin altına düşen bir korpusta değil, **her**
+koşuda çıkıyordu. Mesajın erken üretilmesi düzeltilmedi — geçerli bir biçim
+dizgisinin her koşuda kurulması zararsız; hatayı doğuran kaçırılmamış `%` idi.
+
+**`A.S` bir locale sorunu değildi, testin kendi hatasıydı.** Maddede sebep
+"Türkçe locale `uppercase()`/`lowercase()` farkı" diye yazılmıştı; değil.
+`A.S` `patterns.json`'daki `brandTokens` listesinde (satır 95) ve üretimde
+`BankNotificationParser.kt:43` bu listeyi `clean`'e **her çağrıda** geçiriyor.
+Test ise `clean`'i listesiz çağırıyordu (`brandTokens` varsayılanı `emptySet()`),
+yani üretimde hiç yürünmeyen bir yolu sınayıp marka korumasının çalışmamasını
+"hata" sanıyordu. Düzeltme üretimde değil testte: çağrıya zaten dosyanın
+tepesinde duran `brands` kümesi verildi. Aynı dosyadaki diğer dört test bu
+kümeyi baştan geçiriyordu — tutarsız olan tek satırdı.
+
+**`A101` ise gerçek bir üretim hatasıydı.** `MerchantCleaner`'daki eleme kuralı
+"en az iki **harf**" idi; `A101` tek harf + üç rakam olduğu için eleniyordu ve
+kayıt işyeri adı olmadan düşüyordu. A101 Türkiye'nin en yaygın zincirlerinden
+biri, yani bu kural sessizce gerçek harcamaların adını yiyordu. Kural artık
+"en az iki harf **ya da** bir harf + en az bir rakam". Yalnızca alfanumerik
+saymak yetmezdi: ön ek süzgecinden kaçan bir kart numarası artığı (`1234`)
+mağaza adına dönüşürdü — rakamın sayılabilmesi için yanında en az bir harf şart.
+`N11` gibi adlar da bu kuralla kurtuluyor.
+
+**Testlerin ısırdığı doğrulandı** — bu maddede ayrıca bir bozma denemesi
+gerekmedi: üç test değişiklikten **önce** kırmızıydı (`24 tests completed,
+3 failed`), sonra yeşil. Kırmızıdan yeşile geçişin kendisi, bozma denemesinden
+daha güçlü bir kanıt.
+
+**Regresyon ölçüldü, varsayılmadı.** `MerchantCleaner` değişikliği eleme
+kuralını gevşettiği için korpusa bakıldı: `:parser:verify` 167/167 (%100,
+kırılım dahil değişmedi), `:parser:test` 24/24, `:app:testDebugUnitTest`
+162/162 yeşil.
+
+**Emülatörde de görüldü** (`emulator-5554`, API 36, 1080×2400). `installDebug`
+ile kuruldu, `MainActivity` crash'siz açıldı (`AndroidRuntime:E` boş), seed
+verisiyle ay toplamı **1.400,90 ₺** — 1. maddede yazan rakamın birebir aynısı.
+İşyeri adları temizlenmiş geliyor (`Migros`, `Shell Petrol`), REFUND +45,00
+toplamdan düşülüyor. Yani parser'daki eleme kuralı değişikliği uygulama
+akışının çıktısını değiştirmedi.
+
+**Hâlâ açık:** `A101` düzeltmesi gerçek bir A101 bildirimiyle denenmedi —
+`TestNotificationSeeder`'ın üç örneğinde A101 yok ve korpusta gerçek örnek
+sıfır (2. madde). Düzeltmenin kanıtı şimdilik `MerchantCleanerTest`'in birim
+testi.
 
 ### 3. `:app` için test yaz
 

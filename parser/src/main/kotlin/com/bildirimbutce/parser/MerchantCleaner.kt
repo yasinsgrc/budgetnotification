@@ -53,7 +53,17 @@ object MerchantCleaner {
 
         if (s.isBlank() || s.length < 2) return null
         if (s.lowercase(TR) in STOPWORDS) return null
-        if (s.replace(Regex("""[^\p{L}]"""), "").length < 2) return null
+        // En az iki harf, YA DA bir harf + en az bir rakam.
+        //
+        // Onceki kural "en az iki HARF" idi ve "A101"i eliyordu: tek harf +
+        // uc rakam, harf sayisi 1. A101 gercek bir zincir, bildirimde en sik
+        // gecen isyerlerinden biri - kayitlari isyeri adi olmadan dusuyordu.
+        // Yalnizca alfanumerik saymak da olmaz: on ek suzgecinden kacan bir
+        // kart numarasi artigi ("1234") magaza adina donusurdu. Rakamin
+        // sayilabilmesi icin yaninda en az bir harf sart.
+        val letterCount = s.count { it.isLetter() }
+        val digitCount = s.count { it.isDigit() }
+        if (letterCount == 0 || (letterCount == 1 && digitCount == 0)) return null
 
         return titleCase(s, brandTokens)
     }

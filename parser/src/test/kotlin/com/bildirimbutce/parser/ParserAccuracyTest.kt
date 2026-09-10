@@ -75,7 +75,10 @@ class ParserAccuracyTest {
             println("Basarisiz ornekler:\n" + failures.joinToString("\n"))
         }
         assertTrue(
-            "Dogruluk %95 esiginin altinda: %.1f%%".format(accuracy) + "\n" + failures.joinToString("\n"),
+            // "%95" kacirilmali: format icin '%9' gecersiz bir donusum.
+            // Mesaj assertTrue'nun ilk argumani oldugu icin kosul dogru olsa
+            // bile her kosuda uretilir - kacirilmadiginda test HER ZAMAN patlar.
+            "Dogruluk %%95 esiginin altinda: %.1f%%".format(accuracy) + "\n" + failures.joinToString("\n"),
             accuracy >= 95.0
         )
     }

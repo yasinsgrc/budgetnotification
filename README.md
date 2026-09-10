@@ -11,14 +11,11 @@ bütçe uygulaması.
 
 | Katman | Durum |
 |---|---|
-| `:parser` (ayrıştırma, kategori, defter mantığı) | 167 **sentetik** örnekte %100, uçtan uca akış 8/8 (`gradle :parser:verify`). Gerçek örnek sayısı: **0** — yayın kararı buna bakıyor |
-| `:app` (Android UI, Room, servis, widget) | **Emülatörde derlendi ve çalıştı**, release (R8) derlemesi de geçiyor. 150 birim testi CI'da koşuyor. Gerçek cihazda denenmedi |
+| `:parser` (ayrıştırma, kategori, defter mantığı) | 167 **sentetik** örnekte %100, uçtan uca akış 8/8 (`gradle :parser:verify`), 24 birim testi yeşil. Gerçek örnek sayısı: **0** — yayın kararı buna bakıyor |
+| `:app` (Android UI, Room, servis, widget) | **Emülatörde derlendi ve çalıştı**, release (R8) derlemesi de geçiyor. 162 birim testi CI'da koşuyor. Gerçek cihazda denenmedi |
 
 Açık maddeler, öncelik sırası ve her kararın gerekçesi kökteki
 **`roadmap.md`** dosyasında; neyin neden yapılmadığı `EKSIKLER.md`'de.
-
-> **Not:** `gradle :parser:test` şu an 3 testte kırmızı ve CI yalnızca
-> `:parser:verify` koştuğu için bunu görmüyor — `roadmap.md` madde 2c.
 
 Doğrulamayı kendiniz çalıştırın:
 
@@ -124,6 +121,7 @@ cd bildirim-butce
 
 # Gradle wrapper repoda hazır (gradle/wrapper/gradle-wrapper.jar), üretmeye gerek yok
 ./gradlew :parser:verify        # ayrıştırıcı doğruluğu + yayın kararı
+./gradlew :parser:test          # :parser birim testleri (saf JVM)
 ./gradlew :app:testDebugUnitTest # :app birim testleri (Robolectric)
 ./gradlew :app:assembleDebug    # APK
 ```

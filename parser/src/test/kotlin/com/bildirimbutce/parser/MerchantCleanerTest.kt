@@ -12,7 +12,10 @@ class MerchantCleanerTest {
     @Test
     fun `zincirlenmis on ekler temizlenir`() {
         // Tek gecislik temizlik burada "Ile Migros" birakirdi - regresyon testi
-        assertEquals("Migros Ticaret A.S", MerchantCleaner.clean("1234 kartiniz ile MIGROS TICARET A.S."))
+        // brands verilmeli: "A.S" bir brandToken ve uretimde
+        // BankNotificationParser listeyi her cagrida gecirir. Listesiz cagri
+        // uretimde hic olmayan bir yolu sinar ve "A.s" bekler.
+        assertEquals("Migros Ticaret A.S", MerchantCleaner.clean("1234 kartiniz ile MIGROS TICARET A.S.", brands))
         assertEquals("Trendyol", MerchantCleaner.clean("Sayın müşterimiz, kartınızla TRENDYOL"))
     }
 
