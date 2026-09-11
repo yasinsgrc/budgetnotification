@@ -1108,6 +1108,144 @@ kutu).
 
 ---
 
+## Tasarım denetimi
+
+### 17. Tipografi tasarımdan kaymıştı
+
+Yapıldı. Soru "tasarıma harfiyen uyduk mu" idi; **tipografide uymuyorduk.**
+Renk, aralık ve köşe yarıçapı token'ları yerindeydi, kayma yazı katmanındaydı
+ve tek bir yerde toplanmıştı: `ui/theme/Type.kt`.
+
+- [x] Tasarımın tipografi envanteri çıkarıldı ve ölçekle karşılaştırıldı
+- [x] 700 kesimi eklendi — `schibsted_grotesk_bold.ttf`
+- [x] Kayan token'lar tasarım değerlerine çekildi
+- [x] Tek token'a yığılmış katmanlar ayrıldı (`titleScreen`, `labelButton`,
+      `headlineSmall`, `currencyMark`)
+- [x] Ölçek `TypeScaleTest` ile sabitlendi (10 test)
+
+**Disiplin zaten vardı, sorun değerlerdeydi.** `Type.kt` dışında tüm kaynak
+ağacında `fontSize`/`fontFamily`/`letterSpacing` atayan **tek** satır vardı
+(`EditExpenseSheet.kt:163`). Yani ekranlar ölçeği dürüstçe kullanıyordu;
+ölçeğin kendisi tasarımdan sapmıştı. Bu yüzden düzeltme sekiz ekrana
+dağılmadı, çoğu tek dosyada bitti.
+
+**Tasarımın display katmanı 700, uygulamada 700 kesimi hiç yoktu.** Ölçüldü:
+`design-v2-tum-ekranlar.dc.html` içindeki 317 `font:` bildiriminin tamamı
+ayrıştırıldı; 66/62/60/54/50/46/44/34/31 px'lik **bütün** tutarlar 700, buna
+karşılık `res/font/` altında en ağır kesim 600'dü. Compose'un varsayılanı
+`FontSynthesis.All` olduğu için bu sessiz kalmıyordu, **sahte kalınlık**
+üretiyordu: istenen ağırlık ≥600 ve ailedeki en yakın kesim ondan hafifse
+glifler yazılımla şişiriliyor. Ana ekrandaki 66sp'lik tutar, yani uygulamanın
+en büyük ve en çok bakılan yazısı, bundan etkilenen yerdi.
+
+**Bold dosyası ölçülerek seçildi.** Depodaki kesimlerle aynı aileden olması
+yetmez, aynı **sürüm** ve aynı dikey metrikler olması gerekiyordu; olmasaydı
+Bold'a geçen satırların taban çizgisi kayardı. TTF tabloları okunup
+karşılaştırıldı: sürüm `1.100;gftools[0.9.25]` (depodaki üç kesimle aynı),
+`unitsPerEm` 2048, `typo/hhea/win` metrikleri, x-yüksekliği (1080) ve versal
+yüksekliği (1440) **birebir eşit**, glif kapsamı da eşit (497 glif, fark
+sıfır; Türkçe `ğ Ğ ş Ş ı İ ç Ç ö Ö ü Ü` dahil).
+
+**JetBrains Mono 700 bilerek alınmadı.** Tasarımda Mono-700 on yerde geçiyor
+ve **onunun da tek karakter**: banka baş harfi, "✓", "↺", "i". 109 KB'lik bir
+TTF — imzasız release APK'nın ~%8'i — on glif için pahalı. Bunun bir bedeli
+oldu ve ödendi: `EditExpenseSheet.kt:163` Mono'ya `FontWeight.Bold` istiyordu,
+yani ailede olmayan bir ağırlık; o "↺" işareti 10.5sp'de sentetik kalınlıkla
+bulanık çıkıyordu. İstek ailede gerçekten bulunan `Medium`'a indirildi.
+
+**`titleCard` tek başına dört iş yapıyordu.** Tasarım bunları ayrı ölçülerde
+kullanıyor, kodda hepsi 20sp Medium çıkıyordu:
+
+| Nerede | Tasarım | Önce | Sonra |
+|---|---|---|---|
+| Kart başlığı ("Bildirim erişimi kapalı") | 600 20px/1.2 | 500 20sp | `titleCard` 600 20sp |
+| Ekran başlığı ("Rapor", "Ayarlar") | 600 17px/1 | 500 20sp | `titleScreen` 600 17sp |
+| Buton etiketi ("Kaydet", "Devam") | 600 16px/1 | 500 20sp | `labelButton` 600 16sp |
+| Tutar yanındaki "₺" | 500 21px/1 | 500 20sp | `currencyMark` 500 21sp |
+
+Butonların tasarladığından **dörtte bir büyük ve bir kesim hafif** çıkması,
+"profesyonel durmuyor" hissinin en somut kaynağıydı. Ekran başlığı da kart
+başlığıyla aynı ağırlıkta olunca ekranın hiyerarşisi düzleşiyordu.
+
+**Başlık katmanı da tek token'dı, tasarım iki ölçek kullanıyor.** A1 kahraman
+başlığı 600 40px/1.04, A2/A3 ve paywall başlıkları 600 31px/1.08. Kodda ikisi
+de 500 38sp'ydi. Ayrılmasaydı uzun A2 başlığı ("Android şimdi sana ürkütücü
+bir şey soracak.") kahraman boyutunda kalırdı.
+
+**Diğer kaymalar:** `displayAmount` 68→66sp ve tracking −0.045→−0.05em;
+`displaySheet` tracking −0.04→−0.045em; `amountRow` Medium→SemiBold (tasarımda
+tutar, yanındaki işyeri adıyla aynı ağırlıkta — Medium kalınca satırda soluk
+duruyordu).
+
+**Sistem diyaloğu örneği artık sistem fontuyla çiziliyor.** Onboarding A2'deki
+kutu Android'in izin diyaloğunu taklit ediyor; tasarım bu kutudaki üç satırı
+bilerek **Roboto** yazıyor, kodda marka fontuyla çiziliyordu. Örneğin tek işi
+kullanıcının birazdan göreceği diyaloğa benzemek, marka fontu tam da onu
+bozuyordu. Stiller `AppText`'e konmadı, `OnboardingScreen.kt`'de private
+durdu: bunlar uygulamanın ölçeği değil, **başka bir uygulamanın** ölçeğinin
+taklidi; `AppText`'e konsalar başka bir ekranda yanlışlıkla kullanılabilirdi.
+
+**Ölü `widgetAmount` token'ı silindi.** Hiçbir yer okumuyordu, okuyamazdı da:
+widget'lar `RemoteViews`, yani XML, ve bir Compose `TextStyle` oraya ulaşamaz.
+Token orada dururken "widget bu ölçeği kullanıyor" diye yanlış bir izlenim
+bırakıyordu. Widget tipografisi asıl yerinde düzeltildi: iki widget da
+`schibsted_grotesk_bold`'a geçti.
+
+**Widget'ta ağırlık alındı, boyut 2×1 için alınmadı.** Tasarım 2×1'de 31px
+istiyor, kod 28sp'de bırakıldı: 15. maddede duran açık hata bu widget'ın dar
+hücrede tutarı kırpması ve 31sp'ye çıkmak onu büyütürdü. Tracking'in −0.05'e
+sıkılması Bold'un getirdiği fazladan genişliğin bir kısmını geri alıyor. 4×2'de
+ise **ilişki tersti**: tasarımda 4×2 (34px) 2×1'den (31px) büyük, kodda
+küçüktü (26sp < 28sp). Geniş widget'ın `maxLines="1"` ve bol yeri olduğu için
+31sp'ye çıkarıldı.
+
+**Başlatma sırası hatası test yazılırken çıktı — ölçekle ilgisi yoktu.**
+`AppText` nesnesi font ailelerini dosya düzeyindeki `val`'lerden okuyordu;
+Kotlin onları ayrı bir sınıfa (`TypeKt`) koyuyor ve `AppTypography` de orada
+duruyor. Yani `AppText` → `TypeKt` → `AppTypography` → `AppText`: döngü. JVM
+aynı iş parçacığında yeniden girişi hata saymaz, yarım kalmış sınıfı olduğu
+gibi verir. Sonuç **hangi sınıfa önce dokunulduğuna** bağlıydı: önce `AppText`
+okunan her koşuda — ki her ekran öyle yapıyor — `AppTypography`'nin **bütün**
+alanları null kuruluyordu. Material bileşenleri (`Button`, `TextField`,
+`ModalBottomSheet`) stillerini tam oradan okuyor. Aileler `AppText`'in içine
+alınınca döngü kapandı. Bu hata bu maddeden önce de vardı; kimse bakmadığı
+için görülmemişti.
+
+**Testler:** `TypeScaleTest` (10, saf JVM — ailede gerçek 700 kesimi, Mono'nun
+Medium tavanı, token başına tasarım değerleri, tabular figürler, M3 eşlemesi ve
+başlatma döngüsü). `:app` toplamı 162 → 172. Testlerin ısırdığı **iki kez**
+doğrulandı: (1) başlatma döngüsü testi ilk yazıldığında kırmızı yandı, hata
+düzeltilince yeşile döndü — kırmızıdan yeşile geçişin kendisi, 2c. maddedeki
+gibi bozma denemesinden güçlü bir kanıt; (2) `displayAmount` eski değerine
+(600/68sp) geri alındığında `display katmani tasarimla ayni` kırmızı yandı,
+sonra geri alındı. `:parser` 24/24 değişmedi.
+
+**Boyut:** imzasız release APK 1.467.705 B (1,40 MB). Yeni kesim APK içinde
+94.380 B tutuyor (fontlar sıkıştırılmadan saklanıyor); font sayısı 5 → 6.
+
+**Emülatörde görüldü** (`emulator-5554`, API 36, 1080×2400) — **ama hepsi
+değil.** Ana ekran, rapor, ayarlar ve paywall gözle doğrulandı: ay toplamı
+gerçek Bold'da, "₺" bir kesim hafif ve soluk, işlem satırında tutar işyeri
+adıyla aynı ağırlıkta, "Rapor"/"Ayarlar" başlıkları kicker'la doğru
+hiyerarşide, paywall başlığı 31sp'de iki satıra oturuyor. Elle harcama girişi
+ve düzeltme sayfası **gözle görülemedi**: emülatörün `screencap`'i oturumun
+ortasında dondu (çekilen dosya, dakikalar önceki kareyle byte byte aynı
+geliyordu, saat bile değişmiyordu). O iki ekran `uiautomator` dökümüyle
+doğrulandı — ekranlar açılıyor, metinler yerinde ve "Kaydet" düğmesinin çizim
+kutusu ~16sp'ye denk geliyor (20sp olsaydı ~68px olurdu, ölçülen 52px).
+
+**Hâlâ açık:** Ekranların kendisi (Compose) otomatik test edilmiyor — 4, 5, 6,
+8, 9, 10 ve 12. maddelerdeki gerekçe burada da geçerli, `compose-ui-test`
+bağımlılığı hâlâ yok; test edilen şey ölçeğin değerleri, çizim değil. Gerçek
+cihazda denenmedi (1. maddedeki açık kutu). Widget'lar ana ekrana eklenip gözle
+bakılmadı; 2×1'in dar hücredeki kırpma davranışının Bold'dan sonra
+kötüleşmediği **ölçülmedi**, tracking'in sıkılmasıyla dengelendiği varsayıldı.
+Tasarımın gövde metni katmanındaki küçük farklar (`body` 14.5sp'de, tasarımda
+çoğunlukla 12.5-14px) bu maddede ele alınmadı: orada tek bir doğru değer yok,
+tasarım bağlama göre beş ayrı ölçü kullanıyor.
+
+---
+
 ## Bilerek dışarıda bırakılanlar
 
 Bunlar "eksik" değil, kapsam kararı: bütçe hedefleri, çoklu para birimi, dışa

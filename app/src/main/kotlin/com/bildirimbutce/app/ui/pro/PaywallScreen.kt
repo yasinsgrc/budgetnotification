@@ -76,7 +76,7 @@ fun PaywallScreen(
                 Spacer(Modifier.height(AppSpace.s5))
                 Text(
                     "Bir kere öde, ömür boyu kullan.",
-                    style = AppText.headline,
+                    style = AppText.headlineSmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(Modifier.height(AppSpace.s3))

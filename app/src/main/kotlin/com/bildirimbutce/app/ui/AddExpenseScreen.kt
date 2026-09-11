@@ -125,7 +125,7 @@ fun AddExpenseScreen(
             )
             Text(
                 withLiraFallback(LIRA),
-                style = AppText.titleCard,
+                style = AppText.currencyMark,
                 color = AppTheme.colors.onBackgroundMuted,
                 modifier = Modifier.padding(start = AppSpace.s3)
             )
@@ -227,7 +227,7 @@ private fun SaveButton(enabled: Boolean, onClick: () -> Unit) {
     ) {
         Text(
             "Kaydet",
-            style = AppText.titleCard,
+            style = AppText.labelButton,
             color = if (enabled) MaterialTheme.colorScheme.background else AppTheme.colors.onBackgroundMuted
         )
     }

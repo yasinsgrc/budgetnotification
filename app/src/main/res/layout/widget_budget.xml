@@ -28,14 +28,19 @@
          yazilamaz; widget secicisindeki onizleme bu yuzden simgesiz. Simgeyi
          ayri bir TextView'a almak denendi ve geri alindi: 2x1 hucrede tutar tum
          genisligi kapiyor, son cocuk olan simge kirpiliyordu. -->
+    <!-- Tasarim: 700 31px/.95 -.05em. AGIRLIK ve TRACKING alindi, BOYUT
+         alinmadi - 28sp'de kaldi. Gerekcesi roadmap 15. maddede duran acik
+         hata: bu widget 2 sutunluk dar hucrede tutar uzunken zaten kirpiyor;
+         31sp'ye cikarmak o hatayi buyuturdu. Tracking'in -.05'e sikilmasi
+         Bold'un getirdigi fazladan genisligin bir kismini geri aliyor. -->
     <TextView
         android:id="@+id/widget_amount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:fontFamily="@font/schibsted_grotesk_semibold"
+        android:fontFamily="@font/schibsted_grotesk_bold"
         android:textSize="28sp"
-        android:letterSpacing="-0.04"
+        android:letterSpacing="-0.05"
         android:textColor="@color/widget_ink"
         android:text="0,00" />
 

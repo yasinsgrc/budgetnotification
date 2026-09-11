@@ -117,7 +117,7 @@ private fun ReportTopBar(monthLabel: String, onBack: () -> Unit) {
         ) {
             Text("‹", style = AppText.bodyLarge, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.66f))
         }
-        Text("Rapor", style = AppText.titleCard, color = MaterialTheme.colorScheme.onBackground)
+        Text("Rapor", style = AppText.titleScreen, color = MaterialTheme.colorScheme.onBackground)
         Text(
             monthLabel.uppercase(Locale("tr", "TR")),
             style = AppText.kicker,

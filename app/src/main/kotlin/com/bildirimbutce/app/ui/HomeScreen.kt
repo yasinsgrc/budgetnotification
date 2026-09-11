@@ -374,7 +374,7 @@ private fun TotalHeader(
             )
             Text(
                 withLiraFallback(LIRA),
-                style = AppText.titleCard,
+                style = AppText.currencyMark,
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.4f),
                 modifier = Modifier.padding(top = AppSpace.s2)
             )

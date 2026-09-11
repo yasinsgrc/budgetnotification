@@ -89,7 +89,7 @@ fun EditExpenseSheet(
                 Text(Money.format(expense.amountMinor), style = AppText.displaySheet, color = MaterialTheme.colorScheme.onBackground)
                 Text(
                     expense.currency,
-                    style = AppText.titleCard,
+                    style = AppText.currencyMark,
                     color = AppTheme.colors.onBackgroundMuted,
                     modifier = Modifier.padding(top = AppSpace.s1)
                 )
@@ -160,7 +160,12 @@ fun EditExpenseSheet(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(AppSpace.s2)
             ) {
-                Text("↺", style = AppText.metaMono, color = AppTheme.colors.brandBright, fontWeight = FontWeight.Bold)
+                // fontWeight = Bold BURADAN KALDIRILDI. metaMono JetBrains Mono
+                // kullaniyor ve o ailenin 700 kesimi yok (gerekcesi Type.kt'de);
+                // Bold istendiginde Compose glifi kendisi sismanlatiyordu ve
+                // 10.5sp'lik tek bir "↺" isareti bulanik cikiyordu. Ailede
+                // gercekten bulunan en kalin kesim Medium.
+                Text("↺", style = AppText.metaMono, color = AppTheme.colors.brandBright, fontWeight = FontWeight.Medium)
                 Text(
                     "Bu işyerini bir daha sormam — kuralı öğreniyorum.",
                     style = AppText.body,
@@ -190,7 +195,7 @@ fun EditExpenseSheet(
                         .padding(vertical = AppSpace.s3),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("Kaydet", style = AppText.titleCard, color = MaterialTheme.colorScheme.background)
+                    Text("Kaydet", style = AppText.labelButton, color = MaterialTheme.colorScheme.background)
                 }
                 Box(
                     Modifier

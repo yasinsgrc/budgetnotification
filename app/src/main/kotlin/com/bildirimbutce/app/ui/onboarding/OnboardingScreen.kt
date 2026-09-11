@@ -37,8 +37,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import com.bildirimbutce.app.data.PatternProvider
@@ -285,7 +289,7 @@ private fun PermissionPage(onOpenSettings: () -> Unit, onSkip: () -> Unit) {
             Spacer(Modifier.height(AppSpace.s4))
             Text(
                 "Android şimdi sana ürkütücü bir şey soracak.",
-                style = AppText.headline,
+                style = AppText.headlineSmall,
                 color = MaterialTheme.colorScheme.onBackground
             )
             Spacer(Modifier.height(AppSpace.s3))
@@ -332,6 +336,40 @@ private fun PermissionPage(onOpenSettings: () -> Unit, onSkip: () -> Unit) {
 }
 
 /**
+ * Diyalog ornegi SISTEM FONTUYLA cizilir, marka fontuyla degil.
+ *
+ * Bunlar bilerek AppText'in disinda: uygulamanin tipografi olcegi degil,
+ * BASKA bir uygulamanin (Android'in) tipografisinin taklidi. AppText'e
+ * konsaydi marka olcegini kirletir ve baska bir ekranda yanlislikla
+ * kullanilabilirdi. Tasarim da ayni ayrimi yapiyor: bu kutudaki uc satir
+ * tasarim dosyasinda Roboto, gerisi Schibsted Grotesk.
+ *
+ * FontFamily.Default Android'de Roboto'ya cozulur; cihaz ureticisi sistem
+ * fontunu degistirmisse diyalog da onu kullanir - zaten istenen bu, ornek
+ * kullanicinin GORECEGI diyaloga benzesin diye var.
+ */
+private val SystemDialogTitle = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Medium,
+    fontSize = 16.sp,
+    lineHeight = 22.sp
+)
+
+private val SystemDialogBody = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 12.5.sp,
+    lineHeight = 18.sp
+)
+
+private val SystemDialogAction = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Medium,
+    fontSize = 13.sp,
+    lineHeight = 14.sp
+)
+
+/**
  * Android'in izin diyalogunun ornegi.
  *
  * Sistem diyalogundan birebir kopya degil, ozeti - Android surumden surume
@@ -349,14 +387,14 @@ private fun SystemDialogPreview() {
     ) {
         Text(
             "Bildirim Bütçe için bildirimlere tam erişim verilsin mi?",
-            style = AppText.titleCard,
+            style = SystemDialogTitle,
             color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(Modifier.height(AppSpace.s2))
         Text(
             "Bildirim Bütçe tüm bildirimleri okuyabilecek. Kişiler ve mesajların " +
                 "içeriği gibi kişisel bilgileri içerebilir.",
-            style = AppText.bodySmall,
+            style = SystemDialogBody,
             color = AppTheme.colors.onBackgroundMuted
         )
         Spacer(Modifier.height(AppSpace.s3))
@@ -364,8 +402,8 @@ private fun SystemDialogPreview() {
             Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(AppSpace.s4, Alignment.End)
         ) {
-            Text("İzin verme", style = AppText.labelChip, color = MaterialTheme.colorScheme.primary)
-            Text("İzin ver", style = AppText.labelChip, color = MaterialTheme.colorScheme.primary)
+            Text("İzin verme", style = SystemDialogAction, color = MaterialTheme.colorScheme.primary)
+            Text("İzin ver", style = SystemDialogAction, color = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -419,12 +457,22 @@ private fun ReadyPage(onFinish: () -> Unit) {
                         .border(1.dp, AppTheme.colors.refund.copy(alpha = 0.35f), CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text("✓", style = AppText.headline, color = AppTheme.colors.refund)
+                    // Tasarimda bu isaret 400 34px: bir baslik degil, susleme.
+                    // Baslik olcegiyle cizilirse (600) daireyi doldurup
+                    // sayfanin asil basligiyla agirlik yarisina giriyor.
+                    Text(
+                        "✓",
+                        style = AppText.headline.copy(
+                            fontWeight = FontWeight.Normal,
+                            fontSize = 34.sp
+                        ),
+                        color = AppTheme.colors.refund
+                    )
                 }
                 Spacer(Modifier.height(AppSpace.s6))
                 Text(
                     "Dinlemeye başladım",
-                    style = AppText.headline,
+                    style = AppText.headlineSmall,
                     color = MaterialTheme.colorScheme.onBackground
                 )
                 Spacer(Modifier.height(AppSpace.s3))
@@ -526,6 +574,6 @@ private fun BrandButton(text: String, onClick: () -> Unit) {
             .padding(vertical = AppSpace.s4),
         contentAlignment = Alignment.Center
     ) {
-        Text(text, style = AppText.titleCard, color = MaterialTheme.colorScheme.background)
+        Text(text, style = AppText.labelButton, color = MaterialTheme.colorScheme.background)
     }
 }

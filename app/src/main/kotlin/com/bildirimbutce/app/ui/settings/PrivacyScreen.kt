@@ -72,7 +72,7 @@ fun PrivacyScreen(viewModel: SettingsViewModel, onBack: () -> Unit) {
             Column(Modifier.padding(horizontal = AppSpace.s6, vertical = AppSpace.s3)) {
                 Text(
                     if (internetRequested) "Bir yere gidebilir." else "Hiçbir yere.",
-                    style = AppText.headline,
+                    style = AppText.headlineSmall,
                     color = if (internetRequested) AppTheme.colors.danger
                     else MaterialTheme.colorScheme.onBackground
                 )

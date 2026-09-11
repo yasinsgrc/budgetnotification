@@ -152,7 +152,7 @@ internal fun SettingsTopBar(title: String, onBack: () -> Unit) {
         ) {
             Text("‹", style = AppText.bodyLarge, color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.66f))
         }
-        Text(title, style = AppText.titleCard, color = MaterialTheme.colorScheme.onBackground)
+        Text(title, style = AppText.titleScreen, color = MaterialTheme.colorScheme.onBackground)
     }
 }
 
