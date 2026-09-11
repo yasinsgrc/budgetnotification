@@ -70,15 +70,48 @@ kendi üreteçlerinden geldikleri için kolaydır ve karma oranı yukarı çeker
 baştan yazar, elle eklenen `REAL` satırları siler. Üretecin docstring'inde
 `REAL` satırları koruyan tarif var; korpusu yeniden üretmeden önce oku.
 
-### 2b. Üreteç korpusu yeniden üretemiyor
+### 2b. Korpus üretecinden geri kalmıştı
 
-`generate_corpus.py` çalıştırıldığında yine 167 satır üretiyor ama **içerik
-kümesi depodakiyle aynı değil** — dosya, üreticisinin şu anki hâlinden
-türetilemiyor. Korpus, üreteç değiştikten sonra yeniden üretilmemiş olmalı.
-Sonuç: `fixtures.tsv` elle bakım gerektiren bir dosya, "üretilmiş" değil.
+Yapıldı. Korpus yeniden üretildi; `fixtures.tsv` artık üretecinin çıktısıyla
+**birebir** aynı, yani dosyanın başındaki "OTOMATIK URETILDI" iddiası doğru.
 
-- [ ] Ya üreteci korpusu yeniden üretecek hâle getir, ya da dosyanın
-      başındaki "OTOMATIK URETILDI" iddiasını kaldır
+- [x] Korpus yeniden üretildi — üreteç zaten çalışıyordu, bayat olan dosyaydı
+
+**Maddenin teşhisi yanlıştı: "içerik kümesi aynı değil" doğru değil.** Ölçüldü:
+üretecin çıktısındaki 167 satırın **metin / kind / amountMinor / merchant**
+dörtlüsü depodaki 167 satırla byte byte aynı. Fark tek bir yerdeydi — 2. maddede
+eklenen **5. kolon**. Depodaki satırların hepsi 4 kolonluydu (`awk NF` tek değer
+veriyordu: 4), üreteç ise `SYNTHETIC` damgasıyla 5 kolon basıyor. Yanında
+başlık yorumunun iki satırı da değişmişti. Yani üreteç korpusu üretemiyor
+değildi; **2. madde üreteci güncellemiş, korpusu yeniden üretmemişti.**
+
+**Bu yüzden iki seçenekten birincisi seçildi.** Madde "ya üreteci düzelt ya da
+iddiayı kaldır" diyordu; üretecin düzeltilecek bir yeri çıkmadığı için
+"OTOMATIK URETILDI" satırını silmek yanlış olurdu — dosya gerçekten otomatik
+üretilmiş, yalnızca eski bir sürümden üretilmişti. Doğru iş, dosyayı üretecine
+yetiştirmekti.
+
+**Docstring'deki `REAL` koruma tarifi uygulandı**, ama koruyacak bir şey yoktu:
+`grep -P '\tREAL$'` sıfır satır döndürdü (korpusta gerçek örnek hiç yok — 2.
+madde). Yeniden üretim bu yüzden hiçbir elle eklenmiş satırı silmedi. Tarif
+yine de adım adım izlendi; `REAL` satır biriktikten sonra korpusu yeniden
+üretmek zorunda kalan kişi için tarifin çalıştığı da böylece görülmüş oldu.
+
+**Yeniden üretilebilirlik artık ölçülü bir iddia.** Üreteç ikinci kez
+çalıştırılıp çıktısı dosyayla karşılaştırıldı: birebir eşit. `random.seed`
+sabit olduğu için bu beklenen sonuçtu, ama 2. maddeden sonra kimse
+bakmadığı için iddia iki maddedir yanlıştı.
+
+**Kolon artık tek biçimli.** 167 satırın tamamı 5 kolonlu ve `SYNTHETIC`
+damgalı. `add-fixture.sh` de 5 kolon yazıyor (satır 37), yani dosya bundan
+sonra karışık kolonlu hâle düşmüyor; betiğin gerçek örnek sayacı
+(`cut -f5 | grep -cx REAL`, satır 39) artık her satırda dolu bir 5. kolon
+buluyor.
+
+**Doğrulama:** `:parser:verify` 167/167 (%100), kırılım değişmedi
+(`SYNTHETIC 167/167`, `REAL 0/0`, karar hâlâ `KARAR VERILEMEZ`);
+`:parser:test` 24/24; uçtan uca akışın 8 kontrolü de geçti. Dosya satır sonu
+olarak LF yazıldı — depo LF saklıyor, checkout'ta CRLF'e dönüyor.
 
 ### 2c. `gradle :parser:test` kırmızı
 
